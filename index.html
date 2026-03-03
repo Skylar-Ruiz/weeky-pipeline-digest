@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Delight Pulse — Weekly Dashboard Digest</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background: #f5f4f0;
+    color: #1a1a1a;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+
+  .page {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 80px 32px 120px;
+  }
+
+  /* Header */
+  .logo-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 64px;
+  }
+  .logo-mark {
+    font-size: 22px;
+    line-height: 1;
+  }
+  .logo-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: #1a1a1a;
+    letter-spacing: -0.5px;
+  }
+
+  .page-title {
+    font-family: 'Playfair Display', 'Georgia', serif;
+    font-size: 52px;
+    font-weight: 500;
+    color: #1a1a1a;
+    letter-spacing: -2px;
+    line-height: 1.1;
+    margin-bottom: 16px;
+  }
+
+  .page-subtitle {
+    font-size: 16px;
+    color: #888;
+    font-weight: 400;
+    line-height: 1.7;
+    max-width: 480px;
+    margin-bottom: 64px;
+  }
+
+  /* Archive list */
+  .archive-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #999;
+    font-weight: 500;
+    margin-bottom: 24px;
+  }
+
+  .digest-list {
+    list-style: none;
+  }
+
+  .digest-item {
+    border-top: 1px solid #e8e8e5;
+  }
+
+  .digest-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 28px 0;
+    text-decoration: none;
+    color: inherit;
+    transition: padding-left 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .digest-link:hover {
+    padding-left: 12px;
+  }
+
+  .digest-link:hover .digest-title {
+    color: #b8654a;
+  }
+
+  .digest-link:hover .digest-arrow {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .digest-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .digest-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 500;
+    color: #1a1a1a;
+    letter-spacing: -0.5px;
+    transition: color 0.3s ease;
+  }
+
+  .digest-meta {
+    font-size: 13px;
+    color: #999;
+    font-weight: 400;
+    display: flex;
+    gap: 16px;
+  }
+
+  .digest-meta span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .digest-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .digest-badges {
+    display: flex;
+    gap: 6px;
+  }
+
+  .badge {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 4px 10px;
+    border-radius: 100px;
+  }
+
+  .badge.behind {
+    background: #fdf6f5;
+    color: #c0392b;
+  }
+
+  .badge.watch {
+    background: #fdfaf3;
+    color: #b8860b;
+  }
+
+  .badge.on-track {
+    background: #f6faf6;
+    color: #27825b;
+  }
+
+  .digest-arrow {
+    font-size: 18px;
+    color: #b8654a;
+    opacity: 0;
+    transform: translateX(-8px);
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .digest-item:last-child {
+    border-bottom: 1px solid #e8e8e5;
+  }
+
+  /* Footer */
+  .footer {
+    margin-top: 80px;
+    padding-top: 32px;
+    border-top: 1px solid #e8e8e5;
+  }
+
+  .footer p {
+    font-size: 12px;
+    color: #bbb;
+    line-height: 1.8;
+  }
+
+  /* Staggered entrance */
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .logo-row { animation: fadeUp 0.6s ease both; animation-delay: 0.1s; }
+  .page-title { animation: fadeUp 0.6s ease both; animation-delay: 0.2s; }
+  .page-subtitle { animation: fadeUp 0.6s ease both; animation-delay: 0.3s; }
+  .archive-label { animation: fadeUp 0.6s ease both; animation-delay: 0.4s; }
+  .digest-item:nth-child(1) { animation: fadeUp 0.5s ease both; animation-delay: 0.5s; }
+  .digest-item:nth-child(2) { animation: fadeUp 0.5s ease both; animation-delay: 0.6s; }
+  .digest-item:nth-child(3) { animation: fadeUp 0.5s ease both; animation-delay: 0.7s; }
+  .digest-item:nth-child(4) { animation: fadeUp 0.5s ease both; animation-delay: 0.8s; }
+  .digest-item:nth-child(5) { animation: fadeUp 0.5s ease both; animation-delay: 0.9s; }
+
+  @media (max-width: 600px) {
+    .page { padding: 48px 24px 80px; }
+    .page-title { font-size: 36px; letter-spacing: -1px; }
+    .digest-title { font-size: 18px; }
+    .digest-badges { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="logo-row">
+    <span class="logo-mark">✳</span>
+    <span class="logo-text">delight.ai</span>
+  </div>
+
+  <h1 class="page-title">The Delight Pulse</h1>
+  <p class="page-subtitle">Weekly executive briefings synthesizing pipeline performance, marketing OKRs, and channel effectiveness across the full funnel. FY2027 Q1.</p>
+
+  <div class="archive-label">Archive</div>
+
+  <ul class="digest-list">
+    <li class="digest-item">
+      <a class="digest-link" href="Weekly_Dashboard_Digest_-_Mar_2__2026.html">
+        <div class="digest-info">
+          <div class="digest-title">March 2, 2026</div>
+          <div class="digest-meta">
+            <span>Week 5 of 13</span>
+            <span>·</span>
+            <span>FY2027 Q1</span>
+          </div>
+        </div>
+        <div class="digest-right">
+          <div class="digest-badges">
+            <span class="badge watch">Pre-Pipe 40%</span>
+            <span class="badge behind">Discovery 14%</span>
+          </div>
+          <span class="digest-arrow">→</span>
+        </div>
+      </a>
+    </li>
+    <li class="digest-item">
+      <a class="digest-link" href="Weekly_Dashboard_Digest_-_Feb_23__2026.html">
+        <div class="digest-info">
+          <div class="digest-title">February 23, 2026</div>
+          <div class="digest-meta">
+            <span>Week 3 of 13</span>
+            <span>·</span>
+            <span>FY2027 Q1</span>
+          </div>
+        </div>
+        <div class="digest-right">
+          <div class="digest-badges">
+            <span class="badge behind">Pre-Pipe 4%</span>
+            <span class="badge watch">Qualified 15%</span>
+          </div>
+          <span class="digest-arrow">→</span>
+        </div>
+      </a>
+    </li>
+  </ul>
+
+  <div class="footer">
+    <p>Data: Salesforce via Looker · Prepared by Executive Analytics<br>
+    © 2026 delight.ai</p>
+  </div>
+
+</div>
+</body>
+</html>

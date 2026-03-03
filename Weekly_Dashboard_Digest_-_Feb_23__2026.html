@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weekly Dashboard Digest - Feb 23, 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Helvetica+Neue:wght@400;500;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background: #f5f4f0;
+    color: #1a1a1a;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .email-wrapper {
+    max-width: 640px;
+    margin: 0 auto;
+    background: #ffffff;
+  }
+
+  /* Header — clean, black/white, brand-forward */
+  .header {
+    background: #ffffff;
+    padding: 48px 48px 0;
+    border-bottom: none;
+  }
+  .logo-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 40px;
+  }
+  .logo-mark {
+    font-size: 22px;
+    line-height: 1;
+  }
+  .logo-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: #1a1a1a;
+    letter-spacing: -0.5px;
+  }
+  .header-title {
+    font-family: 'Playfair Display', 'Georgia', serif;
+    font-size: 36px;
+    font-weight: 500;
+    color: #1a1a1a;
+    letter-spacing: -1px;
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+  .header-date {
+    font-size: 14px;
+    color: #888;
+    font-weight: 400;
+    margin-bottom: 36px;
+  }
+
+  /* Hero image — abstract nature motif [P1] */
+  .hero-image {
+    width: 100%;
+    height: 180px;
+    background: linear-gradient(135deg, #f7e6d0 0%, #e8c9a0 30%, #d4956a 60%, #c47a52 80%, #b8654a 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-image::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -40px;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(255,240,220,0.6) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .hero-image::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: 20%;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(255,200,150,0.3) 0%, transparent 60%);
+    border-radius: 50%;
+  }
+
+  /* Content */
+  .content { padding: 40px 48px; }
+
+  /* Pacing Overview */
+  .pacing-section {
+    margin-bottom: 40px;
+  }
+  .pacing-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #999;
+    font-weight: 500;
+    margin-bottom: 20px;
+  }
+  .pacing-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0;
+    border: 1px solid #e8e8e5;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .pace-cell {
+    padding: 20px 12px;
+    text-align: center;
+    border-right: 1px solid #e8e8e5;
+  }
+  .pace-cell:last-child { border-right: none; }
+  .pace-metric-name {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #999;
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+  .pace-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 600;
+    color: #1a1a1a;
+    letter-spacing: -0.5px;
+  }
+  .pace-status {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 6px;
+  }
+  .pace-status.behind { color: #c0392b; }
+  .pace-status.watch { color: #b8860b; }
+  .pace-status.on-track { color: #27825b; }
+
+  /* Divider */
+  .divider {
+    height: 1px;
+    background: #e8e8e5;
+    margin: 36px 0;
+  }
+
+  /* Section headers — Serrif-style */
+  .section { margin-bottom: 36px; }
+  .section-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #999;
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    font-weight: 500;
+    color: #1a1a1a;
+    letter-spacing: -0.5px;
+    margin-bottom: 20px;
+  }
+
+  /* Executive Summary */
+  .exec-summary {
+    font-size: 15px;
+    color: #444;
+    line-height: 1.75;
+    margin-bottom: 36px;
+  }
+  .exec-summary strong { color: #1a1a1a; }
+
+  /* Insight cards — minimal, warm */
+  .insight-card {
+    padding: 20px 24px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    font-size: 14px;
+    line-height: 1.7;
+    color: #444;
+  }
+  .insight-card.win {
+    background: #f6faf6;
+    border-left: 3px solid #27825b;
+  }
+  .insight-card.concern {
+    background: #fdf6f5;
+    border-left: 3px solid #c0392b;
+  }
+  .insight-card.watch-item {
+    background: #fdfaf3;
+    border-left: 3px solid #b8860b;
+  }
+  .insight-card .card-title {
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 4px;
+    font-size: 14px;
+  }
+  .insight-card .big-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 600;
+    margin: 4px 0 6px;
+    letter-spacing: -0.5px;
+  }
+  .insight-card .big-number.green { color: #27825b; }
+  .insight-card .big-number.red { color: #c0392b; }
+
+  /* WoW Table — clean, editorial */
+  .wow-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .wow-table th {
+    text-align: left;
+    padding: 10px 0;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #999;
+    font-weight: 500;
+    border-bottom: 2px solid #1a1a1a;
+  }
+  .wow-table td {
+    padding: 12px 0;
+    border-bottom: 1px solid #f0eeea;
+    color: #444;
+  }
+  .wow-table td:first-child { font-weight: 500; color: #1a1a1a; }
+  .wow-table .up { color: #27825b; font-weight: 600; }
+  .wow-table .down { color: #c0392b; font-weight: 600; }
+
+  /* Action Items */
+  .action-item {
+    display: flex;
+    gap: 16px;
+    padding: 18px 0;
+    border-bottom: 1px solid #f0eeea;
+  }
+  .action-item:last-child { border-bottom: none; }
+  .action-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: #1a1a1a;
+    min-width: 28px;
+    line-height: 1.4;
+  }
+  .action-body {
+    font-size: 14px;
+    color: #444;
+    line-height: 1.65;
+  }
+  .action-body strong { color: #1a1a1a; }
+
+  /* Footer */
+  .footer {
+    background: #1a1a1a;
+    padding: 36px 48px;
+  }
+  .footer-logo {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 12px;
+  }
+  .footer p {
+    font-size: 12px;
+    color: rgba(255,255,255,0.45);
+    line-height: 1.8;
+  }
+
+  @media (max-width: 600px) {
+    .header, .content, .footer { padding-left: 24px; padding-right: 24px; }
+    .header-title { font-size: 28px; }
+    .pacing-grid { grid-template-columns: repeat(3, 1fr); }
+    .pace-cell:nth-child(4), .pace-cell:nth-child(5) {
+      border-top: 1px solid #e8e8e5;
+    }
+    .pace-number { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+<div class="email-wrapper">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo-row">
+      <span class="logo-mark">✳</span>
+      <span class="logo-text">delight.ai</span>
+    </div>
+    <h1 class="header-title">Weekly Dashboard<br>Digest</h1>
+    <p class="header-date">Monday, February 23, 2026 · FY2027 Q1 · Week 3 of 13</p>
+  </div>
+
+  <!-- Hero — abstract warm gradient (P1 nature motif) -->
+  <div class="hero-image"></div>
+
+  <div class="content">
+
+    <!-- PACING AT A GLANCE -->
+    <div class="pacing-section">
+      <div class="pacing-label">Q1 Pacing at a Glance</div>
+      <div class="pacing-grid">
+        <div class="pace-cell">
+          <div class="pace-metric-name">MQLs</div>
+          <div class="pace-number">23%</div>
+          <div class="pace-status behind">Behind</div>
+        </div>
+        <div class="pace-cell">
+          <div class="pace-metric-name">SALs</div>
+          <div class="pace-number">27%</div>
+          <div class="pace-status behind">Behind</div>
+        </div>
+        <div class="pace-cell">
+          <div class="pace-metric-name">Pre-Pipe</div>
+          <div class="pace-number">4%</div>
+          <div class="pace-status behind">Critical</div>
+        </div>
+        <div class="pace-cell">
+          <div class="pace-metric-name">Discovery</div>
+          <div class="pace-number">10%</div>
+          <div class="pace-status behind">Behind</div>
+        </div>
+        <div class="pace-cell">
+          <div class="pace-metric-name">Qualified</div>
+          <div class="pace-number">15%</div>
+          <div class="pace-status watch">Watch</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EXECUTIVE SUMMARY -->
+    <p class="exec-summary">
+      Three weeks into Q1, pipeline generation is behind pace across all funnel stages — most critically <strong>Pre-Pipeline at just 4%</strong> of its $49.8M target. Events are carrying 72% of Discovery pipeline, creating channel concentration risk. The bright spots: <strong>branded search is at 149% of target</strong>, AI product pipeline outpaces Comms 6.6:1, and EMEA Qualified is pacing at 36%. Immediate acceleration needed across Paid, Organic, and Enterprise.
+    </p>
+
+    <div class="divider"></div>
+
+    <!-- WINS -->
+    <div class="section">
+      <div class="section-label">What's working</div>
+      <div class="section-title">Wins & highlights</div>
+
+      <div class="insight-card win">
+        <div class="card-title">Branded search is crushing target</div>
+        <div class="big-number green">149% paced</div>
+        <div>1,910 branded impressions against a 5,000 Q1 goal. The week of Feb 9 spiked to 679 impressions — brand awareness efforts are landing.</div>
+      </div>
+
+      <div class="insight-card win">
+        <div class="card-title">AI product pipeline outperforming Comms 6.6x</div>
+        <div class="big-number green">$505K qualified · 19% paced</div>
+        <div>AI Qualified Pipeline is at $505K vs. Comms at $77K (5% paced). The market is pulling toward the AI offering — a clear signal for GTM prioritization.</div>
+      </div>
+
+      <div class="insight-card win">
+        <div class="card-title">EMEA leading geo pacing</div>
+        <div>Qualified Pipeline at 36% — the strongest region. Added $115K in Pre-Pipeline in Week 3 alone, showing sustained momentum.</div>
+      </div>
+
+      <div class="insight-card win">
+        <div class="card-title">Sales Prospecting pacing at 43%</div>
+        <div>$355K against a $3.2M target — nearly double the 23% pace benchmark. Outbound execution is strong.</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- CONCERNS -->
+    <div class="section">
+      <div class="section-label">Needs attention</div>
+      <div class="section-title">Concerns & problem areas</div>
+
+      <div class="insight-card concern">
+        <div class="card-title">Enterprise Qualified Pipeline — emergency</div>
+        <div class="big-number red">1% of $10.2M target</div>
+        <div>Only $24K in Enterprise Qualified pipe. At 1% pacing with 23% of the quarter elapsed, this is the single largest gap in the funnel and requires immediate intervention.</div>
+      </div>
+
+      <div class="insight-card concern">
+        <div class="card-title">MQL-to-Qualified conversion collapsed</div>
+        <div class="big-number red">10% (↓41% QoQ)</div>
+        <div>Down from 17% in FY26 Q4. This efficiency leak compounds every volume shortfall — are MQLs lower quality, or has the qualification bar shifted?</div>
+      </div>
+
+      <div class="insight-card concern">
+        <div class="card-title">Pre-Pipeline critically behind at 4%</div>
+        <div>$2.18M against a $49.8M target. AMER at 4%, APAC at 3%. This will cascade downstream if not addressed immediately.</div>
+      </div>
+
+      <div class="insight-card watch-item">
+        <div class="card-title">Inbound Paid severely underperforming</div>
+        <div>~$130K Discovery against a $4.1M target (~3%). Paid Search needs an urgent audit for targeting, budget, and conversion issues.</div>
+      </div>
+
+      <div class="insight-card watch-item">
+        <div class="card-title">Channel concentration risk</div>
+        <div>Events generated 72% of Discovery Pipeline ($627K of $873K). No safety net if event momentum slows.</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- WEEK OVER WEEK -->
+    <div class="section">
+      <div class="section-label">Trends</div>
+      <div class="section-title">Week-over-week changes</div>
+
+      <table class="wow-table">
+        <thead>
+          <tr>
+            <th style="width:40%">Metric</th>
+            <th>Wk 2</th>
+            <th>Wk 3</th>
+            <th>Change</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>MQLs</td>
+            <td>58</td>
+            <td>54</td>
+            <td class="down">▼ 7%</td>
+          </tr>
+          <tr>
+            <td>Sales Accepted</td>
+            <td>4</td>
+            <td>3</td>
+            <td class="down">▼ 25%</td>
+          </tr>
+          <tr>
+            <td>Pre-Pipeline $</td>
+            <td>$12.5K</td>
+            <td>$231.9K</td>
+            <td class="up">▲ 1,754%</td>
+          </tr>
+          <tr>
+            <td>Discovery $</td>
+            <td>$257.8K</td>
+            <td>$361.0K</td>
+            <td class="up">▲ 40%</td>
+          </tr>
+          <tr>
+            <td>Qualified $</td>
+            <td>$105.0K</td>
+            <td>$150.0K</td>
+            <td class="up">▲ 43%</td>
+          </tr>
+          <tr>
+            <td>Pre-Pipeline Opps</td>
+            <td>2</td>
+            <td>8</td>
+            <td class="up">▲ 300%</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p style="font-size: 13px; color: #666; margin-top: 16px; line-height: 1.7;">
+        <strong style="color:#1a1a1a;">Key takeaway:</strong> Week 3 showed a strong dollar rebound after a soft Week 2. Pre-Pipeline jumped from $12.5K to $232K, and EMEA came online. However, Sales Accepted meetings continued declining (10 → 4 → 3) — a potential bottleneck forming.
+      </p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ACTION ITEMS -->
+    <div class="section">
+      <div class="section-label">This week</div>
+      <div class="section-title">Recommended actions</div>
+
+      <div class="action-item">
+        <div class="action-num">1</div>
+        <div class="action-body">
+          <strong>Enterprise pipeline war room.</strong> Schedule a cross-functional review to diagnose the 1% Qualified pacing. Identify the top 10 Enterprise accounts and build a 60-day acceleration plan.
+        </div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">2</div>
+        <div class="action-body">
+          <strong>Paid channel audit.</strong> At ~3% of Discovery target, Inbound Paid needs immediate diagnosis — targeting, budget allocation, or conversion funnel.
+        </div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">3</div>
+        <div class="action-body">
+          <strong>MQL-to-Qualified conversion deep dive.</strong> Investigate the 41% QoQ drop. Is it lead quality, qualification criteria, or a handoff gap?
+        </div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">4</div>
+        <div class="action-body">
+          <strong>Diversify beyond Events.</strong> Develop a 30-day plan to accelerate Direct, Organic, and Email/Nurture to reduce single-channel dependency.
+        </div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">5</div>
+        <div class="action-body">
+          <strong>Double down on AI positioning.</strong> AI pipeline is 6.6x Comms. Shift messaging and budget to lean into this product-market fit signal.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-logo">✳ delight.ai</div>
+    <p>Weekly Dashboard Digest · February 23, 2026<br>
+    Data: Salesforce via Looker · FY2027 Q1<br>
+    Prepared by Executive Analytics</p>
+  </div>
+
+</div>
+</body>
+</html>
