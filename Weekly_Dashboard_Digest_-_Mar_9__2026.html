@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weekly Dashboard Digest - Mar 9, 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Helvetica+Neue:wght@400;500;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background: #f5f4f0;
+    color: #1a1a1a;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .email-wrapper {
+    max-width: 640px;
+    margin: 0 auto;
+    background: #ffffff;
+  }
+
+  /* Header */
+  .header {
+    background: #ffffff;
+    padding: 48px 48px 0;
+    border-bottom: none;
+  }
+  .logo-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 40px;
+  }
+  .logo-mark {
+    font-size: 22px;
+    line-height: 1;
+  }
+  .logo-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: #1a1a1a;
+    letter-spacing: -0.5px;
+  }
+  .header-title {
+    font-family: 'Playfair Display', 'Georgia', serif;
+    font-size: 36px;
+    font-weight: 500;
+    color: #1a1a1a;
+    letter-spacing: -1px;
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+  .header-date {
+    font-size: 14px;
+    color: #888;
+    font-weight: 400;
+    margin-bottom: 36px;
+  }
+
+  /* Hero */
+  .hero-image {
+    width: 100%;
+    height: 180px;
+    background: linear-gradient(135deg, #f7e6d0 0%, #e8c9a0 30%, #d4956a 60%, #c47a52 80%, #b8654a 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-image::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -40px;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(255,240,220,0.6) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .hero-image::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: 20%;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(255,200,150,0.3) 0%, transparent 60%);
+    border-radius: 50%;
+  }
+
+  /* Content */
+  .content { padding: 40px 48px; }
+
+  /* Pacing Overview */
+  .pacing-section {
+    margin-bottom: 40px;
+  }
+  .pacing-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #999;
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+  .pacing-sublabel {
+    font-size: 12px;
+    color: #999;
+    margin-bottom: 20px;
+    line-height: 1.5;
+  }
+  .pacing-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0;
+    border: 1px solid #e8e8e5;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .pace-cell {
+    padding: 20px 10px;
+    text-align: center;
+    border-right: 1px solid #e8e8e5;
+  }
+  .pace-cell:last-child { border-right: none; }
+  .pace-metric-name {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #999;
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+  .pace-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 600;
+    color: #1a1a1a;
+    letter-spacing: -0.5px;
+  }
+  .pace-actual {
+    font-size: 11px;
+    color: #888;
+    margin-top: 4px;
+    line-height: 1.4;
+  }
+  .pace-actual strong {
+    color: #1a1a1a;
+  }
+  .pace-status {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 6px;
+  }
+  .pace-status.behind { color: #c0392b; }
+  .pace-status.watch { color: #b8860b; }
+  .pace-status.on-track { color: #27825b; }
+
+  /* Divider */
+  .divider {
+    height: 1px;
+    background: #e8e8e5;
+    margin: 36px 0;
+  }
+
+  /* Section headers */
+  .section { margin-bottom: 36px; }
+  .section-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #999;
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    font-weight: 500;
+    color: #1a1a1a;
+    letter-spacing: -0.5px;
+    margin-bottom: 20px;
+  }
+
+  /* Executive Summary */
+  .exec-summary {
+    font-size: 15px;
+    color: #444;
+    line-height: 1.75;
+    margin-bottom: 36px;
+  }
+  .exec-summary strong { color: #1a1a1a; }
+
+  /* Insight cards */
+  .insight-card {
+    padding: 20px 24px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    font-size: 14px;
+    line-height: 1.7;
+    color: #444;
+  }
+  .insight-card.win {
+    background: #f6faf6;
+    border-left: 3px solid #27825b;
+  }
+  .insight-card.concern {
+    background: #fdf6f5;
+    border-left: 3px solid #c0392b;
+  }
+  .insight-card.watch-item {
+    background: #fdfaf3;
+    border-left: 3px solid #b8860b;
+  }
+  .insight-card .card-title {
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 4px;
+    font-size: 14px;
+  }
+  .insight-card .big-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 600;
+    margin: 4px 0 6px;
+    letter-spacing: -0.5px;
+  }
+  .insight-card .big-number.green { color: #27825b; }
+  .insight-card .big-number.red { color: #c0392b; }
+
+  /* Events table */
+  .events-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-bottom: 16px;
+  }
+  .events-table th {
+    text-align: left;
+    padding: 10px 8px;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #999;
+    font-weight: 500;
+    border-bottom: 2px solid #1a1a1a;
+  }
+  .events-table th:last-child { text-align: right; }
+  .events-table td {
+    padding: 10px 8px;
+    border-bottom: 1px solid #f0eeea;
+    color: #444;
+    font-size: 13px;
+  }
+  .events-table td:first-child {
+    font-weight: 500;
+    color: #1a1a1a;
+    max-width: 280px;
+  }
+  .events-table td:last-child {
+    text-align: right;
+    font-weight: 600;
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    letter-spacing: -0.3px;
+  }
+  .events-table tr.total-row td {
+    border-top: 2px solid #1a1a1a;
+    border-bottom: none;
+    font-weight: 700;
+    color: #1a1a1a;
+    padding-top: 12px;
+  }
+
+  /* WoW Table */
+  .wow-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .wow-table th {
+    text-align: left;
+    padding: 10px 0;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #999;
+    font-weight: 500;
+    border-bottom: 2px solid #1a1a1a;
+  }
+  .wow-table td {
+    padding: 12px 0;
+    border-bottom: 1px solid #f0eeea;
+    color: #444;
+  }
+  .wow-table td:first-child { font-weight: 500; color: #1a1a1a; }
+  .wow-table .up { color: #27825b; font-weight: 600; }
+  .wow-table .down { color: #c0392b; font-weight: 600; }
+
+  /* Action Items */
+  .action-item {
+    display: flex;
+    gap: 16px;
+    padding: 18px 0;
+    border-bottom: 1px solid #f0eeea;
+  }
+  .action-item:last-child { border-bottom: none; }
+  .action-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: #1a1a1a;
+    min-width: 28px;
+    line-height: 1.4;
+  }
+  .action-body {
+    font-size: 14px;
+    color: #444;
+    line-height: 1.65;
+  }
+  .action-body strong { color: #1a1a1a; }
+
+  /* Footer */
+  .footer {
+    background: #1a1a1a;
+    padding: 36px 48px;
+  }
+  .footer-logo {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 12px;
+  }
+  .footer p {
+    font-size: 12px;
+    color: rgba(255,255,255,0.45);
+    line-height: 1.8;
+  }
+
+  @media (max-width: 600px) {
+    .header, .content, .footer { padding-left: 24px; padding-right: 24px; }
+    .header-title { font-size: 28px; }
+    .pacing-grid { grid-template-columns: repeat(3, 1fr); }
+    .pace-cell:nth-child(4), .pace-cell:nth-child(5) {
+      border-top: 1px solid #e8e8e5;
+    }
+    .pace-number { font-size: 20px; }
+    .pace-actual { font-size: 10px; }
+  }
+</style>
+</head>
+<body>
+<div class="email-wrapper">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo-row">
+      <span class="logo-mark">✳</span>
+      <span class="logo-text">delight.ai</span>
+    </div>
+    <h1 class="header-title">Weekly Dashboard<br>Digest</h1>
+    <p class="header-date">Monday, March 9, 2026 · FY2027 Q1 · Week 6 of 13</p>
+  </div>
+
+  <!-- Hero -->
+  <div class="hero-image"></div>
+
+  <div class="content">
+
+    <!-- PACING AT A GLANCE -->
+    <div class="pacing-section">
+      <div class="pacing-label">Q1 Pacing at a Glance</div>
+      <div class="pacing-sublabel">Projected % = where we'll finish if current pace holds · Actual % = what we've hit so far · Quarter is 41% elapsed</div>
+      <div class="pacing-grid">
+        <div class="pace-cell">
+          <div class="pace-metric-name">MQLs</div>
+          <div class="pace-number">39%</div>
+          <div class="pace-actual">Actual: 440 of 2,770<br><strong>16%</strong> of target</div>
+          <div class="pace-status watch">Watch</div>
+        </div>
+        <div class="pace-cell">
+          <div class="pace-metric-name">SALs</div>
+          <div class="pace-number">35%</div>
+          <div class="pace-actual">Actual: 40 of 277<br><strong>14%</strong> of target</div>
+          <div class="pace-status watch">Watch</div>
+        </div>
+        <div class="pace-cell">
+          <div class="pace-metric-name">Pre-Pipe</div>
+          <div class="pace-number">40%</div>
+          <div class="pace-actual">Actual: $8.1M of $49.8M<br><strong>16%</strong> of target</div>
+          <div class="pace-status watch">Watch</div>
+        </div>
+        <div class="pace-cell">
+          <div class="pace-metric-name">Discovery</div>
+          <div class="pace-number">14%</div>
+          <div class="pace-actual">Actual: $2.4M of $40.4M<br><strong>6%</strong> of target</div>
+          <div class="pace-status behind">Behind</div>
+        </div>
+        <div class="pace-cell">
+          <div class="pace-metric-name">Qualified</div>
+          <div class="pace-number">15%</div>
+          <div class="pace-actual">Actual: $982K of $15.7M<br><strong>6%</strong> of target</div>
+          <div class="pace-status behind">Behind</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EXECUTIVE SUMMARY -->
+    <p class="exec-summary">
+      Six weeks in — 41% of Q1 elapsed — and the funnel story remains bifurcated. <strong>Top-of-funnel has stabilized near pace</strong>: MQLs improved to 39% projected (440 actual, 16% of target), Pre-Pipeline held at 40% projected ($8.1M actual), and MQL volume surged in Week 5 to 158 — the quarter's best week. But <strong>Discovery at 14% projected and Qualified at 15%</strong> remain stuck at roughly a third of pace. The conversion bottleneck is now the defining challenge — $19.8M in projected Pre-Pipeline sits upstream while only $5.7M projected has reached Discovery. Events are the standout engine, driving <strong>$6.7M in attributed Pre-Pipeline ARR</strong> — led by ViVE ($3.1M) and eTail Palm Springs ($1.7M). AI pipeline outpaces Comms 6.7:1.
+    </p>
+
+    <div class="divider"></div>
+
+    <!-- WINS -->
+    <div class="section">
+      <div class="section-label">What's working</div>
+      <div class="section-title">Wins & highlights</div>
+
+      <div class="insight-card win">
+        <div class="card-title">MQL volume hit a quarter high in Week 5</div>
+        <div class="big-number green">158 MQLs · ▲53% WoW</div>
+        <div>The highest single-week volume this quarter, driven by Paid Search (51), Direct (27), and Organic Search (24). Total MQL pacing improved from 31% to 39% projected — closing the gap toward the 41% benchmark.</div>
+      </div>
+
+      <div class="insight-card win">
+        <div class="card-title">AI pipeline dominance widening — 6.7:1 ratio</div>
+        <div class="big-number green">$855K AI vs. $127K Comms Qualified</div>
+        <div>AI Qualified projected at 20% of target vs. Comms at just 6%. The gap widened from 5.2:1 last week — the market continues pulling hard toward the AI offering.</div>
+      </div>
+
+      <div class="insight-card win">
+        <div class="card-title">Discovery rebounded sharply in Week 5</div>
+        <div class="big-number green">$610K · ▲401% WoW</div>
+        <div>After a dismal $122K in Week 4, Discovery snapped back to $610K — the second-strongest week this quarter. Events contributed $410K, with AMER adding $460K. First signs the Pre-Pipeline surge is starting to convert.</div>
+      </div>
+
+      <div class="insight-card win">
+        <div class="card-title">Commercial Qualified pacing at 47%</div>
+        <div>$303K actual ($737K projected) against a $1.57M target. The only market segment pacing above the 41% benchmark — a bright spot in an otherwise challenged Qualified picture.</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- EVENTS PIPELINE SPOTLIGHT -->
+    <div class="section">
+      <div class="section-label">Channel deep dive</div>
+      <div class="section-title">Events pipeline spotlight</div>
+
+      <div class="insight-card win" style="margin-bottom: 20px;">
+        <div class="card-title">Events are the #1 Pre-Pipeline engine this quarter</div>
+        <div class="big-number green">$6.7M attributed Pre-Pipeline ARR</div>
+        <div>Events-sourced campaigns account for 83% of all attributed Pre-Pipeline ARR ($6.7M of $8.1M total). Three flagship Q1 events — ViVE, eTail Palm Springs, and CCW Exchange UK — generated $5.5M combined.</div>
+      </div>
+
+      <table class="events-table">
+        <thead>
+          <tr>
+            <th>Event Campaign</th>
+            <th>Pre-Pipeline ARR</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>ViVE Conference (AMER)</td>
+            <td>$3,122,333</td>
+          </tr>
+          <tr>
+            <td>eTail Palm Springs (AMER)</td>
+            <td>$1,687,048</td>
+          </tr>
+          <tr>
+            <td>CCW Exchange UK (EMEA)</td>
+            <td>$708,333</td>
+          </tr>
+          <tr>
+            <td>AI Readiness Webinar (AMER)</td>
+            <td>$200,000</td>
+          </tr>
+          <tr>
+            <td>CCW Vegas — Direct (AMER)</td>
+            <td>$151,886</td>
+          </tr>
+          <tr>
+            <td>CX Live Malaysia (APAC)</td>
+            <td>$148,500</td>
+          </tr>
+          <tr>
+            <td>Sullivan's eTail PS (AMER)</td>
+            <td>$140,000</td>
+          </tr>
+          <tr>
+            <td>All other events (14 campaigns)</td>
+            <td>$573,652</td>
+          </tr>
+          <tr class="total-row">
+            <td>Total Events Pre-Pipeline</td>
+            <td>$6,731,752</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p style="font-size: 13px; color: #666; line-height: 1.7;">
+        <strong style="color:#1a1a1a;">Key insight:</strong> ViVE ($3.1M) and eTail Palm Springs ($1.7M) — both Q1 events — are the quarter's dominant pipeline generators. CCW Exchange UK ($708K) signals growing EMEA event traction. Events also drove $1.48M in Discovery ARR (16% of the $9.1M Events Discovery target). The priority now is converting this event-sourced Pre-Pipeline downstream — particularly the ViVE and eTail pipeline sitting in early stages.
+      </p>
+
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- CONCERNS -->
+    <div class="section">
+      <div class="section-label">Needs attention</div>
+      <div class="section-title">Concerns & problem areas</div>
+
+      <div class="insight-card concern">
+        <div class="card-title">Discovery Pipeline still deeply behind at 14% projected</div>
+        <div class="big-number red">$2.4M actual (6%) · $5.7M projected of $40.4M target</div>
+        <div>Only 6% of the Discovery target has actually been hit. Even projected attainment ($5.7M) is barely one-third of the 41% pace benchmark. APAC Discovery at 9% projected is the weakest region. The $19.8M Pre-Pipeline reservoir is not converting fast enough.</div>
+      </div>
+
+      <div class="insight-card concern">
+        <div class="card-title">Enterprise Qualified deteriorated to 4% projected</div>
+        <div class="big-number red">$174K actual (1.7%) · $423K projected of $10.2M target</div>
+        <div>Down from 5% projected last week. Enterprise represents 65% of the total Qualified target and has generated just $174K in actual pipe. This remains the single most critical gap in the entire funnel.</div>
+      </div>
+
+      <div class="insight-card concern">
+        <div class="card-title">MQL-to-Qualified conversion stuck at 9%</div>
+        <div class="big-number red">9% · ↓49% QoQ</div>
+        <div>Down from 17% in FY26 Q4. The mid-funnel efficiency problem persists — every lead generated at the top converts at roughly half its expected rate. This compounds every upstream volume gain.</div>
+      </div>
+
+      <div class="insight-card concern">
+        <div class="card-title">SALs pacing slipped from 37% to 35% projected</div>
+        <div class="big-number red">40 actual (14% of target) · 35% projected</div>
+        <div>Week 5 delivered only 5 Sales Accepted meetings, continuing the decline (11 → 5 → 10 → 8 → 5). Rising MQLs are not translating to meetings — the handoff gap is widening.</div>
+      </div>
+
+      <div class="insight-card watch-item">
+        <div class="card-title">Inbound Paid Discovery at less than 1%</div>
+        <div>Only $77K in Discovery ARR against an $8.1M target — 0.9% pacing. The worst-performing channel by a wide margin. Needs urgent intervention to justify continued spend.</div>
+      </div>
+
+      <div class="insight-card watch-item">
+        <div class="card-title">APAC Qualified collapsed to 2% projected</div>
+        <div>$53K actual, $129K projected against a $5.2M target. No new Qualified pipeline from APAC since Week 1. The region represents 33% of the Qualified target.</div>
+      </div>
+
+      <div class="insight-card watch-item">
+        <div class="card-title">Social followers still lagging at 22%</div>
+        <div>654 followers against a 3,000 Q1 target. Weekly gains remain inconsistent — 187 one week, single digits the next. At current pace, projected attainment falls well short of goal.</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- WEEK OVER WEEK -->
+    <div class="section">
+      <div class="section-label">Trends</div>
+      <div class="section-title">Week-over-week changes</div>
+
+      <table class="wow-table">
+        <thead>
+          <tr>
+            <th style="width:40%">Metric</th>
+            <th>Wk 4</th>
+            <th>Wk 5</th>
+            <th>Change</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>MQLs</td>
+            <td>103</td>
+            <td>158</td>
+            <td class="up">▲ 53%</td>
+          </tr>
+          <tr>
+            <td>Sales Accepted</td>
+            <td>8</td>
+            <td>5</td>
+            <td class="down">▼ 38%</td>
+          </tr>
+          <tr>
+            <td>Pre-Pipeline $</td>
+            <td>$4,187.2K</td>
+            <td>$2,540.9K</td>
+            <td class="down">▼ 39%</td>
+          </tr>
+          <tr>
+            <td>Discovery $</td>
+            <td>$121.8K</td>
+            <td>$610.0K</td>
+            <td class="up">▲ 401%</td>
+          </tr>
+          <tr>
+            <td>Qualified $</td>
+            <td>$0</td>
+            <td>$250.0K</td>
+            <td class="up">▲ New</td>
+          </tr>
+          <tr>
+            <td>Pre-Pipeline Opps</td>
+            <td>42</td>
+            <td>31</td>
+            <td class="down">▼ 26%</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p style="font-size: 13px; color: #666; margin-top: 16px; line-height: 1.7;">
+        <strong style="color:#1a1a1a;">Key takeaway:</strong> Week 5 reversed the downstream drought. Discovery surged 401% to $610K — the first meaningful conversion from the Pre-Pipeline buildup. Qualified came back online at $250K after a zero week. MQLs hit their quarter high at 158. But Pre-Pipeline generation cooled 39% as the Events wave naturally ebbed, and Sales Accepted meetings continued their worrying decline (8 → 5). The pattern is encouraging for conversion but the SAL bottleneck demands attention — it's been below 10 for four of the last five weeks.
+      </p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ACTION ITEMS -->
+    <div class="section">
+      <div class="section-label">This week</div>
+      <div class="section-title">Recommended actions</div>
+
+      <div class="action-item">
+        <div class="action-num">1</div>
+        <div class="action-body">
+          <strong>Convert the Events Pre-Pipeline surge.</strong> $6.7M in events Pre-Pipeline ARR is the quarter's biggest asset — but only if it moves downstream. Prioritize the top 25 event opps by value (starting with ViVE's $3.1M and eTail's $1.7M), assign dedicated owners, and set a 2-week Discovery conversion SLA.
+        </div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">2</div>
+        <div class="action-body">
+          <strong>Enterprise pipeline intervention — executive sponsorship required.</strong> At 4% projected (1.7% actual) against 65% of the Qualified target, Enterprise is the single largest risk. Escalate to CRO for a top-10 Enterprise account blitz with multi-threaded executive engagement.
+        </div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">3</div>
+        <div class="action-body">
+          <strong>Diagnose the SAL bottleneck.</strong> MQLs are up 53% WoW but SALs dropped to 5. The MQL-to-SAL handoff is breaking — audit whether leads are sitting unworked, the acceptance bar has shifted, or routing is misaligned.
+        </div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">4</div>
+        <div class="action-body">
+          <strong>Inbound Paid emergency review.</strong> At 0.9% Discovery pacing against an $8.1M target, Paid is essentially non-contributing. Conduct an immediate audit of targeting, creative, and landing page conversion. Consider reallocating budget if fixes can't be identified within 2 weeks.
+        </div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">5</div>
+        <div class="action-body">
+          <strong>APAC regional escalation.</strong> Discovery at 9% projected and Qualified at 2%. No new Qualified pipeline from APAC in five weeks. Initiate a 30-day sprint with regional leadership — the back half of the quarter starts now.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-logo">✳ delight.ai</div>
+    <p>Weekly Dashboard Digest · March 9, 2026<br>
+    Data: Salesforce via Looker · FY2027 Q1<br>
+    Prepared by Executive Analytics</p>
+  </div>
+
+</div>
+</body>
+</html>
