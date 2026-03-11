@@ -289,9 +289,47 @@
     }
     .pace-number { font-size: 22px; }
   }
+
+  /* Digest navigation */
+  .digest-nav {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 20px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .nav-back {
+    font-size: 13px;
+    font-weight: 500;
+    color: #888;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+  .nav-back:hover { color: #b8654a; }
+  .nav-issues {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .nav-prev, .nav-next {
+    font-size: 13px;
+    font-weight: 500;
+    color: #888;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+  .nav-prev:hover, .nav-next:hover { color: #b8654a; }
 </style>
 </head>
 <body>
+<nav class="digest-nav">
+  <a class="nav-back" href="index.html">← All Digests</a>
+  <div class="nav-issues">
+    <a class="nav-prev" href="Weekly_Dashboard_Digest_-_Feb_23__2026.html">← Feb 23</a>
+    <a class="nav-next" href="Weekly_Dashboard_Digest_-_Mar_9__2026.html">March 9 →</a>
+  </div>
+</nav>
 <div class="email-wrapper">
 
   <!-- HEADER -->
