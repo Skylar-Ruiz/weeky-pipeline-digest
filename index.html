@@ -214,6 +214,41 @@
   .digest-item:nth-child(4) { animation: fadeUp 0.5s ease both; animation-delay: 0.8s; }
   .digest-item:nth-child(5) { animation: fadeUp 0.5s ease both; animation-delay: 0.9s; }
 
+  /* Report type tabs */
+  .report-tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 32px;
+  }
+
+  .tab {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    padding: 7px 16px;
+    border-radius: 100px;
+    border: 1px solid #e8e8e5;
+    background: transparent;
+    color: #999;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .tab:hover {
+    color: #1a1a1a;
+    border-color: #ccc;
+  }
+
+  .tab.active {
+    background: #1a1a1a;
+    border-color: #1a1a1a;
+    color: #fff;
+  }
+
+  .digest-item[data-type] { transition: opacity 0.2s ease; }
+  .digest-item.hidden { display: none; }
+
   @media (max-width: 600px) {
     .page { padding: 48px 24px 80px; }
     .page-title { font-size: 36px; letter-spacing: -1px; }
@@ -236,7 +271,13 @@
 
   <div class="archive-label">Archive</div>
 
-  <li class="digest-item">
+  <div class="report-tabs">
+    <button class="tab active" data-filter="all">All</button>
+    <button class="tab" data-filter="weekly">Weekly</button>
+    <button class="tab" data-filter="events">Events</button>
+  </div>
+
+  <li class="digest-item" data-type="weekly">
       <a class="digest-link" href="Weekly_Dashboard_Digest_-_Mar_9__2026.html">
         <div class="digest-info">
           <div class="digest-title">March 9, 2026</div>
@@ -257,7 +298,7 @@
     </li>
 
   <ul class="digest-list">
-    <li class="digest-item">
+    <li class="digest-item" data-type="weekly">
       <a class="digest-link" href="Weekly_Dashboard_Digest_-_Mar_2__2026.html">
         <div class="digest-info">
           <div class="digest-title">March 2, 2026</div>
@@ -276,7 +317,7 @@
         </div>
       </a>
     </li>
-    <li class="digest-item">
+    <li class="digest-item" data-type="weekly">
       <a class="digest-link" href="Weekly_Dashboard_Digest_-_Feb_23__2026.html">
         <div class="digest-info">
           <div class="digest-title">February 23, 2026</div>
@@ -303,5 +344,21 @@
   </div>
 
 </div>
+<script>
+  document.querySelectorAll('.tab').forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      var filter = this.getAttribute('data-filter');
+      document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+      this.classList.add('active');
+      document.querySelectorAll('.digest-item[data-type]').forEach(function(item) {
+        if (filter === 'all' || item.getAttribute('data-type') === filter) {
+          item.classList.remove('hidden');
+        } else {
+          item.classList.add('hidden');
+        }
+      });
+    });
+  });
+</script>
 </body>
 </html>
