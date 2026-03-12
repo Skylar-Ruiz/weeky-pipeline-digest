@@ -273,8 +273,8 @@
 
   <div class="report-tabs">
     <button class="tab active" data-filter="all">All</button>
-    <button class="tab" data-filter="weekly">Weekly</button>
-    <button class="tab" data-filter="events">Events</button>
+    <button class="tab" data-filter="full-funnel">Full Funnel</button>
+    <button class="tab" data-filter="channels">Channels</button>
   </div>
 
   <li class="digest-item" data-type="weekly">
@@ -351,11 +351,11 @@
       document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
       this.classList.add('active');
       document.querySelectorAll('.digest-item[data-type]').forEach(function(item) {
-        if (filter === 'all' || item.getAttribute('data-type') === filter) {
-          item.classList.remove('hidden');
-        } else {
-          item.classList.add('hidden');
-        }
+        var type = item.getAttribute('data-type');
+        var show = filter === 'all' ||
+                   (filter === 'full-funnel' && type === 'weekly') ||
+                   (filter === 'channels' && type !== 'weekly');
+        item.classList.toggle('hidden', !show);
       });
     });
   });
