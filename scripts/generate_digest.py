@@ -210,7 +210,10 @@ Generate a complete Events Pipeline Report for {week_label}. Rules:
    "← Previous Events Report" should link to the previous events report filename from the template
    (look for Events_Digest_-_ in the template nav links).
 8. Update the footer date attribution.
-9. Keep the hero gradient, logo, and all structural HTML identical.
+9. Keep the logo and all structural HTML identical.
+10. The hero gradient MUST use delight brand blue: linear-gradient(135deg, #e8efff 0%, #b8cafc 30%, #8facf9 60%, #7092fb 80%, #5577e8 100%).
+    Radial overlays: ::before uses rgba(220,235,255,0.7), ::after uses rgba(180,210,255,0.3).
+    Link hover color and action number color: #7092fb.
 """
 
     print("  ✓ Calling Claude API for Events Report (this may take ~30s)...")
