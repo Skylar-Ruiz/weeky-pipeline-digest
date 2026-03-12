@@ -1,0 +1,50 @@
+name: Notify Slack on Digest Published
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'Weekly_Dashboard_Digest_-_*.html'
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Get digest info
+        id: digest
+        run: |
+          FILENAME=$(git diff --name-only HEAD~1 HEAD | grep 'Weekly_Dashboard_Digest' | head -1)
+          echo "filename=$FILENAME" >> $GITHUB_OUTPUT
+          WEEK_LABEL=$(echo $FILENAME | sed 's/Weekly_Dashboard_Digest_-_//' | sed 's/\.html//' | sed 's/__/ /g' | sed 's/_/ /g')
+          echo "week_label=$WEEK_LABEL" >> $GITHUB_OUTPUT
+
+      - name: Send Slack notifications
+        env:
+          SLACK_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          FILENAME: ${{ steps.digest.outputs.filename }}
+          WEEK_LABEL: ${{ steps.digest.outputs.week_label }}
+        run: |
+          MESSAGE="📊 *Delight's Weekly Digest is live!*\n\n*${WEEK_LABEL}* is now published.\n\n👉 <https://weeky-pipeline-digest.vercel.app/${FILENAME}|View Digest>"
+
+          # Post to #marketing
+          curl -s -X POST https://slack.com/api/chat.postMessage \
+            -H "Authorization: Bearer $SLACK_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d "{\"channel\": \"CBN6C3X3J\", \"text\": \"$MESSAGE\"}"
+
+          # DM Skylar
+          curl -s -X POST https://slack.com/api/chat.postMessage \
+            -H "Authorization: Bearer $SLACK_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d "{\"channel\": \"U08V2PVE0UT\", \"text\": \"$MESSAGE\"}"
+
+          # DM Charles
+          curl -s -X POST https://slack.com/api/chat.postMessage \
+            -H "Authorization: Bearer $SLACK_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d "{\"channel\": \"U090CFEA4BT\", \"text\": \"$MESSAGE\"}"
