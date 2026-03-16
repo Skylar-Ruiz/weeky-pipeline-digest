@@ -129,7 +129,7 @@ def load_previous_events_report(weekly_template: str) -> str:
     return weekly_template
 
 
-def generate_report(csvs: dict, template_html: str, week_label: str, week_num: int) -> str:
+def generate_report(csvs: dict, template_html: str, week_label: str, week_num: int, events_filename: str = "") -> str:
     """Send CSVs + template to Claude and get back a complete weekly HTML report."""
     client = anthropic.Anthropic(api_key=ANTHROPIC_KEY)
 
@@ -141,6 +141,7 @@ def generate_report(csvs: dict, template_html: str, week_label: str, week_num: i
 
 Today: {datetime.now().strftime('%A, %B %-d, %Y')}
 Report week: {week_label} · FY2027 Q1 · Week {week_num} of 13
+Events Deep Dive filename for this week: {events_filename}
 
 ────────────────────────────────────────────────
 CSV DATA FROM EXEC DASHBOARDS:
@@ -168,8 +169,16 @@ Generate a complete new HTML report for {week_label}. Rules:
    to the previous week's numbers (read from the template's pacing grid).
 6. Rewrite the Executive Summary, Wins, Concerns, Watch Items, and Action Items
    based entirely on this week's CSV data.
-7. Update the navigation bar: "← All Digests" stays as index.html,
-   "← Previous" should link to the previous digest filename from the template.
+7. Update the navigation bar:
+   - "← All Digests" stays as index.html
+   - "← Previous" should link to the previous digest filename from the template
+   - Add an "Events Deep Dive →" pill button linking to Events_Digest_-_{events_suffix}.html
+     where {events_suffix} matches this week's date (same suffix as the weekly filename)
+   - The pill button should use class="nav-events" with this CSS (add to the <style> block):
+     .nav-events {{ font-size:12px; font-weight:600; color:#fff; background:#1a1a1a;
+       text-decoration:none; padding:6px 14px; border-radius:100px; letter-spacing:0.2px;
+       transition:background 0.2s ease; }}
+     .nav-events:hover {{ background:#b8654a; }}
 8. Update the footer date attribution.
 9. Keep the hero gradient, logo, and all structural HTML identical.
 10. Do NOT include an Events section or Events Pipeline Spotlight section — omit it entirely.
@@ -381,7 +390,7 @@ def main():
     events_template = load_previous_events_report(weekly_template)
 
     print("\n🤖 Generating Weekly Digest with Claude...")
-    weekly_html = generate_report(csvs, weekly_template, week_label, week_num)
+    weekly_html = generate_report(csvs, weekly_template, week_label, week_num, events_filename)
     with open(f"{REPO_PATH}/{weekly_filename}", "w") as f:
         f.write(weekly_html)
     print(f"  ✓ Saved: {weekly_filename}")
