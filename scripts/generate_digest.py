@@ -16,6 +16,7 @@ import os
 import glob
 import tempfile
 import subprocess
+import zipfile
 from datetime import datetime
 
 import anthropic
@@ -24,6 +25,19 @@ import anthropic
 REPO_PATH            = "/Users/skylar.ruiz/weeky-pipeline-digest"
 DRIVE_FOLDER         = "gdrive:Analytics/Weekly AI Briefings /Weekly Digest - Exec Summary"
 EVENTS_DRIVE_FOLDER  = "gdrive:Analytics/Weekly AI Briefings /Weekly Digest - Events"
+
+# Load .env file from project root if it exists (for scheduled/non-interactive runs)
+_env_file = os.path.join(REPO_PATH, ".env")
+if os.path.exists(_env_file):
+    with open(_env_file) as _f:
+        for _line in _f:
+            _line = _line.strip()
+            if _line and not _line.startswith("#") and "=" in _line:
+                _k, _, _v = _line.partition("=")
+                _val = _v.strip()
+                if _val:
+                    os.environ[_k.strip()] = _val
+
 ANTHROPIC_KEY        = os.environ.get("ANTHROPIC_API_KEY", "")
 
 EXPECTED_CSVS = [
@@ -62,10 +76,25 @@ def download_csvs() -> dict:
 
         all_expected = EXPECTED_CSVS + EVENTS_EXPECTED_CSVS
         csvs = {}
+
         for path in glob.glob(f"{tmp}/*"):
-            base_name = os.path.basename(path).replace(".csv", "").replace(".CSV", "")
-            base_lower = base_name.lower()
-            if any(expected in base_lower for expected in all_expected):
+            base_name = os.path.basename(path)
+            base_lower = base_name.lower().replace(".zip", "").replace(".csv", "").replace(".CSV", "")
+
+            matched = next((e for e in all_expected if e in base_lower), None)
+            if not matched:
+                continue
+
+            if zipfile.is_zipfile(path):
+                # Read every CSV inside the zip, keyed as "export_name/file.csv"
+                with zipfile.ZipFile(path) as zf:
+                    members = [m for m in zf.namelist() if m.lower().endswith(".csv")]
+                    for member in members:
+                        csv_key = f"{base_lower}/{os.path.basename(member)}"
+                        with zf.open(member) as f:
+                            csvs[csv_key] = f.read().decode("utf-8", errors="replace")
+                print(f"  ✓ Downloaded: {base_name} ({len(members)} CSVs)")
+            else:
                 with open(path, encoding="utf-8", errors="replace") as f:
                     csvs[base_lower] = f.read()
                 print(f"  ✓ Downloaded: {base_name}")
@@ -303,9 +332,30 @@ def git_push(weekly_filename: str, events_filename: str, week_label: str):
             raise RuntimeError(f"Git error ({' '.join(cmd)}): {result.stderr.strip()}")
         return result
 
+    # Save generated file contents before touching git (handles re-runs cleanly)
+    with open(f"{REPO_PATH}/{weekly_filename}") as f:
+        weekly_content = f.read()
+    with open(f"{REPO_PATH}/{events_filename}") as f:
+        events_content = f.read()
+    with open(f"{REPO_PATH}/index.html") as f:
+        index_content = f.read()
+
+    # Surgically restore only the output files (leaves generate_digest.py intact)
+    for output_file in [weekly_filename, events_filename, "index.html"]:
+        run(["git", "checkout", "HEAD", "--", output_file], check=False)
     run(["git", "checkout", "main"])
     run(["git", "pull", "origin", "main"])
+    run(["git", "branch", "-D", branch], check=False)
+    run(["git", "push", "origin", "--delete", branch], check=False)
     run(["git", "checkout", "-b", branch])
+
+    with open(f"{REPO_PATH}/{weekly_filename}", "w") as f:
+        f.write(weekly_content)
+    with open(f"{REPO_PATH}/{events_filename}", "w") as f:
+        f.write(events_content)
+    with open(f"{REPO_PATH}/index.html", "w") as f:
+        f.write(index_content)
+
     run(["git", "add", weekly_filename, events_filename, "index.html"])
     run(["git", "commit", "-m", f"Add Weekly Digest and Events Report for {week_label}"])
     run(["git", "push", "origin", branch])
