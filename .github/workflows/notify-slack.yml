@@ -3,7 +3,7 @@ name: Notify Slack on Digest Published
 on:
   push:
     branches:
-      - main
+      - publish
     paths:
       - 'Weekly_Dashboard_Digest_-_*.html'
       - 'Events_Digest_-_*.html'
