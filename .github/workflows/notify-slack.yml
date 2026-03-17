@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - 'Weekly_Dashboard_Digest_-_*.html'
+      - 'Events_Digest_-_*.html'
 
 jobs:
   notify:
@@ -15,19 +16,30 @@ jobs:
         with:
           fetch-depth: 2
 
-      - name: Get digest info
-        id: digest
+      - name: Detect changed files
+        id: detect
         run: |
-          FILENAME=$(git diff --name-only HEAD~1 HEAD | grep 'Weekly_Dashboard_Digest' | head -1)
-          echo "filename=$FILENAME" >> $GITHUB_OUTPUT
-          WEEK_LABEL=$(echo $FILENAME | sed 's/Weekly_Dashboard_Digest_-_//' | sed 's/\.html//' | sed 's/__/ /g' | sed 's/_/ /g')
-          echo "week_label=$WEEK_LABEL" >> $GITHUB_OUTPUT
+          WEEKLY_FILE=$(git diff --name-only HEAD~1 HEAD | grep 'Weekly_Dashboard_Digest' | head -1)
+          EVENTS_FILE=$(git diff --name-only HEAD~1 HEAD | grep 'Events_Digest' | head -1)
+          echo "weekly_file=$WEEKLY_FILE" >> $GITHUB_OUTPUT
+          echo "events_file=$EVENTS_FILE" >> $GITHUB_OUTPUT
 
-      - name: Send Slack notifications
+          if [ -n "$WEEKLY_FILE" ]; then
+            WEEK_LABEL=$(echo $WEEKLY_FILE | sed 's/Weekly_Dashboard_Digest_-_//' | sed 's/\.html//' | sed 's/__/ /g' | sed 's/_/ /g')
+            echo "weekly_label=$WEEK_LABEL" >> $GITHUB_OUTPUT
+          fi
+
+          if [ -n "$EVENTS_FILE" ]; then
+            EVENTS_LABEL=$(echo $EVENTS_FILE | sed 's/Events_Digest_-_//' | sed 's/\.html//' | sed 's/__/ /g' | sed 's/_/ /g')
+            echo "events_label=$EVENTS_LABEL" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Send Weekly Digest notifications
+        if: steps.detect.outputs.weekly_file != ''
         env:
           SLACK_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-          FILENAME: ${{ steps.digest.outputs.filename }}
-          WEEK_LABEL: ${{ steps.digest.outputs.week_label }}
+          FILENAME: ${{ steps.detect.outputs.weekly_file }}
+          WEEK_LABEL: ${{ steps.detect.outputs.weekly_label }}
         run: |
           MESSAGE="📊 *Delight's Weekly Digest is live!*\n\n*${WEEK_LABEL}* is now published.\n\n👉 <https://weeky-pipeline-digest.vercel.app/${FILENAME}|View Digest>"
 
@@ -48,3 +60,30 @@ jobs:
             -H "Authorization: Bearer $SLACK_TOKEN" \
             -H "Content-Type: application/json" \
             -d "{\"channel\": \"U090CFEA4BT\", \"text\": \"$MESSAGE\"}"
+
+      - name: Send Events Digest notifications
+        if: steps.detect.outputs.events_file != ''
+        env:
+          SLACK_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          FILENAME: ${{ steps.detect.outputs.events_file }}
+          EVENTS_LABEL: ${{ steps.detect.outputs.events_label }}
+        run: |
+          MESSAGE="📅 *Events Pipeline Report is live!*\n\n*${EVENTS_LABEL}* is now published.\n\n👉 <https://weeky-pipeline-digest.vercel.app/${FILENAME}|View Events Report>"
+
+          # DM Skylar
+          curl -s -X POST https://slack.com/api/chat.postMessage \
+            -H "Authorization: Bearer $SLACK_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d "{\"channel\": \"U08V2PVE0UT\", \"text\": \"$MESSAGE\"}"
+
+          # DM Charles
+          curl -s -X POST https://slack.com/api/chat.postMessage \
+            -H "Authorization: Bearer $SLACK_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d "{\"channel\": \"U090CFEA4BT\", \"text\": \"$MESSAGE\"}"
+
+          # DM Events person
+          curl -s -X POST https://slack.com/api/chat.postMessage \
+            -H "Authorization: Bearer $SLACK_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d "{\"channel\": \"D098HN8CVC5\", \"text\": \"$MESSAGE\"}"
