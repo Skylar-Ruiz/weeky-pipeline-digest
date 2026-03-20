@@ -7,6 +7,7 @@ on:
     paths:
       - 'Weekly_Dashboard_Digest_-_*.html'
       - 'Events_Digest_-_*.html'
+      - 'Email_Digest_-_*.html'
 
 jobs:
   notify:
@@ -21,8 +22,10 @@ jobs:
         run: |
           WEEKLY_FILE=$(git diff --name-only HEAD~1 HEAD | grep 'Weekly_Dashboard_Digest' | head -1)
           EVENTS_FILE=$(git diff --name-only HEAD~1 HEAD | grep 'Events_Digest' | head -1)
+          EMAIL_FILE=$(git diff --name-only HEAD~1 HEAD | grep 'Email_Digest' | head -1)
           echo "weekly_file=$WEEKLY_FILE" >> $GITHUB_OUTPUT
           echo "events_file=$EVENTS_FILE" >> $GITHUB_OUTPUT
+          echo "email_file=$EMAIL_FILE" >> $GITHUB_OUTPUT
 
           if [ -n "$WEEKLY_FILE" ]; then
             WEEK_LABEL=$(echo $WEEKLY_FILE | sed 's/Weekly_Dashboard_Digest_-_//' | sed 's/\.html//' | sed 's/__/ /g' | sed 's/_/ /g')
@@ -32,6 +35,11 @@ jobs:
           if [ -n "$EVENTS_FILE" ]; then
             EVENTS_LABEL=$(echo $EVENTS_FILE | sed 's/Events_Digest_-_//' | sed 's/\.html//' | sed 's/__/ /g' | sed 's/_/ /g')
             echo "events_label=$EVENTS_LABEL" >> $GITHUB_OUTPUT
+          fi
+
+          if [ -n "$EMAIL_FILE" ]; then
+            EMAIL_LABEL=$(echo $EMAIL_FILE | sed 's/Email_Digest_-_//' | sed 's/\.html//' | sed 's/__/ /g' | sed 's/_/ /g')
+            echo "email_label=$EMAIL_LABEL" >> $GITHUB_OUTPUT
           fi
 
       - name: Send Weekly Digest notifications
@@ -87,3 +95,24 @@ jobs:
             -H "Authorization: Bearer $SLACK_TOKEN" \
             -H "Content-Type: application/json" \
             -d "{\"channel\": \"D098HN8CVC5\", \"text\": \"$MESSAGE\"}"
+
+      - name: Send Email Digest notifications
+        if: steps.detect.outputs.email_file != ''
+        env:
+          SLACK_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          FILENAME: ${{ steps.detect.outputs.email_file }}
+          EMAIL_LABEL: ${{ steps.detect.outputs.email_label }}
+        run: |
+          MESSAGE="✉️ *Email Performance Report is live!*\n\n*${EMAIL_LABEL}* is now published.\n\n👉 <https://weeky-pipeline-digest.vercel.app/${FILENAME}|View Email Report>"
+
+          # DM Skylar
+          curl -s -X POST https://slack.com/api/chat.postMessage \
+            -H "Authorization: Bearer $SLACK_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d "{\"channel\": \"U08V2PVE0UT\", \"text\": \"$MESSAGE\"}"
+
+          # DM Charles
+          curl -s -X POST https://slack.com/api/chat.postMessage \
+            -H "Authorization: Bearer $SLACK_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d "{\"channel\": \"U090CFEA4BT\", \"text\": \"$MESSAGE\"}"

@@ -273,11 +273,30 @@
 
   <div class="report-tabs">
     <button class="tab active" data-filter="all">All</button>
-    <button class="tab" data-filter="full-funnel">Weekly Digest</button>
-    <button class="tab" data-filter="channels">By Channel</button>
+    <button class="tab" data-filter="weekly">Weekly Digest</button>
+    <button class="tab" data-filter="events">Events</button>
+    <button class="tab" data-filter="email">Email</button>
   </div>
 
   <ul class="digest-list">
+  <li class="digest-item" data-type="email">
+      <a class="digest-link" href="Email_Digest_-_Mar_20__2026.html">
+        <div class="digest-info">
+          <div class="digest-title">Email — March 20, 2026</div>
+          <div class="digest-meta">
+            <span>Email Report</span>
+            <span>·</span>
+            <span>FY2027 Q1</span>
+          </div>
+        </div>
+        <div class="digest-right">
+          <div class="digest-badges">
+            <span class="badge watch">New</span>
+          </div>
+          <span class="digest-arrow">→</span>
+        </div>
+      </a>
+    </li>
   <li class="digest-item" data-type="events">
       <a class="digest-link" href="Events_Digest_-_Mar_16__2026.html">
         <div class="digest-info">
@@ -405,9 +424,7 @@
       this.classList.add('active');
       document.querySelectorAll('.digest-item[data-type]').forEach(function(item) {
         var type = item.getAttribute('data-type');
-        var show = filter === 'all' ||
-                   (filter === 'full-funnel' && type === 'weekly') ||
-                   (filter === 'channels' && type !== 'weekly');
+        var show = filter === 'all' || filter === type;
         item.classList.toggle('hidden', !show);
       });
     });

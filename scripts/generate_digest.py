@@ -13,6 +13,7 @@ Setup (one-time):
 """
 
 import os
+import base64
 import glob
 import tempfile
 import subprocess
@@ -25,6 +26,7 @@ import anthropic
 REPO_PATH            = "/Users/skylar.ruiz/weeky-pipeline-digest"
 DRIVE_FOLDER         = "gdrive:Analytics/Weekly AI Briefings /Weekly Digest - Exec Summary"
 EVENTS_DRIVE_FOLDER  = "gdrive:Analytics/Weekly AI Briefings /Weekly Digest - Events"
+EMAIL_DRIVE_FOLDER   = "gdrive:Analytics/Weekly AI Briefings /Weekly Digest - Email"
 
 # Load .env file from project root if it exists (for scheduled/non-interactive runs)
 _env_file = os.path.join(REPO_PATH, ".env")
@@ -74,12 +76,40 @@ def download_csvs() -> dict:
         if result.returncode != 0:
             raise RuntimeError(f"rclone error (events): {result.stderr.strip()}")
 
+        # Download from Email folder (adds Weekly_email_report_csv + Weekly_email_report_pdf)
+        result = subprocess.run(
+            ["rclone", "copy", EMAIL_DRIVE_FOLDER, tmp, "-v"],
+            capture_output=True, text=True
+        )
+        if result.returncode != 0:
+            raise RuntimeError(f"rclone error (email): {result.stderr.strip()}")
+
         all_expected = EXPECTED_CSVS + EVENTS_EXPECTED_CSVS
         csvs = {}
+        email_data: dict = {}  # keyed "email_csv" and "email_pdf"
 
         for path in glob.glob(f"{tmp}/*"):
             base_name = os.path.basename(path)
             base_lower = base_name.lower().replace(".zip", "").replace(".csv", "").replace(".CSV", "")
+
+            # Handle email files separately
+            if "weekly_email_report_csv" in base_lower:
+                if zipfile.is_zipfile(path):
+                    with zipfile.ZipFile(path) as zf:
+                        members = [m for m in zf.namelist() if m.lower().endswith(".csv")]
+                        parts = []
+                        for member in members:
+                            with zf.open(member) as f:
+                                parts.append(f"=== {os.path.basename(member)} ===\n{f.read().decode('utf-8', errors='replace')}")
+                        email_data["email_csv"] = "\n\n".join(parts)
+                    print(f"  ✓ Downloaded (email CSV): {base_name} ({len(members)} CSVs)")
+                continue
+
+            if "weekly_email_report_pdf" in base_lower:
+                with open(path, "rb") as f:
+                    email_data["email_pdf"] = base64.standard_b64encode(f.read()).decode("utf-8")
+                print(f"  ✓ Downloaded (email PDF): {base_name}")
+                continue
 
             matched = next((e for e in all_expected if e in base_lower), None)
             if not matched:
@@ -103,6 +133,7 @@ def download_csvs() -> dict:
         if missing:
             raise RuntimeError(f"Missing CSVs from Drive: {missing}")
 
+        csvs["__email__"] = email_data
         return csvs
 
 
@@ -331,8 +362,126 @@ def update_index_events(filename: str, week_label: str):
     print("  ✓ Updated index.html with Events entry")
 
 
-def git_push(weekly_filename: str, events_filename: str, week_label: str):
-    """Create a review branch, commit both digests, and push to GitHub."""
+def load_previous_email_report(events_template: str) -> str:
+    """Return the HTML of the most recent Email report, or events digest as fallback."""
+    files = sorted(glob.glob(f"{REPO_PATH}/Email_Digest_-_*.html"))
+    if files:
+        latest = files[-1]
+        print(f"  ✓ Email template: {os.path.basename(latest)}")
+        with open(latest) as f:
+            return f.read()
+    print("  ✓ Email template: using events digest as structural reference (first run)")
+    return events_template
+
+
+def generate_email_report(csvs: dict, template_html: str, week_label: str, week_num: int) -> str:
+    """Generate an Email-focused sub-report using Claude."""
+    client = anthropic.Anthropic(api_key=ANTHROPIC_KEY)
+
+    email_data = csvs.get("__email__", {})
+    email_csv = email_data.get("email_csv", "")
+    email_pdf_b64 = email_data.get("email_pdf", "")
+
+    prompt = f"""You are generating Delight's Email Performance Report — a weekly email marketing sub-report for delight.ai.
+
+Today: {datetime.now().strftime('%A, %B %-d, %Y')}
+Report week: {week_label} · FY2027 Q1 · Week {week_num} of 13
+
+────────────────────────────────────────────────
+CSV DATA FROM EMAIL MARKETING DASHBOARD:
+────────────────────────────────────────────────
+{email_csv}
+
+────────────────────────────────────────────────
+STRUCTURAL TEMPLATE (match this HTML/CSS exactly — change only content and hero color):
+────────────────────────────────────────────────
+{template_html}
+
+────────────────────────────────────────────────
+INSTRUCTIONS:
+────────────────────────────────────────────────
+Generate a complete Email Performance Report for {week_label}. Rules:
+
+1. OUTPUT only the raw HTML document — no markdown fences, no explanation.
+2. Keep ALL CSS structure identical to the template.
+3. Update <title> to "Email Performance Report — {week_label}" and header to read
+   "Email Performance Report" with date line "Monday, {week_label} · FY2027 Q1 · Week {week_num} of 13".
+4. This report is EMAIL-FOCUSED — only show email marketing performance data.
+5. HERO GRADIENT — use this dark teal:
+   background: linear-gradient(135deg, #e0ede8 0%, #9ec4b8 30%, #5a9688 60%, #2d7060 80%, #1d5248 100%);
+   ::before radial: rgba(200,230,220,0.7)
+   ::after radial: rgba(150,210,195,0.3)
+   All link hover colors and action number colors: #2d7060
+6. Sections to include:
+   a. Performance Summary — pacing grid with Open Rate, CTR, Unsubscribe Rate vs benchmarks
+   b. Program Breakdown — table of top email programs (clean program names)
+   c. Week-over-Week Trends — open rate and CTR across last 4 weeks
+   d. Top Subject Lines — best by open rate and best by CTR
+   e. Wins, Concerns, Watch Items — email-specific observations
+   f. Recommended Actions — 3-4 email-specific action items
+7. Navigation: "← All Digests" → index.html. Previous email report from template nav if exists.
+8. Update footer date.
+9. Do NOT include pipeline ARR, MQLs, SALs, or non-email data.
+10. Also reference the attached PDF dashboard for any additional context or visuals to describe.
+"""
+
+    content = []
+    if email_pdf_b64:
+        content.append({
+            "type": "document",
+            "source": {"type": "base64", "media_type": "application/pdf", "data": email_pdf_b64},
+            "title": "Weekly Email Marketing Performance Dashboard PDF"
+        })
+    content.append({"type": "text", "text": prompt})
+
+    print("  ✓ Calling Claude API for Email Report (this may take ~30s)...")
+    resp = client.messages.create(
+        model="claude-opus-4-6",
+        max_tokens=16000,
+        messages=[{"role": "user", "content": content}],
+    )
+    html = resp.content[0].text.strip()
+
+    if html.startswith("```"):
+        html = html.split("\n", 1)[1]
+        html = html.rsplit("```", 1)[0].strip()
+
+    return html
+
+
+def update_index_email(filename: str, week_label: str):
+    """Prepend the new Email report entry to the archive list in index.html."""
+    index_path = f"{REPO_PATH}/index.html"
+    with open(index_path) as f:
+        html = f.read()
+
+    new_entry = f"""  <li class="digest-item" data-type="email">
+      <a class="digest-link" href="{filename}">
+        <div class="digest-info">
+          <div class="digest-title">Email — {week_label}</div>
+          <div class="digest-meta">
+            <span>Email Report</span>
+            <span>·</span>
+            <span>FY2027 Q1</span>
+          </div>
+        </div>
+        <div class="digest-right">
+          <div class="digest-badges">
+            <span class="badge watch">New</span>
+          </div>
+          <span class="digest-arrow">→</span>
+        </div>
+      </a>
+    </li>
+"""
+    html = html.replace('<ul class="digest-list">\n', f'<ul class="digest-list">\n{new_entry}', 1)
+    with open(index_path, "w") as f:
+        f.write(html)
+    print("  ✓ Updated index.html with Email entry")
+
+
+def git_push(weekly_filename: str, events_filename: str, email_filename: str, week_label: str):
+    """Create a review branch, commit all three digests, and push to GitHub."""
     branch = f"digest/{week_label.replace(' ', '-').replace(',', '')}"
 
     def run(cmd, check=True):
@@ -346,11 +495,13 @@ def git_push(weekly_filename: str, events_filename: str, week_label: str):
         weekly_content = f.read()
     with open(f"{REPO_PATH}/{events_filename}") as f:
         events_content = f.read()
+    with open(f"{REPO_PATH}/{email_filename}") as f:
+        email_content = f.read()
     with open(f"{REPO_PATH}/index.html") as f:
         index_content = f.read()
 
     # Surgically restore only the output files (leaves generate_digest.py intact)
-    for output_file in [weekly_filename, events_filename, "index.html"]:
+    for output_file in [weekly_filename, events_filename, email_filename, "index.html"]:
         run(["git", "checkout", "HEAD", "--", output_file], check=False)
     run(["git", "checkout", "main"])
     run(["git", "pull", "origin", "main"])
@@ -362,11 +513,13 @@ def git_push(weekly_filename: str, events_filename: str, week_label: str):
         f.write(weekly_content)
     with open(f"{REPO_PATH}/{events_filename}", "w") as f:
         f.write(events_content)
+    with open(f"{REPO_PATH}/{email_filename}", "w") as f:
+        f.write(email_content)
     with open(f"{REPO_PATH}/index.html", "w") as f:
         f.write(index_content)
 
-    run(["git", "add", weekly_filename, events_filename, "index.html"])
-    run(["git", "commit", "-m", f"Add Weekly Digest and Events Report for {week_label}"])
+    run(["git", "add", weekly_filename, events_filename, email_filename, "index.html"])
+    run(["git", "commit", "-m", f"Add Weekly Digest, Events Report, and Email Report for {week_label}"])
     run(["git", "push", "origin", branch])
 
     print(f"  ✓ Branch pushed: {branch}")
@@ -379,6 +532,7 @@ def main():
     week_num        = ((now - Q1_START).days // 7) + 1
     weekly_filename = f"Weekly_Dashboard_Digest_-_{now.strftime('%b_%-d__%Y')}.html"
     events_filename = f"Events_Digest_-_{now.strftime('%b_%-d__%Y')}.html"
+    email_filename  = f"Email_Digest_-_{now.strftime('%b_%-d__%Y')}.html"
 
     print(f"\n📅  Generating digests: {week_label} (Week {week_num} of 13)")
 
@@ -388,6 +542,7 @@ def main():
     print("\n📄 Loading previous reports as templates...")
     weekly_template = load_previous_report()
     events_template = load_previous_events_report(weekly_template)
+    email_template  = load_previous_email_report(events_template)
 
     print("\n🤖 Generating Weekly Digest with Claude...")
     weekly_html = generate_report(csvs, weekly_template, week_label, week_num, events_filename)
@@ -401,12 +556,19 @@ def main():
         f.write(events_html)
     print(f"  ✓ Saved: {events_filename}")
 
+    print("\n🤖 Generating Email Report with Claude...")
+    email_html = generate_email_report(csvs, email_template, week_label, week_num)
+    with open(f"{REPO_PATH}/{email_filename}", "w") as f:
+        f.write(email_html)
+    print(f"  ✓ Saved: {email_filename}")
+
     print("\n📋 Updating archive index...")
     update_index(weekly_filename, week_label, week_num)
     update_index_events(events_filename, week_label)
+    update_index_email(email_filename, week_label)
 
     print("\n🚀 Pushing review branch to GitHub...")
-    git_push(weekly_filename, events_filename, week_label)
+    git_push(weekly_filename, events_filename, email_filename, week_label)
 
     print("\n✅ Done! Open the PR link above to review and merge.\n")
 
