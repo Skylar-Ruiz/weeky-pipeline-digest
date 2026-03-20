@@ -111,6 +111,19 @@ def download_csvs() -> dict:
                 print(f"  ✓ Downloaded (email PDF): {base_name}")
                 continue
 
+            # Newsletter PDFs: 30-day (full digest) and 180-day (newsletter deep dive)
+            if "newsletter_report_180" in base_lower:
+                with open(path, "rb") as f:
+                    email_data["newsletter_pdf_180d"] = base64.standard_b64encode(f.read()).decode("utf-8")
+                print(f"  ✓ Downloaded (newsletter 180-day PDF): {base_name}")
+                continue
+
+            if "newsletter_report" in base_lower:
+                with open(path, "rb") as f:
+                    email_data["newsletter_pdf_30d"] = base64.standard_b64encode(f.read()).decode("utf-8")
+                print(f"  ✓ Downloaded (newsletter 30-day PDF): {base_name}")
+                continue
+
             matched = next((e for e in all_expected if e in base_lower), None)
             if not matched:
                 continue
@@ -381,6 +394,8 @@ def generate_email_report(csvs: dict, template_html: str, week_label: str, week_
     email_data = csvs.get("__email__", {})
     email_csv = email_data.get("email_csv", "")
     email_pdf_b64 = email_data.get("email_pdf", "")
+    newsletter_pdf_30d_b64 = email_data.get("newsletter_pdf_30d", "")
+    newsletter_pdf_180d_b64 = email_data.get("newsletter_pdf_180d", "")
 
     prompt = f"""You are generating Delight's Email Performance Report — a weekly email marketing sub-report for delight.ai.
 
@@ -414,15 +429,22 @@ Generate a complete Email Performance Report for {week_label}. Rules:
    All link hover colors and action number colors: #2d7060
 6. Sections to include:
    a. Performance Summary — pacing grid with Open Rate, CTR, Unsubscribe Rate vs benchmarks
+      (use the 30-day newsletter PDF for overall email KPIs)
    b. Program Breakdown — table of top email programs (clean program names)
    c. Week-over-Week Trends — open rate and CTR across last 4 weeks
-   d. Top Subject Lines — best by open rate and best by CTR
+   d. Newsletter Deep Dive — Delight Dispatch section:
+      - Show 3-month issue scorecards (month, sent, open rate, CTR, total clicks)
+        using the 180-day newsletter PDF which covers the last 3 months of newsletter sends
+      - Unified ranked links table with issue badge (Mar/Feb/Jan) and click counts
+      - Content theme breakdown tiles (Thought Leadership, Customer Stories, Product Releases, Homepage)
+        with click counts and % of total from the current month's newsletter
    e. Wins, Concerns, Watch Items — email-specific observations
    f. Recommended Actions — 3-4 email-specific action items
 7. Navigation: "← All Digests" → index.html. Previous email report from template nav if exists.
 8. Update footer date.
 9. Do NOT include pipeline ARR, MQLs, SALs, or non-email data.
-10. Also reference the attached PDF dashboard for any additional context or visuals to describe.
+10. The 30-day newsletter PDF covers all email types for the past 30 days — use it for sections a, b, c, e, f.
+11. The 180-day newsletter PDF covers only newsletter sends for the past 180 days — use it ONLY for section d (Newsletter Deep Dive).
 """
 
     content = []
@@ -430,7 +452,19 @@ Generate a complete Email Performance Report for {week_label}. Rules:
         content.append({
             "type": "document",
             "source": {"type": "base64", "media_type": "application/pdf", "data": email_pdf_b64},
-            "title": "Weekly Email Marketing Performance Dashboard PDF"
+            "title": "Weekly Email Marketing Performance Dashboard (all email types, 30-day)"
+        })
+    if newsletter_pdf_30d_b64:
+        content.append({
+            "type": "document",
+            "source": {"type": "base64", "media_type": "application/pdf", "data": newsletter_pdf_30d_b64},
+            "title": "Newsletter Report — 30 days (use for overall email KPIs and program breakdown)"
+        })
+    if newsletter_pdf_180d_b64:
+        content.append({
+            "type": "document",
+            "source": {"type": "base64", "media_type": "application/pdf", "data": newsletter_pdf_180d_b64},
+            "title": "Newsletter Report — 180 days (use ONLY for Newsletter Deep Dive 3-month comparison)"
         })
     content.append({"type": "text", "text": prompt})
 
