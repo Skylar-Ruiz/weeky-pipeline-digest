@@ -111,14 +111,14 @@ def download_csvs() -> dict:
                 print(f"  ✓ Downloaded (email PDF): {base_name}")
                 continue
 
-            # Newsletter PDFs: 30-day (full digest) and 180-day (newsletter deep dive)
-            if "newsletter_report_180" in base_lower:
+            # Newsletter PDFs: last30 (full digest) and last180 (newsletter deep dive)
+            if "newsletter_report_last180" in base_lower:
                 with open(path, "rb") as f:
                     email_data["newsletter_pdf_180d"] = base64.standard_b64encode(f.read()).decode("utf-8")
                 print(f"  ✓ Downloaded (newsletter 180-day PDF): {base_name}")
                 continue
 
-            if "newsletter_report" in base_lower:
+            if "newsletter_report_last30" in base_lower:
                 with open(path, "rb") as f:
                     email_data["newsletter_pdf_30d"] = base64.standard_b64encode(f.read()).decode("utf-8")
                 print(f"  ✓ Downloaded (newsletter 30-day PDF): {base_name}")
