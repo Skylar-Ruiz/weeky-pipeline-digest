@@ -20,7 +20,15 @@ import subprocess
 import zipfile
 from datetime import datetime
 
+import ssl
+import time
+import certifi
 import anthropic
+from slack_sdk import WebClient
+from slack_sdk.errors import SlackApiError
+
+# Fix SSL cert verification on macOS Python 3.14+
+_ssl_context = ssl.create_default_context(cafile=certifi.where())
 
 # ── Config ────────────────────────────────────────────────────────────────────
 REPO_PATH            = "/Users/skylar.ruiz/weeky-pipeline-digest"
@@ -41,6 +49,14 @@ if os.path.exists(_env_file):
                     os.environ[_k.strip()] = _val
 
 ANTHROPIC_KEY        = os.environ.get("ANTHROPIC_API_KEY", "")
+SLACK_BOT_TOKEN      = os.environ.get("SLACK_BOT_TOKEN", "")
+
+# Slack recipients
+SLACK_ALERTS_CHANNEL = "C0ALF87LLCF"   # #skylar-claude-alerts
+SLACK_CHARLES        = "U090CFEA4BT"   # Charles Studt (CMO) — Weekly Digest
+SLACK_LEXI           = "U052Y8M2AJC"   # Lexi von Schottenstein — Events Digest
+SLACK_CHERYL         = "U077CLUJYEQ"   # Cheryl Chai — Email Digest
+SLACK_CAROLYN        = "U08RULZDYLB"   # Carolyn Hom — Email Digest
 
 EXPECTED_CSVS = [
     "full_funnel_report_daily_export",
@@ -585,6 +601,52 @@ def git_push(weekly_filename: str, events_filename: str, email_filename: str, we
     print(f"  → Review PR: https://github.com/Skylar-Ruiz/weeky-pipeline-digest/compare/{branch}")
 
 
+def slack_notify(weekly_url: str, events_url: str, email_url: str, pr_url: str, week_label: str):
+    """Send the #skylar-claude-alerts review message and schedule stakeholder DMs 30 min later."""
+    if not SLACK_BOT_TOKEN:
+        print("  ⚠ SLACK_BOT_TOKEN not set — skipping Slack notifications")
+        return
+
+    client = WebClient(token=SLACK_BOT_TOKEN, ssl=_ssl_context)
+
+    # Immediate alert to Skylar's review channel
+    client.chat_postMessage(
+        channel=SLACK_ALERTS_CHANNEL,
+        text=(
+            f"📊 *Weekly Digest ready for review — {week_label}*\n\n"
+            f"*Preview:*\n"
+            f"• <{weekly_url}|Weekly Dashboard Digest>\n"
+            f"• <{events_url}|Events Digest>\n"
+            f"• <{email_url}|Email Digest>\n\n"
+            f"*Approve & merge:* {pr_url}"
+        )
+    )
+    print("  ✓ Sent #skylar-claude-alerts review message")
+
+    # Stakeholder DMs scheduled 30 minutes from now
+    post_at = int(time.time()) + 1800
+    stakeholders = [
+        (SLACK_CHARLES, f"Hi Charles! This week's <{weekly_url}|Weekly Dashboard Digest> for {week_label} is ready to view. 📊"),
+        (SLACK_LEXI,    f"Hi Lexi! This week's <{events_url}|Events Pipeline Digest> for {week_label} is ready to view. 📊"),
+        (SLACK_CHERYL,  f"Hi Cheryl! This week's <{email_url}|Email Performance Digest> for {week_label} is ready to view. 📊"),
+        (SLACK_CAROLYN, f"Hi Carolyn! This week's <{email_url}|Email Performance Digest> for {week_label} is ready to view. 📊"),
+    ]
+    for user_id, text in stakeholders:
+        client.chat_scheduleMessage(channel=user_id, text=text, post_at=post_at)
+    print("  ✓ Scheduled stakeholder DMs (30 min)")
+
+
+def slack_notify_failure(error_message: str):
+    """Send a failure alert to #skylar-claude-alerts."""
+    if not SLACK_BOT_TOKEN:
+        return
+    client = WebClient(token=SLACK_BOT_TOKEN, ssl=_ssl_context)
+    client.chat_postMessage(
+        channel=SLACK_ALERTS_CHANNEL,
+        text=f"❌ *Weekly Digest generation failed* — {error_message}"
+    )
+
+
 def main():
     now = datetime.now()
     week_label      = now.strftime("%B %-d, %Y")
@@ -627,10 +689,27 @@ def main():
     update_index_email(email_filename, week_label)
 
     print("\n🚀 Pushing review branch to GitHub...")
+    branch = f"digest/{week_label.replace(' ', '-').replace(',', '')}"
     git_push(weekly_filename, events_filename, email_filename, week_label)
+
+    base = "https://htmlpreview.github.io/?https://github.com/Skylar-Ruiz/weeky-pipeline-digest/blob"
+    weekly_url = f"{base}/{branch}/{weekly_filename}"
+    events_url = f"{base}/{branch}/{events_filename}"
+    email_url  = f"{base}/{branch}/{email_filename}"
+    pr_url     = f"https://github.com/Skylar-Ruiz/weeky-pipeline-digest/compare/{branch}"
+
+    print("\n📣 Sending Slack notifications...")
+    slack_notify(weekly_url, events_url, email_url, pr_url, week_label)
 
     print("\n✅ Done! Open the PR link above to review and merge.\n")
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        import traceback
+        error_msg = f"{e}\n{traceback.format_exc()}"
+        print(f"\n❌ Error: {error_msg}")
+        slack_notify_failure(str(e))
+        raise
