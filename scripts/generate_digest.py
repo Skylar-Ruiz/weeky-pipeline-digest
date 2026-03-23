@@ -50,6 +50,7 @@ EXPECTED_CSVS = [
 
 EVENTS_EXPECTED_CSVS = [
     "full funnel campaigns",
+    "bigquery_prod full_funnel_combined",
 ]
 
 # Q1 FY2027 start date (adjust if needed)
@@ -177,8 +178,11 @@ def generate_report(csvs: dict, template_html: str, week_label: str, week_num: i
     """Send CSVs + template to Claude and get back a complete weekly HTML report."""
     client = anthropic.Anthropic(api_key=ANTHROPIC_KEY)
 
+    # Exclude email data (PDFs/email CSVs) and events-only campaign data — not needed for weekly digest
+    weekly_csvs = {k: v for k, v in csvs.items() if k != "__email__" and "campaigns" not in k}
+
     csv_block = "\n\n".join(
-        f"=== {name} ===\n{content}" for name, content in csvs.items()
+        f"=== {name} ===\n{content}" for name, content in weekly_csvs.items()
     )
 
     prompt = f"""You are generating Delight's Weekly Digest — a weekly executive pipeline HTML report for delight.ai.
@@ -205,10 +209,14 @@ Generate a complete new HTML report for {week_label}. Rules:
 1. OUTPUT only the raw HTML document — no markdown fences, no explanation.
 2. Keep ALL CSS identical to the template. Do not change any styles.
 3. Update <title> and header-date to reflect {week_label} and Week {week_num} of 13.
-4. Recalculate all 5 pacing metrics (MQLs, SALs, Pre-Pipe, Discovery, Qualified):
+4. Recalculate all 5 pacing metrics (MQLs, SALs, Opps Created, Discovery, Qualified):
+   - IMPORTANT: "Pre-Pipe" and "Pre-Pipeline" have been renamed to "Opps Created" — use "Opps Created" everywhere.
    - Projected % = where we'll finish if current pace holds
    - Actual % = what we've hit so far
-   - Status = Behind / Watch / On Track
+   - Status thresholds (apply strictly based on Projected %):
+     • On Track  = Projected % ≥ 85%
+     • Watch     = Projected % 70–84%
+     • Behind    = Projected % < 70%
 5. Update the Week-over-Week Trends section by comparing this week's numbers
    to the previous week's numbers (read from the template's pacing grid).
 6. Rewrite the Executive Summary, Wins, Concerns, Watch Items, and Action Items
@@ -216,8 +224,7 @@ Generate a complete new HTML report for {week_label}. Rules:
 7. Update the navigation bar:
    - "← All Digests" stays as index.html
    - "← Previous" should link to the previous digest filename from the template
-   - Add an "Events Deep Dive →" pill button linking to Events_Digest_-_{events_suffix}.html
-     where {events_suffix} matches this week's date (same suffix as the weekly filename)
+   - Add an "Events Deep Dive →" pill button linking to {events_filename}
    - The pill button should use class="nav-events" with this CSS (add to the <style> block):
      .nav-events {{ font-size:12px; font-weight:600; color:#fff; background:#1a1a1a;
        text-decoration:none; padding:6px 14px; border-radius:100px; letter-spacing:0.2px;
@@ -249,7 +256,7 @@ def generate_events_report(csvs: dict, template_html: str, week_label: str, week
 
     # Use only events-relevant CSVs
     events_csvs = {k: v for k, v in csvs.items() if any(
-        term in k for term in ["channels", "okr", "campaigns"]
+        term in k for term in ["channels", "okr", "campaigns", "bigquery_prod"]
     )}
 
     csv_block = "\n\n".join(
@@ -281,13 +288,19 @@ Generate a complete Events Pipeline Report for {week_label}. Rules:
 3. Update <title> to "Events Pipeline Report — {week_label}" and header to read
    "Events Pipeline Report" with the date line "Monday, {week_label} · FY2027 Q1 · Week {week_num} of 13".
 4. This report is EVENTS-FOCUSED — only show events pipeline data.
-5. Sections to include:
-   a. Events Pacing — pacing grid for events-attributed metrics (Pre-Pipeline ARR, Discovery ARR, Qualified ARR)
-   b. Campaign Breakdown — table of top event campaigns with Pre-Pipeline ARR, Discovery ARR, and status
-   c. Week-over-Week Trends — compare events metrics to the previous week
-   d. Wins, Concerns, Watch Items — specific to events performance only
-   e. Recommended Actions — events-focused action items only
-6. Do NOT include MQLs, SALs, or non-events pipeline data.
+   IMPORTANT: "Pre-Pipe" and "Pre-Pipeline" have been renamed to "Opps Created" — use "Opps Created" everywhere.
+5. IMPORTANT: "Pre-Pipe" and "Pre-Pipeline" have been renamed to "Opps Created" — use "Opps Created" everywhere.
+6. Sections to include (keep each section concise — this report should be digestible, not exhaustive):
+   a. Events Pacing — pacing grid for events-attributed metrics (Opps Created ARR, Discovery ARR, Qualified ARR)
+   b. Campaign Breakdown — table of top event campaigns with Opps Created ARR, Discovery ARR, and status
+   c. Historical Performance (from the bigquery_prod full_funnel_combined CSV) — a tight analysis covering:
+      - Quarter-over-quarter pipeline trend (last 4 quarters + current) with total pipeline and ROI multiplier
+      - Top 2-3 insights on conversion rates or cost efficiency worth highlighting
+      - Keep this to 3-4 key callouts, not a full data dump
+   d. Week-over-Week Trends — compare events metrics to the previous week
+   e. Wins, Concerns, Watch Items — specific to events performance only
+   f. Recommended Actions — events-focused action items only
+7. Do NOT include MQLs, SALs, or non-events pipeline data.
 7. Update the navigation bar: "← All Digests" stays as index.html,
    "← Previous Events Report" should link to the previous events report filename from the template
    (look for Events_Digest_-_ in the template nav links).
@@ -319,6 +332,10 @@ def update_index(filename: str, week_label: str, week_num: int):
     with open(index_path) as f:
         html = f.read()
 
+    if f'href="{filename}"' in html:
+        print(f"  ✓ index.html already has weekly entry for {filename}, skipping")
+        return
+
     new_entry = f"""  <li class="digest-item" data-type="weekly">
       <a class="digest-link" href="{filename}">
         <div class="digest-info">
@@ -349,6 +366,10 @@ def update_index_events(filename: str, week_label: str):
     index_path = f"{REPO_PATH}/index.html"
     with open(index_path) as f:
         html = f.read()
+
+    if f'href="{filename}"' in html:
+        print(f"  ✓ index.html already has Events entry for {filename}, skipping")
+        return
 
     new_entry = f"""  <li class="digest-item" data-type="events">
       <a class="digest-link" href="{filename}">
@@ -488,6 +509,10 @@ def update_index_email(filename: str, week_label: str):
     index_path = f"{REPO_PATH}/index.html"
     with open(index_path) as f:
         html = f.read()
+
+    if f'href="{filename}"' in html:
+        print(f"  ✓ index.html already has Email entry for {filename}, skipping")
+        return
 
     new_entry = f"""  <li class="digest-item" data-type="email">
       <a class="digest-link" href="{filename}">
