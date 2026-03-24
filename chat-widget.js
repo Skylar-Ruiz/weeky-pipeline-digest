@@ -190,10 +190,18 @@
   const sendBtn    = document.getElementById("ask-ai-send");
   const suggestEl  = document.getElementById("ask-ai-suggestions");
 
+  function renderText(text) {
+    return text.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+  }
+
   function addMessage(text, type) {
     const div = document.createElement("div");
     div.className = "msg msg-" + type;
-    div.textContent = text;
+    if (type === "ai") {
+      div.innerHTML = renderText(text);
+    } else {
+      div.textContent = text;
+    }
     messagesEl.appendChild(div);
     messagesEl.scrollTop = messagesEl.scrollHeight;
     return div;
