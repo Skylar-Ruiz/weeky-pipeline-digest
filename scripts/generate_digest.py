@@ -647,6 +647,13 @@ def slack_notify_failure(error_message: str):
     )
 
 
+def inject_chat_widget(html: str) -> str:
+    """Inject the Ask AI chat widget script tag before </body> if not already present."""
+    if "chat-widget.js" in html:
+        return html
+    return html.replace("</body>", '<script src="/chat-widget.js"></script>\n</body>', 1)
+
+
 def main():
     now = datetime.now()
     week_label      = now.strftime("%B %-d, %Y")
@@ -666,19 +673,19 @@ def main():
     email_template  = load_previous_email_report(events_template)
 
     print("\n🤖 Generating Weekly Digest with Claude...")
-    weekly_html = generate_report(csvs, weekly_template, week_label, week_num, events_filename)
+    weekly_html = inject_chat_widget(generate_report(csvs, weekly_template, week_label, week_num, events_filename))
     with open(f"{REPO_PATH}/{weekly_filename}", "w") as f:
         f.write(weekly_html)
     print(f"  ✓ Saved: {weekly_filename}")
 
     print("\n🤖 Generating Events Report with Claude...")
-    events_html = generate_events_report(csvs, events_template, week_label, week_num)
+    events_html = inject_chat_widget(generate_events_report(csvs, events_template, week_label, week_num))
     with open(f"{REPO_PATH}/{events_filename}", "w") as f:
         f.write(events_html)
     print(f"  ✓ Saved: {events_filename}")
 
     print("\n🤖 Generating Email Report with Claude...")
-    email_html = generate_email_report(csvs, email_template, week_label, week_num)
+    email_html = inject_chat_widget(generate_email_report(csvs, email_template, week_label, week_num))
     with open(f"{REPO_PATH}/{email_filename}", "w") as f:
         f.write(email_html)
     print(f"  ✓ Saved: {email_filename}")
