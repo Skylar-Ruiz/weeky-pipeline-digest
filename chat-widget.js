@@ -83,6 +83,29 @@
     }
     .ask-ai-close:hover { background: #e8e8e5; }
 
+    #ask-ai-name-prompt {
+      padding: 14px 18px 10px; border-bottom: 1px solid #f0f0ee; flex-shrink: 0;
+    }
+    #ask-ai-name-prompt.hidden { display: none; }
+    .name-prompt-label {
+      font-family: 'Inter', sans-serif; font-size: 12px; color: #888; margin-bottom: 7px;
+    }
+    .name-prompt-row { display: flex; gap: 8px; align-items: center; }
+    .name-prompt-input {
+      flex: 1; border: 1.5px solid #e8e8e5; border-radius: 10px;
+      padding: 7px 11px; font-family: 'Inter', sans-serif; font-size: 13px;
+      color: #1a1a1a; outline: none; transition: border-color 0.15s ease;
+    }
+    .name-prompt-input:focus { border-color: ${ACCENT}; }
+    .name-prompt-input::placeholder { color: #bbb; }
+    .name-prompt-save {
+      background: ${ACCENT}; color: #fff; border: none; border-radius: 8px;
+      padding: 7px 14px; font-family: 'Inter', sans-serif; font-size: 12.5px;
+      font-weight: 600; cursor: pointer; white-space: nowrap;
+      transition: opacity 0.15s ease;
+    }
+    .name-prompt-save:hover { opacity: 0.85; }
+
     .ask-ai-messages {
       flex: 1; overflow-y: auto; padding: 14px 18px;
       display: flex; flex-direction: column; gap: 10px;
@@ -157,6 +180,13 @@
       </div>
       <button class="ask-ai-close" aria-label="Close">✕</button>
     </div>
+    <div id="ask-ai-name-prompt">
+      <div class="name-prompt-label">What's your name? (one-time, so we know who's asking)</div>
+      <div class="name-prompt-row">
+        <input class="name-prompt-input" id="ask-ai-name-input" type="text" placeholder="e.g. Skylar" maxlength="60" />
+        <button class="name-prompt-save" id="ask-ai-name-save">Save</button>
+      </div>
+    </div>
     <div class="ask-ai-messages" id="ask-ai-messages"></div>
     <div class="ask-ai-suggestions" id="ask-ai-suggestions">
       ${SUGGESTIONS[reportType].map(q => `<button class="suggestion-chip">${q}</button>`).join("")}
@@ -172,6 +202,34 @@
   // State
   let isLoading = false;
   let cachedPageText = null;
+  let userName = localStorage.getItem("askAiSkyUser") || "";
+
+  const namePromptEl = drawer.querySelector("#ask-ai-name-prompt");
+  const nameInputEl  = drawer.querySelector("#ask-ai-name-input");
+  const nameSaveBtn  = drawer.querySelector("#ask-ai-name-save");
+
+  function updateNamePrompt() {
+    if (userName) {
+      namePromptEl.classList.add("hidden");
+    } else {
+      namePromptEl.classList.remove("hidden");
+    }
+  }
+  updateNamePrompt();
+
+  function saveName() {
+    const val = nameInputEl.value.trim();
+    if (!val) return;
+    userName = val;
+    localStorage.setItem("askAiSkyUser", userName);
+    namePromptEl.classList.add("hidden");
+    inputEl.focus();
+  }
+
+  nameSaveBtn.addEventListener("click", saveName);
+  nameInputEl.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") { e.preventDefault(); saveName(); }
+  });
 
   function getPageText() {
     if (cachedPageText) return cachedPageText;
@@ -211,7 +269,13 @@
     overlay.classList.add("open");
     drawer.classList.add("open");
     btn.style.display = "none";
-    setTimeout(() => inputEl.focus(), 300);
+    setTimeout(() => {
+      if (!userName) {
+        nameInputEl.focus();
+      } else {
+        inputEl.focus();
+      }
+    }, 300);
   }
 
   function closeDrawer() {
@@ -262,7 +326,7 @@
       const response = await fetch("/api/ask", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ question, pageText: getPageText(), reportType }),
+        body: JSON.stringify({ question, pageText: getPageText(), reportType, userName }),
       });
       const data = await response.json();
       loadingMsg.remove();

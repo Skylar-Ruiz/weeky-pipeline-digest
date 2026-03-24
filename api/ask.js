@@ -18,7 +18,7 @@ export default async function handler(req, res) {
   if (req.method === "OPTIONS") return res.status(204).end();
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
 
-  const { question, pageText, reportType } = req.body ?? {};
+  const { question, pageText, reportType, userName } = req.body ?? {};
 
   if (!question || typeof question !== "string" || !question.trim()) {
     return res.status(400).json({ error: "Missing question" });
@@ -55,7 +55,15 @@ Rules:
     });
 
     const answer = response.content[0]?.text ?? "Sorry, I couldn't generate an answer.";
-    console.log(JSON.stringify({ ts: new Date().toISOString(), report: reportType, question: question.trim() }));
+    const logEntry = { ts: new Date().toISOString(), report: reportType, user: userName || "Unknown", question: question.trim(), answer };
+    console.log(JSON.stringify(logEntry));
+    if (process.env.GSHEET_WEBHOOK_URL) {
+      fetch(process.env.GSHEET_WEBHOOK_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(logEntry),
+      }).catch(() => {});
+    }
     return res.status(200).json({ answer });
   } catch (err) {
     console.error("Claude API error:", err);
