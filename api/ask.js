@@ -55,6 +55,7 @@ Rules:
     });
 
     const answer = response.content[0]?.text ?? "Sorry, I couldn't generate an answer.";
+    console.log(JSON.stringify({ ts: new Date().toISOString(), report: reportType, question: question.trim() }));
     return res.status(200).json({ answer });
   } catch (err) {
     console.error("Claude API error:", err);
