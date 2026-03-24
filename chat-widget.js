@@ -138,7 +138,7 @@
   // Floating button
   const btn = document.createElement("button");
   btn.id = "ask-ai-btn";
-  btn.innerHTML = `<span style="font-size:15px;line-height:1">✦</span> Ask AI`;
+  btn.innerHTML = `<span style="font-size:15px;line-height:1">✦</span> Ask AI Sky`;
   document.body.appendChild(btn);
 
   // Overlay
