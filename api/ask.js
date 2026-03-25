@@ -58,7 +58,7 @@ Rules:
     const logEntry = { ts: new Date().toISOString(), report: reportType, user: userName || "Unknown", question: question.trim(), answer };
     console.log(JSON.stringify(logEntry));
     if (process.env.GSHEET_WEBHOOK_URL) {
-      fetch(process.env.GSHEET_WEBHOOK_URL, {
+      await fetch(process.env.GSHEET_WEBHOOK_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(logEntry),
