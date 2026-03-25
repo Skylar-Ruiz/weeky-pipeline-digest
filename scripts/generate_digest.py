@@ -225,8 +225,8 @@ Generate a complete new HTML report for {week_label}. Rules:
 1. OUTPUT only the raw HTML document — no markdown fences, no explanation.
 2. Keep ALL CSS identical to the template. Do not change any styles.
 3. Update <title> and header-date to reflect {week_label} and Week {week_num} of 13.
-4. Recalculate all 5 pacing metrics (MQLs, SALs, Opps Created, Discovery, Qualified):
-   - IMPORTANT: "Pre-Pipe" and "Pre-Pipeline" have been renamed to "Opps Created" — use "Opps Created" everywhere.
+4. Recalculate all 5 pacing metrics (MQLs, SALs, Meeting Booked, Pre-pipeline, Qualified):
+   - IMPORTANT: Stage names are now: MQL, SAL, Meeting Booked (formerly Opps Created/Pre-Pipe), Pre-pipeline (formerly Discovery), Qualified Pipeline.
    - Projected % = where we'll finish if current pace holds
    - Actual % = what we've hit so far
    - Status thresholds (apply strictly based on Projected %):
@@ -304,11 +304,11 @@ Generate a complete Events Pipeline Report for {week_label}. Rules:
 3. Update <title> to "Events Pipeline Report — {week_label}" and header to read
    "Events Pipeline Report" with the date line "Monday, {week_label} · FY2027 Q1 · Week {week_num} of 13".
 4. This report is EVENTS-FOCUSED — only show events pipeline data.
-   IMPORTANT: "Pre-Pipe" and "Pre-Pipeline" have been renamed to "Opps Created" — use "Opps Created" everywhere.
-5. IMPORTANT: "Pre-Pipe" and "Pre-Pipeline" have been renamed to "Opps Created" — use "Opps Created" everywhere.
+   IMPORTANT: Stage names are now: Meeting Booked (formerly Opps Created/Pre-Pipe), Pre-pipeline (formerly Discovery), Qualified Pipeline.
+5. IMPORTANT: Use current stage names everywhere — Meeting Booked (not Opps Created), Pre-pipeline (not Discovery).
 6. Sections to include (keep each section concise — this report should be digestible, not exhaustive):
-   a. Events Pacing — pacing grid for events-attributed metrics (Opps Created ARR, Discovery ARR, Qualified ARR)
-   b. Campaign Breakdown — table of top event campaigns with Opps Created ARR, Discovery ARR, and status
+   a. Events Pacing — pacing grid for events-attributed metrics (Meeting Booked ARR, Pre-pipeline ARR, Qualified ARR)
+   b. Campaign Breakdown — table of top event campaigns with Meeting Booked ARR, Pre-pipeline ARR, and status
    c. Historical Performance (from the bigquery_prod full_funnel_combined CSV) — a tight analysis covering:
       - Quarter-over-quarter pipeline trend (last 4 quarters + current) with total pipeline and ROI multiplier
       - Top 2-3 insights on conversion rates or cost efficiency worth highlighting

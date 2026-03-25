@@ -23,7 +23,7 @@
     ],
     events: [
       "Which event generated the most pipeline?",
-      "How is events Discovery pacing vs. OKR?",
+      "How is events Pre-pipeline pacing vs. OKR?",
       "What's the top recommended action?",
       "How did events perform WoW?",
     ],

@@ -5,7 +5,7 @@ const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 const MAX_PAGE_TEXT = 60_000;
 
 const REPORT_LABELS = {
-  weekly: "Weekly Dashboard Digest (pipeline, MQLs, SALs, Opps Created, pacing against Q1 targets)",
+  weekly: "Weekly Dashboard Digest (pipeline, MQLs, SALs, Meeting Booked, Pre-pipeline, Qualified, pacing against Q1 targets)",
   events: "Events Pipeline Report (event campaigns, events-attributed pipeline by stage)",
   email:  "Email Performance Report (email programs, open rates, CTR, newsletter deep dive)",
 };
@@ -39,7 +39,7 @@ Rules:
 - Answer ONLY using facts present in the report text provided. Do not invent numbers.
 - Be concise and direct — executives want the answer in 2–4 sentences, not a paragraph.
 - If a number is not in the report, say "That figure isn't in this report" rather than guessing.
-- Use the same terminology as the report (e.g. "Opps Created", "Discovery", "Qualified").
+- Use the same terminology as the report (e.g. "Meeting Booked", "Pre-pipeline", "Qualified").
 - Format currency as $X.XM or $XK to match the report style.
 - If the user asks for context or "why", give a brief interpretation grounded in the report data.
 - This is an internal analytics digest for delight.ai, covering FY2027 Q1 performance.`;
