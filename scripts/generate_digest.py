@@ -30,6 +30,10 @@ from slack_sdk.errors import SlackApiError
 # Fix SSL cert verification on macOS Python 3.14+
 _ssl_context = ssl.create_default_context(cafile=certifi.where())
 
+# ── One-time flags ────────────────────────────────────────────────────────────
+# Set to False after the first run that includes the banner.
+SHOW_RENAME_BANNER = True
+
 # ── Config ────────────────────────────────────────────────────────────────────
 REPO_PATH            = "/Users/skylar.ruiz/weeky-pipeline-digest"
 DRIVE_FOLDER         = "gdrive:Analytics/Weekly AI Briefings /Weekly Digest - Exec Summary"
@@ -654,6 +658,31 @@ def inject_chat_widget(html: str) -> str:
     return html.replace("</body>", '<script src="/chat-widget.js"></script>\n</body>', 1)
 
 
+RENAME_BANNER_HTML = """
+<div style="background:#fff8e6;border:1.5px solid #f0c040;border-radius:10px;padding:14px 20px;margin:0 0 28px 0;font-family:'Inter',sans-serif;font-size:13.5px;color:#7a5c00;line-height:1.6;">
+  <strong style="font-size:14px;color:#5a4000;">📋 Funnel Stage Name Update</strong><br>
+  We've aligned our pipeline stage names with Sales nomenclature. <strong>No definitions or thresholds have changed</strong> — only the labels.<br>
+  <span style="display:inline-block;margin-top:6px;">
+    <span style="background:#fdefc3;border-radius:4px;padding:2px 8px;margin-right:4px;">Opps Created → <strong>Meeting Booked</strong></span>
+    <span style="background:#fdefc3;border-radius:4px;padding:2px 8px;">Discovery → <strong>Pre-pipeline</strong></span>
+  </span>
+</div>
+"""
+
+def inject_rename_banner(html: str) -> str:
+    """Inject the one-time rename alert banner after the opening <body> tag or first <div>."""
+    if not SHOW_RENAME_BANNER:
+        return html
+    # Insert after the first <div or after <body> — works even without explicit <body>
+    import re
+    # Try after <body...>
+    result = re.sub(r'(<body[^>]*>)', r'\1' + RENAME_BANNER_HTML, html, count=1)
+    if result != html:
+        return result
+    # Fallback: insert before first top-level <div
+    return re.sub(r'(<div)', RENAME_BANNER_HTML + r'\1', html, count=1)
+
+
 def main():
     now = datetime.now()
     week_label      = now.strftime("%B %-d, %Y")
@@ -673,19 +702,19 @@ def main():
     email_template  = load_previous_email_report(events_template)
 
     print("\n🤖 Generating Weekly Digest with Claude...")
-    weekly_html = inject_chat_widget(generate_report(csvs, weekly_template, week_label, week_num, events_filename))
+    weekly_html = inject_rename_banner(inject_chat_widget(generate_report(csvs, weekly_template, week_label, week_num, events_filename)))
     with open(f"{REPO_PATH}/{weekly_filename}", "w") as f:
         f.write(weekly_html)
     print(f"  ✓ Saved: {weekly_filename}")
 
     print("\n🤖 Generating Events Report with Claude...")
-    events_html = inject_chat_widget(generate_events_report(csvs, events_template, week_label, week_num))
+    events_html = inject_rename_banner(inject_chat_widget(generate_events_report(csvs, events_template, week_label, week_num)))
     with open(f"{REPO_PATH}/{events_filename}", "w") as f:
         f.write(events_html)
     print(f"  ✓ Saved: {events_filename}")
 
     print("\n🤖 Generating Email Report with Claude...")
-    email_html = inject_chat_widget(generate_email_report(csvs, email_template, week_label, week_num))
+    email_html = inject_rename_banner(inject_chat_widget(generate_email_report(csvs, email_template, week_label, week_num)))
     with open(f"{REPO_PATH}/{email_filename}", "w") as f:
         f.write(email_html)
     print(f"  ✓ Saved: {email_filename}")
