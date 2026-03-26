@@ -2,7 +2,7 @@ import Anthropic from "@anthropic-ai/sdk";
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
-const MAX_PAGE_TEXT = 60_000;
+const MAX_PAGE_TEXT = 150_000;
 
 const REPORT_LABELS = {
   weekly: "Weekly Dashboard Digest (pipeline, MQLs, SALs, Meeting Booked, Pre-pipeline, Qualified, pacing against Q1 targets)",

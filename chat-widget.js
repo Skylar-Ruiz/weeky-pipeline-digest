@@ -181,7 +181,10 @@
       if (el) el.remove();
     });
     clone.querySelectorAll("style, script, noscript").forEach(el => el.remove());
-    cachedPageText = (clone.innerText || clone.textContent || "").replace(/\s{3,}/g, "\n\n").trim();
+    let text = (clone.innerText || clone.textContent || "").replace(/\s{3,}/g, "\n\n").trim();
+    const sourceData = document.getElementById("digest-source-data");
+    if (sourceData) text += "\n\nSOURCE DATA:\n" + sourceData.textContent;
+    cachedPageText = text;
     return cachedPageText;
   }
 

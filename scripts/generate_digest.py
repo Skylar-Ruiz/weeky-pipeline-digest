@@ -658,6 +658,41 @@ def inject_chat_widget(html: str) -> str:
     return html.replace("</body>", '<script src="/chat-widget.js"></script>\n</body>', 1)
 
 
+SOURCE_DATA_KEYS = {
+    "weekly": ["full_funnel_report_daily_export", "marketing_okr_progress_daily_export", "full_funnel_channels_daily_export"],
+    "events": ["full funnel campaigns", "bigquery_prod full_funnel_combined"],
+    "email":  ["__email_csv__"],
+}
+SOURCE_DATA_MAX_CHARS = 200_000
+
+def inject_source_data(html: str, csvs: dict, report_type: str) -> str:
+    """Embed raw CSV text in a hidden element so Ask AI Sky can answer deeper data questions."""
+    keys = SOURCE_DATA_KEYS.get(report_type, [])
+    parts = []
+    total = 0
+    email_data = csvs.get("__email__", {})
+    for key in keys:
+        if key == "__email_csv__":
+            content = email_data.get("email_csv", "")
+            label = "email_csv"
+        else:
+            content = csvs.get(key, "")
+            label = key
+        if not content:
+            continue
+        remaining = SOURCE_DATA_MAX_CHARS - total
+        if remaining <= 0:
+            break
+        chunk = content[:remaining]
+        parts.append(f"=== {label} ===\n{chunk}")
+        total += len(chunk)
+    if not parts:
+        return html
+    block = "\n\n".join(parts)
+    div = f'<div id="digest-source-data" style="display:none;white-space:pre">{block}</div>'
+    return html.rstrip() + "\n" + div
+
+
 RENAME_BANNER_HTML = """
 <div style="background:#fff8e6;border:1.5px solid #f0c040;border-radius:10px;padding:14px 20px;margin:0 0 28px 0;font-family:'Inter',sans-serif;font-size:13.5px;color:#7a5c00;line-height:1.6;">
   <strong style="font-size:14px;color:#5a4000;">📋 Funnel Stage Name Update</strong><br>
@@ -702,19 +737,19 @@ def main():
     email_template  = load_previous_email_report(events_template)
 
     print("\n🤖 Generating Weekly Digest with Claude...")
-    weekly_html = inject_rename_banner(inject_chat_widget(generate_report(csvs, weekly_template, week_label, week_num, events_filename)))
+    weekly_html = inject_source_data(inject_rename_banner(inject_chat_widget(generate_report(csvs, weekly_template, week_label, week_num, events_filename))), csvs, "weekly")
     with open(f"{REPO_PATH}/{weekly_filename}", "w") as f:
         f.write(weekly_html)
     print(f"  ✓ Saved: {weekly_filename}")
 
     print("\n🤖 Generating Events Report with Claude...")
-    events_html = inject_rename_banner(inject_chat_widget(generate_events_report(csvs, events_template, week_label, week_num)))
+    events_html = inject_source_data(inject_rename_banner(inject_chat_widget(generate_events_report(csvs, events_template, week_label, week_num))), csvs, "events")
     with open(f"{REPO_PATH}/{events_filename}", "w") as f:
         f.write(events_html)
     print(f"  ✓ Saved: {events_filename}")
 
     print("\n🤖 Generating Email Report with Claude...")
-    email_html = inject_rename_banner(inject_chat_widget(generate_email_report(csvs, email_template, week_label, week_num)))
+    email_html = inject_source_data(inject_rename_banner(inject_chat_widget(generate_email_report(csvs, email_template, week_label, week_num))), csvs, "email")
     with open(f"{REPO_PATH}/{email_filename}", "w") as f:
         f.write(email_html)
     print(f"  ✓ Saved: {email_filename}")
