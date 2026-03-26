@@ -194,7 +194,50 @@
   const suggestEl  = document.getElementById("ask-ai-suggestions");
 
   function renderText(text) {
-    return text.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+    const lines = text.split("\n");
+    const out = [];
+    let i = 0;
+    while (i < lines.length) {
+      const line = lines[i];
+      // Markdown table: line starts with |
+      if (line.trim().startsWith("|")) {
+        const tableLines = [];
+        while (i < lines.length && lines[i].trim().startsWith("|")) {
+          tableLines.push(lines[i]);
+          i++;
+        }
+        const rows = tableLines.filter(l => !/^\s*\|[\s\-|]+\|\s*$/.test(l));
+        let html = '<table style="border-collapse:collapse;width:100%;font-size:12px;margin:6px 0">';
+        rows.forEach((row, ri) => {
+          const cells = row.replace(/^\||\|$/g, "").split("|").map(c => c.trim());
+          const tag = ri === 0 ? "th" : "td";
+          const style = ri === 0
+            ? 'style="background:#f5f5f5;font-weight:600;padding:5px 8px;border:1px solid #ddd;text-align:left"'
+            : 'style="padding:5px 8px;border:1px solid #ddd"';
+          html += "<tr>" + cells.map(c => `<${tag} ${style}>${inlineFormat(c)}</${tag}>`).join("") + "</tr>";
+        });
+        html += "</table>";
+        out.push(html);
+        continue;
+      }
+      // Heading: # or ##
+      const headingMatch = line.match(/^(#{1,3})\s+(.*)/);
+      if (headingMatch) {
+        const size = headingMatch[1].length === 1 ? "14px" : "13px";
+        out.push(`<div style="font-weight:700;font-size:${size};margin:8px 0 4px">${inlineFormat(headingMatch[2])}</div>`);
+        i++;
+        continue;
+      }
+      out.push(inlineFormat(line) || (line.trim() === "" ? "<br>" : ""));
+      i++;
+    }
+    return out.join("\n");
+  }
+
+  function inlineFormat(text) {
+    return text
+      .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+      .replace(/\*(.*?)\*/g, "<em>$1</em>");
   }
 
   function addMessage(text, type) {
