@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weekly Dashboard Digest - Mar 30, 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Helvetica+Neue:wght@400;500;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background: #f5f4f0;
+    color: #1a1a1a;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .email-wrapper {
+    max-width: 640px;
+    margin: 0 auto;
+    background: #ffffff;
+  }
+
+  /* Header */
+  .header {
+    background: #ffffff;
+    padding: 48px 48px 0;
+    border-bottom: none;
+  }
+  .logo-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 40px;
+  }
+  .logo-mark {
+    font-size: 22px;
+    line-height: 1;
+  }
+  .logo-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: #1a1a1a;
+    letter-spacing: -0.5px;
+  }
+  .header-title {
+    font-family: 'Playfair Display', 'Georgia', serif;
+    font-size: 36px;
+    font-weight: 500;
+    color: #1a1a1a;
+    letter-spacing: -1px;
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+  .header-date {
+    font-size: 14px;
+    color: #888;
+    font-weight: 400;
+    margin-bottom: 36px;
+  }
+
+  /* Hero */
+  .hero-image {
+    width: 100%;
+    height: 180px;
+    background: linear-gradient(135deg, #f7e6d0 0%, #e8c9a0 30%, #d4956a 60%, #c47a52 80%, #b8654a 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-image::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -40px;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(255,240,220,0.6) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .hero-image::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: 20%;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(255,200,150,0.3) 0%, transparent 60%);
+    border-radius: 50%;
+  }
+
+  /* Content */
+  .content { padding: 40px 48px; }
+
+  /* Pacing Overview */
+  .pacing-section {
+    margin-bottom: 40px;
+  }
+  .pacing-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #999;
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+  .pacing-sublabel {
+    font-size: 12px;
+    color: #999;
+    margin-bottom: 20px;
+    line-height: 1.5;
+  }
+  .pacing-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0;
+    border: 1px solid #e8e8e5;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .pace-cell {
+    padding: 20px 10px;
+    text-align: center;
+    border-right: 1px solid #e8e8e5;
+  }
+  .pace-cell:last-child { border-right: none; }
+  .pace-metric-name {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #999;
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+  .pace-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 600;
+    color: #1a1a1a;
+    letter-spacing: -0.5px;
+  }
+  .pace-actual {
+    font-size: 11px;
+    color: #888;
+    margin-top: 4px;
+    line-height: 1.4;
+  }
+  .pace-actual strong {
+    color: #1a1a1a;
+  }
+  .pace-status {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 6px;
+  }
+  .pace-status.behind { color: #c0392b; }
+  .pace-status.watch { color: #b8860b; }
+  .pace-status.on-track { color: #27825b; }
+
+  /* Divider */
+  .divider {
+    height: 1px;
+    background: #e8e8e5;
+    margin: 36px 0;
+  }
+
+  /* Section headers */
+  .section { margin-bottom: 36px; }
+  .section-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #999;
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    font-weight: 500;
+    color: #1a1a1a;
+    letter-spacing: -0.5px;
+    margin-bottom: 20px;
+  }
+
+  /* Executive Summary */
+  .exec-summary {
+    font-size: 15px;
+    color: #444;
+    line-height: 1.75;
+    margin-bottom: 36px;
+  }
+  .exec-summary strong { color: #1a1a1a; }
+
+  /* Insight cards */
+  .insight-card {
+    padding: 20px 24px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    font-size: 14px;
+    line-height: 1.7;
+    color: #444;
+  }
+  .insight-card.win {
+    background: #f6faf6;
+    border-left: 3px solid #27825b;
+  }
+  .insight-card.concern {
+    background: #fdf6f5;
+    border-left: 3px solid #c0392b;
+  }
+  .insight-card.watch-item {
+    background: #fdfaf3;
+    border-left: 3px solid #b8860b;
+  }
+  .insight-card .card-title {
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 4px;
+    font-size: 14px;
+  }
+  .insight-card .big-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 600;
+    margin: 4px 0 6px;
+    letter-spacing: -0.5px;
+  }
+  .insight-card .big-number.green { color: #27825b; }
+  .insight-card .big-number.red { color: #c0392b; }
+
+  /* Events table */
+  .events-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-bottom: 16px;
+  }
+  .events-table th {
+    text-align: left;
+    padding: 10px 8px;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #999;
+    font-weight: 500;
+    border-bottom: 2px solid #1a1a1a;
+  }
+  .events-table th:last-child { text-align: right; }
+  .events-table td {
+    padding: 10px 8px;
+    border-bottom: 1px solid #f0eeea;
+    color: #444;
+    font-size: 13px;
+  }
+  .events-table td:first-child {
+    font-weight: 500;
+    color: #1a1a1a;
+    max-width: 280px;
+  }
+  .events-table td:last-child {
+    text-align: right;
+    font-weight: 600;
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    letter-spacing: -0.3px;
+  }
+  .events-table tr.total-row td {
+    border-top: 2px solid #1a1a1a;
+    border-bottom: none;
+    font-weight: 700;
+    color: #1a1a1a;
+    padding-top: 12px;
+  }
+
+  /* WoW Table */
+  .wow-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .wow-table th {
+    text-align: left;
+    padding: 10px 0;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #999;
+    font-weight: 500;
+    border-bottom: 2px solid #1a1a1a;
+  }
+  .wow-table td {
+    padding: 12px 0;
+    border-bottom: 1px solid #f0eeea;
+    color: #444;
+  }
+  .wow-table td:first-child { font-weight: 500; color: #1a1a1a; }
+  .wow-table .up { color: #27825b; font-weight: 600; }
+  .wow-table .down { color: #c0392b; font-weight: 600; }
+
+  /* Action Items */
+  .action-item {
+    display: flex;
+    gap: 16px;
+    padding: 18px 0;
+    border-bottom: 1px solid #f0eeea;
+  }
+  .action-item:last-child { border-bottom: none; }
+  .action-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: #1a1a1a;
+    min-width: 28px;
+    line-height: 1.4;
+  }
+  .action-body {
+    font-size: 14px;
+    color: #444;
+    line-height: 1.65;
+  }
+  .action-body strong { color: #1a1a1a; }
+
+  /* Footer */
+  .footer {
+    background: #1a1a1a;
+    padding: 36px 48px;
+  }
+  .footer-logo {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 12px;
+  }
+  .footer p {
+    font-size: 12px;
+    color: rgba(255,255,255,0.45);
+    line-height: 1.8;
+  }
+
+  @media (max-width: 600px) {
+    .header, .content, .footer { padding-left: 24px; padding-right: 24px; }
+    .header-title { font-size: 28px; }
+    .pacing-grid { grid-template-columns: repeat(3, 1fr); }
+    .pace-cell:nth-child(4), .pace-cell:nth-child(5) {
+      border-top: 1px solid #e8e8e5;
+    }
+    .pace-number { font-size: 20px; }
+    .pace-actual { font-size: 10px; }
+  }
+
+  /* WoW Trend section */
+  .trend-section { margin-bottom: 40px; }
+  .trend-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #999;
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+  .trend-sublabel {
+    font-size: 12px;
+    color: #bbb;
+    margin-bottom: 16px;
+  }
+  .trend-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0;
+    border: 1px solid #e8e8e5;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .trend-cell {
+    padding: 16px 10px;
+    text-align: center;
+    border-right: 1px solid #e8e8e5;
+  }
+  .trend-cell:last-child { border-right: none; }
+  .trend-metric-name {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #999;
+    font-weight: 500;
+    margin-bottom: 10px;
+  }
+  .trend-values {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    margin-bottom: 8px;
+  }
+  .trend-prev { font-size: 12px; color: #bbb; font-weight: 400; }
+  .trend-arrow-right { font-size: 10px; color: #ccc; }
+  .trend-curr { font-size: 14px; color: #1a1a1a; font-weight: 600; }
+  .trend-delta {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 100px;
+    display: inline-block;
+  }
+  .trend-delta.up { color: #27825b; background: #f0faf5; }
+  .trend-delta.down { color: #c0392b; background: #fdf6f5; }
+  .trend-delta.flat { color: #999; background: #f5f5f3; }
+
+  /* Digest navigation */
+  .digest-nav {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 20px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .nav-back {
+    font-size: 13px;
+    font-weight: 500;
+    color: #888;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+  .nav-back:hover { color: #b8654a; }
+  .nav-issues {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .nav-prev, .nav-next {
+    font-size: 13px;
+    font-weight: 500;
+    color: #888;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+  .nav-prev:hover, .nav-next:hover { color: #b8654a; }
+
+  .nav-events { font-size:12px; font-weight:600; color:#fff; background:#1a1a1a;
+    text-decoration:none; padding:6px 14px; border-radius:100px; letter-spacing:0.2px;
+    transition:background 0.2s ease; }
+  .nav-events:hover { background:#b8654a; }
+
+</style>
+</head>
+<body>
+<div style="background:#fff8e6;border:1.5px solid #f0c040;border-radius:10px;padding:14px 20px;margin:0 0 28px 0;font-family:'Inter',sans-serif;font-size:13.5px;color:#7a5c00;line-height:1.6;">
+  <strong style="font-size:14px;color:#5a4000;">📋 Funnel Stage Name Update</strong><br>
+  We've aligned our pipeline stage names with Sales nomenclature. <strong>No definitions or thresholds have changed</strong> — only the labels.<br>
+  <span style="display:inline-block;margin-top:6px;">
+    <span style="background:#fdefc3;border-radius:4px;padding:2px 8px;margin-right:4px;">Opps Created → <strong>Meeting Booked</strong></span>
+    <span style="background:#fdefc3;border-radius:4px;padding:2px 8px;">Discovery → <strong>Pre-pipeline</strong></span>
+  </span>
+</div>
+
+<nav class="digest-nav">
+  <a class="nav-back" href="index.html">← All Digests</a>
+  <div class="nav-issues">
+    <a class="nav-prev" href="Weekly_Dashboard_Digest_-_Mar_9__2026.html">← March 9</a>
+    <a class="nav-events" href="Events_Digest_-_Mar_30__2026.html">Events Deep Dive →</a>
+  </div>
+</nav>
+<div class="email-wrapper">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo-row">
+      <span class="logo-mark">✳</span>
+      <span class="logo-text">delight.ai</span>
+    </div>
+    <h1 class="header-title">Weekly Dashboard<br>Digest</h1>
+    <p class="header-date">Monday, March 30, 2026 · FY2027 Q1 · Week 9 of 13</p>
+  </div>
+
+  <!-- Hero -->
+  <div class="hero-image"></div>
+
+  <div class="content">
+
+    <!-- PACING AT A GLANCE -->
+    <div class="pacing-section">
+      <div class="pacing-label">Q1 Pacing at a Glance</div>
+      <div class="pacing-sublabel">Projected % = where we'll finish if current pace holds · Actual % = what we've hit so far · Quarter is 64% elapsed</div>
+      <div class="pacing-grid">
+        <div class="pace-cell">
+          <div class="pace-metric-name">MQLs</div>
+          <div class="pace-number">37%</div>
+          <div class="pace-actual">Actual: 668 of 2,770<br><strong>24%</strong> of target</div>
+          <div class="pace-status behind">Behind</div>
+        </div>
+        <div class="pace-cell">
+          <div class="pace-metric-name">SALs</div>
+          <div class="pace-number">55%</div>
+          <div class="pace-actual">Actual: 98 of 277<br><strong>35%</strong> of target</div>
+          <div class="pace-status behind">Behind</div>
+        </div>
+        <div class="pace-cell">
+          <div class="pace-metric-name">Mtg Booked</div>
+          <div class="pace-number">56%</div>
+          <div class="pace-actual">Actual: $18.0M of $49.8M<br><strong>36%</strong> of target</div>
+          <div class="pace-status behind">Behind</div>
+        </div>
+        <div class="pace-cell">
+          <div class="pace-metric-name">Pre-Pipeline</div>
+          <div class="pace-number">23%</div>
+          <div class="pace-actual">Actual: $6.8M of $44.9M<br><strong>15%</strong> of target</div>
+          <div class="pace-status behind">Behind</div>
+        </div>
+        <div class="pace-cell">
+          <div class="pace-metric-name">Qualified</div>
+          <div class="pace-number">18%</div>
+          <div class="pace-actual">Actual: $1.8M of $15.7M<br><strong>12%</strong> of target</div>
+          <div class="pace-status behind">Behind</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WOW TRENDS -->
+    <div class="trend-section">
+      <div class="trend-label">Week-over-Week Trends</div>
+      <div class="trend-sublabel">vs. March 9 · Week 6</div>
+      <div class="trend-grid">
+        <div class="trend-cell">
+          <div class="trend-metric-name">MQLs</div>
+          <div class="trend-values">
+            <span class="trend-prev">39%</span>
+            <span class="trend-arrow-right">→</span>
+            <span class="trend-curr">37%</span>
+          </div>
+          <span class="trend-delta down">↓ −2pp</span>
+        </div>
+        <div class="trend-cell">
+          <div class="trend-metric-name">SALs</div>
+          <div class="trend-values">
+            <span class="trend-prev">35%</span>
+            <span class="trend-arrow-right">→</span>
+            <span class="trend-curr">55%</span>
+          </div>
+          <span class="trend-delta up">↑ +20pp</span>
+        </div>
+        <div class="trend-cell">
+          <div class="trend-metric-name">Mtg Booked</div>
+          <div class="trend-values">
+            <span class="trend-prev">40%</span>
+            <span class="trend-arrow-right">→</span>
+            <span class="trend-curr">56%</span>
+          </div>
+          <span class="trend-delta up">↑ +16pp</span>
+        </div>
+        <div class="trend-cell">
+          <div class="trend-metric-name">Pre-Pipeline</div>
+          <div class="trend-values">
+            <span class="trend-prev">14%</span>
+            <span class="trend-arrow-right">→</span>
+            <span class="trend-curr">23%</span>
+          </div>
+          <span class="trend-delta up">↑ +9pp</span>
+        </div>
+        <div class="trend-cell">
+          <div class="trend-metric-name">Qualified</div>
+          <div class="trend-values">
+            <span class="trend-prev">15%</span>
+            <span class="trend-arrow-right">→</span>
+            <span class="trend-curr">18%</span>
+          </div>
+          <span class="trend-delta up">↑ +3pp</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- EXECUTIVE SUMMARY -->
+    <p class="exec-summary">
+      Nine weeks in — 64% of Q1 elapsed — and the funnel shows meaningful downstream progress but remains well short of pace across every stage. <strong>SALs have been the biggest mover</strong>, jumping from 35% to 55% projected as the team delivered 98 meetings (35% of target) — a dramatic improvement in conversion cadence. Meeting Booked ARR climbed to <strong>$18.0M (56% projected)</strong> and Pre-Pipeline reached <strong>$6.8M (23% projected)</strong>, both showing real momentum. But <strong>MQLs have slipped to 37% projected</strong> — below the Week 6 reading of 39% — signaling top-of-funnel deceleration. Qualified Pipeline at <strong>$1.8M (18% projected)</strong> against a $15.7M target remains the quarter's critical bottleneck. Events continue as the dominant engine with <strong>$3.2M in Pre-Pipeline Discovery ARR</strong>, and AI pipeline leads Comms 11.5:1 at the Qualified stage. With four weeks remaining, the gap between volume generated and pipeline qualified is the defining challenge.
+    </p>
+
+    <div class="divider"></div>
+
+    <!-- WINS -->
+    <div class="section">
+      <div class="section-label">What's working</div>
+      <div class="section-title">Wins & highlights</div>
+
+      <div class="insight-card win">
+        <div class="card-title">SAL pacing surged from 35% to 55% projected</div>
+        <div class="big-number green">98 SALs · +20pp improvement</div>
+        <div>The SAL bottleneck flagged in prior weeks has materially improved. Week 8 delivered 16 Sales Accepted meetings — the joint-highest week this quarter — and the team has now logged 98 against a 277 target (35% actual). The MQL-to-SAL handoff is finally responding.</div>
+      </div>
+
+      <div class="insight-card win">
+        <div class="card-title">Meeting Booked ARR hit $18.0M — the strongest cumulative read</div>
+        <div class="big-number green">$18.0M actual · 56% projected</div>
+        <div>Meeting Booked jumped +16pp in projected attainment. Week 8 alone delivered $1.86M in new Pre-Pipeline ARR led by AMER ($1.47M) and APAC ($240K). Events-attributed campaigns like HIMSS ($3.6M cumulative) and ViVE ($3.3M) are converting at scale.</div>
+      </div>
+
+      <div class="insight-card win">
+        <div class="card-title">Pre-Pipeline Discovery nearly doubled in projected pacing</div>
+        <div class="big-number green">$6.8M actual · 23% projected (was 14%)</div>
+        <div>Week 8 was the quarter's biggest Discovery week at $1.76M, driven by AMER ($930K) and EMEA ($750K). EMEA's first significant Discovery contribution — $1.3M cumulative — is a breakout development. Total Discovery opps reached 63.</div>
+      </div>
+
+      <div class="insight-card win">
+        <div class="card-title">AI Qualified pipeline dominance widens to 11.5:1</div>
+        <div class="big-number green">$1.68M AI vs. $147K Comms Qualified</div>
+        <div>AI Qualified ARR now represents 92% of all Qualified pipeline. The ratio expanded from 6.7:1 three weeks ago, confirming the AI offering as the primary pipeline driver this quarter.</div>
+      </div>
+
+      <div class="insight-card win">
+        <div class="card-title">Branded search volume tracking to 152% of target</div>
+        <div class="big-number green">4,882 actual · 7,576 projected vs. 5,000 target</div>
+        <div>The only OKR metric pacing well above plan. Weekly impressions have held above 600 for seven consecutive weeks, signaling strong brand awareness momentum.</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- CONCERNS -->
+    <div class="section">
+      <div class="section-label">Needs attention</div>
+      <div class="section-title">Concerns & problem areas</div>
+
+      <div class="insight-card concern">
+        <div class="card-title">Qualified Pipeline at 18% projected — the quarter's most critical gap</div>
+        <div class="big-number red">$1.8M actual (12%) · $2.8M projected of $15.7M target</div>
+        <div>Even with downstream improvements, Qualified is tracking to miss by over $12.8M. Only 15 deals have reached Qualified stage all quarter. At the current weekly run-rate of ~$240K, the team would need $3.5M per week over the final 4 weeks to hit target — a 15x acceleration.</div>
+      </div>
+
+      <div class="insight-card concern">
+        <div class="card-title">Enterprise Qualified still deeply distressed at 4% projected</div>
+        <div class="big-number red">$284K actual · $441K projected of $10.2M target</div>
+        <div>Enterprise holds 65% of the Qualified target and has produced just $284K — less than 3% of plan. The segment has generated only $284K cumulative across 8 weeks. Mid-Market ($1.22M) has quietly become the workhorse, but cannot compensate for this Enterprise shortfall.</div>
+      </div>
+
+      <div class="insight-card concern">
+        <div class="card-title">MQL pacing declined from 39% to 37% projected</div>
+        <div class="big-number red">668 actual (24%) · 1,037 projected of 2,770 target</div>
+        <div>Top-of-funnel is decelerating. Week 8 delivered 76 MQLs, down from the 153 peak in Week 5. Paid Search (141 MQLs) and Organic Search (92) remain the primary drivers, but volume is not keeping up with the target trajectory.</div>
+      </div>
+
+      <div class="insight-card concern">
+        <div class="card-title">MQL-to-Qualified conversion rate still at 9% — unchanged</div>
+        <div class="big-number red">9% · ↓48% QoQ</div>
+        <div>Despite SAL improvement, the quality-to-qualification funnel hasn't budged from the 9% rate flagged three weeks ago. Down from 18% in FY26 Q4, this efficiency drag continues to compound every upstream gain.</div>
+      </div>
+
+      <div class="insight-card watch-item">
+        <div class="card-title">SDR Prospecting Qualified at 7% projected — weakest source</div>
+        <div>$150K actual ($233K projected) against a $3.1M target. Only one deal qualified from SDR Prospecting all quarter. Sales Prospecting at 18% and Marketing Programs at 17% are modestly better but all sources underperform.</div>
+      </div>
+
+      <div class="insight-card watch-item">
+        <div class="card-title">APAC Qualified improved but still at 6% projected</div>
+        <div>$210K actual ($326K projected) against a $5.2M target. APAC added $157K in Week 7–8 after a prolonged drought, but the region remains deeply behind. EMEA has produced just $150K Qualified all quarter.</div>
+      </div>
+
+      <div class="insight-card watch-item">
+        <div class="card-title">Social followers at 25% of target — unlikely to recover</div>
+        <div>752 followers gained against a 3,000 Q1 target. Weekly gains have dropped to 25–49 range after sporadic spikes. At current pace, the team will finish well under 50% of goal.</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- WEEK OVER WEEK -->
+    <div class="section">
+      <div class="section-label">Trends</div>
+      <div class="section-title">Week-over-week changes</div>
+
+      <table class="wow-table">
+        <thead>
+          <tr>
+            <th style="width:40%">Metric</th>
+            <th>Wk 7</th>
+            <th>Wk 8</th>
+            <th>Change</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>MQLs</td>
+            <td>80</td>
+            <td>76</td>
+            <td class="down">▼ 5%</td>
+          </tr>
+          <tr>
+            <td>Sales Accepted</td>
+            <td>12</td>
+            <td>16</td>
+            <td class="up">▲ 33%</td>
+          </tr>
+          <tr>
+            <td>Meeting Booked $</td>
+            <td>$4,836.4K</td>
+            <td>$1,860.7K</td>
+            <td class="down">▼ 62%</td>
+          </tr>
+          <tr>
+            <td>Pre-Pipeline $</td>
+            <td>$1,325.1K</td>
+            <td>$1,760.0K</td>
+            <td class="up">▲ 33%</td>
+          </tr>
+          <tr>
+            <td>Qualified $</td>
+            <td>$470.0K</td>
+            <td>$239.8K</td>
+            <td class="down">▼ 49%</td>
+          </tr>
+          <tr>
+            <td>Pre-Pipeline Opps</td>
+            <td>45</td>
+            <td>20</td>
+            <td class="down">▼ 56%</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p style="font-size: 13px; color: #666; margin-top: 16px; line-height: 1.7;">
+        <strong style="color:#1a1a1a;">Key takeaway:</strong> Week 8 delivered a mixed but structurally encouraging picture. Pre-Pipeline Discovery hit a quarter high of $1.76M (+33% WoW), with EMEA contributing $750K for the first time in a meaningful way. SALs maintained at 16, tying the quarter best. But Meeting Booked ARR cooled 62% to $1.86M as the post-events wave normalized, and Qualified dipped to $240K from the prior week's $470K spike. MQL volume continues its slow decline (80 → 76), now four weeks removed from the 153 peak. The overall trend is positive for mid-funnel conversion but the clock is ticking — with 4 weeks left, the Qualified gap requires a step-change in downstream velocity.
+      </p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ACTION ITEMS -->
+    <div class="section">
+      <div class="section-label">This week</div>
+      <div class="section-title">Recommended actions</div>
+
+      <div class="action-item">
+        <div class="action-num">1</div>
+        <div class="action-body">
+          <strong>Qualified Pipeline sprint — $3.5M/week needed for the final 4 weeks.</strong> At $1.8M actual vs. $15.7M target, Qualified is the quarter's defining miss. Convene a cross-functional pipeline council (Sales, Marketing, RevOps) to identify the top 20 Discovery deals by ARR, assign executive sponsors, and establish daily stand-ups through quarter-end. Focus on the $6.8M in Pre-Pipeline Discovery that hasn't yet advanced.
+        </div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">2</div>
+        <div class="action-body">
+          <strong>Enterprise segment escalation — CRO intervention required.</strong> $284K Qualified against a $10.2M target is not recoverable through normal motions. Recommend a targeted Enterprise deal acceleration program: identify 10 high-value accounts in Discovery stage, multi-thread with VP+ executive engagement, and compress deal timelines with custom business cases.
+        </div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">3</div>
+        <div class="action-body">
+          <strong>Sustain the SAL momentum — don't let it slip.</strong> The jump from 35% to 55% projected is the quarter's best trend. Protect it: ensure Week 9 maintains 14+ SALs, keep the SDR/AE handoff cadence tight, and monitor the Week 5 MQL cohort (the 153-MQL week) — those leads should be hitting SAL stage now.
+        </div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">4</div>
+        <div class="action-body">
+          <strong>Capitalize on EMEA's breakout Discovery week.</strong> EMEA contributed $750K in Discovery for the first time, reaching $1.3M cumulative — 45% projected against its regional target. Double down: fast-track the CCW Exchange UK pipeline ($323K in Discovery) and ensure the new EMEA deals get immediate qualification attention.
+        </div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">5</div>
+        <div class="action-body">
+          <strong>MQL volume intervention — arrest the decline.</strong> MQLs have dropped from 153 (Week 5) to 76 (Week 8) and projected pacing slid to 37%. Audit Paid Search and Organic campaigns for declining performance. Consider launching a high-urgency Q1 close campaign to generate a final MQL burst in Weeks 10–13.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-logo">✳ delight.ai</div>
+    <p>Weekly Dashboard Digest · March 30, 2026<br>
+    Data: Salesforce via Looker · FY2027 Q1<br>
+    Prepared by Executive Analytics</p>
+  </div>
+
+</div>
+<script src="/chat-widget.js"></script>
+</body>
+</html>
