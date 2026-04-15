@@ -1,0 +1,1486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Email Performance Report — April 14, 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background: #f5f4f0;
+    color: #1a1a1a;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .email-wrapper {
+    max-width: 640px;
+    margin: 0 auto;
+    background: #ffffff;
+  }
+
+  /* Header */
+  .header {
+    background: #ffffff;
+    padding: 48px 48px 0;
+    border-bottom: none;
+  }
+  .logo-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 40px;
+  }
+  .logo-mark {
+    font-size: 22px;
+    line-height: 1;
+  }
+  .logo-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: #1a1a1a;
+    letter-spacing: -0.5px;
+  }
+  .header-title {
+    font-family: 'Playfair Display', 'Georgia', serif;
+    font-size: 36px;
+    font-weight: 500;
+    color: #1a1a1a;
+    letter-spacing: -1px;
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+  .header-date {
+    font-size: 14px;
+    color: #888;
+    font-weight: 400;
+    margin-bottom: 36px;
+  }
+
+  /* Hero */
+  .hero-image {
+    width: 100%;
+    height: 120px;
+    background: linear-gradient(135deg, #e0ede8 0%, #9ec4b8 30%, #5a9688 60%, #2d7060 80%, #1d5248 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-image::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -40px;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(200,230,220,0.7) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .hero-image::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: 20%;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(150,210,195,0.3) 0%, transparent 60%);
+    border-radius: 50%;
+  }
+
+  /* Content */
+  .content { padding: 36px 48px 48px; }
+
+  /* Summary */
+  .summary-block {
+    margin-bottom: 32px;
+  }
+  .summary-text {
+    font-size: 15px;
+    color: #444;
+    line-height: 1.75;
+  }
+  .summary-text strong { color: #1a1a1a; }
+
+  /* Section label */
+  .section-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #999;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+
+  /* Divider */
+  .divider {
+    height: 1px;
+    background: #e8e8e5;
+    margin: 32px 0;
+  }
+
+  /* Glance cards */
+  .glance-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    border: 1px solid #e8e8e5;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .glance-card {
+    padding: 22px 18px;
+    border-right: 1px solid #e8e8e5;
+  }
+  .glance-card:last-child { border-right: none; }
+  .glance-metric {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #999;
+    font-weight: 500;
+    margin-bottom: 10px;
+  }
+  .glance-amount {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    font-weight: 600;
+    color: #1a1a1a;
+    letter-spacing: -0.5px;
+    margin-bottom: 6px;
+    line-height: 1.2;
+  }
+  .glance-sub {
+    font-size: 11px;
+    color: #888;
+    line-height: 1.55;
+    margin-bottom: 6px;
+  }
+  .glance-sub strong { color: #1a1a1a; }
+  .glance-change {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 100px;
+    display: inline-block;
+  }
+  .glance-change.up { color: #27825b; background: #f0faf5; }
+  .glance-change.down { color: #c0392b; background: #fdf6f5; }
+  .glance-pacing {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 100px;
+    display: inline-block;
+    color: #c0392b;
+    background: #fdf6f5;
+  }
+
+  /* Events table */
+  .events-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12.5px;
+  }
+  .events-table th {
+    text-align: left;
+    padding: 9px 8px;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #999;
+    font-weight: 500;
+    border-bottom: 2px solid #1a1a1a;
+    white-space: nowrap;
+  }
+  .events-table th.center { text-align: center; }
+  .events-table th.right { text-align: right; }
+  .events-table td {
+    padding: 9px 8px;
+    border-bottom: 1px solid #f0eeea;
+    color: #444;
+    vertical-align: middle;
+  }
+  .events-table td.name {
+    font-weight: 500;
+    color: #1a1a1a;
+  }
+  .events-table td.center { text-align: center; color: #888; font-size: 11.5px; }
+  .events-table td.num {
+    text-align: right;
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    letter-spacing: -0.3px;
+    color: #1a1a1a;
+  }
+  .events-table td.num-dim {
+    text-align: right;
+    font-family: 'Playfair Display', serif;
+    font-size: 12.5px;
+    letter-spacing: -0.3px;
+    color: #aaa;
+  }
+  .events-table td.pill-cell { text-align: center; }
+
+  /* Table section row */
+  .table-section-row td {
+    padding: 10px 8px 6px;
+    font-size: 9.5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #bbb;
+    border-bottom: none;
+    background: transparent;
+  }
+  .table-section-row.current td { color: #2d7060; padding-top: 0; }
+
+  /* Subtotal rows */
+  .events-table tr.subtotal td {
+    padding: 8px 8px;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: #1a1a1a;
+    border-top: 1.5px solid #e0e0da;
+    border-bottom: 2px solid #e8e8e5;
+    background: #fafaf8;
+  }
+  .events-table tr.subtotal td.num {
+    font-family: 'Playfair Display', serif;
+    font-size: 12.5px;
+    color: #1a1a1a;
+    text-align: right;
+  }
+  .events-table tr.subtotal td.label { color: #888; font-size: 10.5px; font-weight: 500; }
+  .events-table tr.prior.subtotal td { color: #bbb; background: #fafaf8; border-color: #edecea; }
+  .events-table tr.prior.subtotal td.num { color: #bbb; font-size: 12px; }
+
+  /* Grand total row */
+  .events-table tr.grand-total td {
+    padding: 11px 8px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #1a1a1a;
+    border-top: 2px solid #1a1a1a;
+    border-bottom: none;
+    background: #f5f4f0;
+  }
+  .events-table tr.grand-total td.num {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #1a1a1a;
+    text-align: right;
+  }
+  .events-table tr.grand-total td.grand-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #1a1a1a;
+    letter-spacing: 0.2px;
+  }
+  .events-table tr.grand-total td.grand-note {
+    font-size: 10px;
+    font-weight: 400;
+    color: #aaa;
+  }
+
+  /* Dimmed prior-quarter rows */
+  .events-table tr.prior td.name { color: #aaa; font-weight: 400; }
+  .events-table tr.prior td { color: #bbb; border-bottom-color: #f8f7f5; }
+  .events-table tr.prior td.num,
+  .events-table tr.prior td.num-dim { color: #ccc; }
+  .events-table tr.prior td.center { color: #ccc; }
+
+  /* Status pills */
+  .status-pill {
+    display: inline-block;
+    padding: 2px 9px;
+    border-radius: 100px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+  .status-pill.on-track { color: #27825b; background: #f0faf5; }
+  .status-pill.watch { color: #b8860b; background: #fdfaf3; }
+  .status-pill.behind { color: #c0392b; background: #fdf6f5; }
+
+  /* Table key */
+  .table-key {
+    font-size: 11px;
+    color: #aaa;
+    line-height: 1.7;
+    margin-top: 12px;
+    padding: 10px 14px;
+    background: #fafaf8;
+    border-radius: 6px;
+    border: 1px solid #f0eeea;
+  }
+  .table-key strong { color: #888; }
+
+  /* WoW table */
+  .wow-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .wow-table th {
+    text-align: left;
+    padding: 9px 0;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #999;
+    font-weight: 500;
+    border-bottom: 2px solid #1a1a1a;
+  }
+  .wow-table th:not(:first-child) { text-align: right; }
+  .wow-table td {
+    padding: 12px 0;
+    border-bottom: 1px solid #f0eeea;
+    color: #444;
+    vertical-align: middle;
+  }
+  .wow-table td:first-child { font-weight: 500; color: #1a1a1a; }
+  .wow-table td:not(:first-child) { text-align: right; }
+  .wow-table .num-curr {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    letter-spacing: -0.3px;
+    color: #1a1a1a;
+  }
+  .wow-table .num-prev {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    letter-spacing: -0.3px;
+    color: #bbb;
+  }
+  .wow-table .up { color: #27825b; font-weight: 600; font-size: 12px; }
+  .wow-table .down { color: #c0392b; font-weight: 600; font-size: 12px; }
+  .wow-table .flat { color: #888; font-weight: 500; font-size: 12px; }
+
+  /* Action items */
+  .action-item {
+    display: flex;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid #f0eeea;
+  }
+  .action-item:last-child { border-bottom: none; }
+  .action-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: #2d7060;
+    min-width: 22px;
+    line-height: 1.5;
+  }
+  .action-body {
+    font-size: 13.5px;
+    color: #444;
+    line-height: 1.65;
+  }
+  .action-body strong { color: #1a1a1a; }
+
+  /* Footer */
+  .footer {
+    background: #1a1a1a;
+    padding: 32px 48px;
+  }
+  .footer-logo {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 10px;
+  }
+  .footer p {
+    font-size: 12px;
+    color: rgba(255,255,255,0.45);
+    line-height: 1.8;
+  }
+
+  /* Digest navigation */
+  .digest-nav {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 20px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .nav-back {
+    font-size: 13px;
+    font-weight: 500;
+    color: #888;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+  .nav-back:hover { color: #2d7060; }
+
+  /* ── Pacing Block ─────────────────────────────── */
+  .pacing-block {
+    border: 1px solid #c4ddd6;
+    border-radius: 10px;
+    padding: 22px 24px;
+    background: #f5faf8;
+  }
+  .pacing-hdr {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 18px;
+  }
+  .pacing-main { font-size: 13.5px; font-weight: 600; color: #1a1a1a; margin-bottom: 3px; }
+  .pacing-sub { font-size: 11px; color: #999; }
+  .pacing-bar-wrap { position: relative; padding-bottom: 24px; margin-bottom: 6px; }
+  .pacing-track {
+    height: 10px;
+    background: #edecea;
+    border-radius: 100px;
+    display: flex;
+    overflow: hidden;
+  }
+  .pacing-fill-actual {
+    height: 100%;
+    background: #2d7060;
+    flex-shrink: 0;
+  }
+  .pacing-fill-projected {
+    height: 100%;
+    background: #9ec4b8;
+    flex-shrink: 0;
+  }
+  .pacing-fill-gap { flex: 1; }
+  .pacing-tick {
+    position: absolute;
+    top: -3px;
+    width: 1.5px;
+    height: 16px;
+    background: #aaa;
+    transform: translateX(-50%);
+  }
+  .pacing-annot {
+    position: absolute;
+    font-size: 10px;
+    white-space: nowrap;
+    top: 15px;
+    transform: translateX(-50%);
+  }
+  .pacing-annot.actual { color: #2d7060; font-weight: 600; }
+  .pacing-annot.projected { color: #888; }
+  .pacing-stat-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid #c4ddd6;
+    padding-top: 14px;
+    margin-top: 2px;
+  }
+  .pacing-stat { text-align: center; padding: 0 6px; border-right: 1px solid #c4ddd6; }
+  .pacing-stat:last-child { border-right: none; }
+  .pacing-stat-val {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: #1a1a1a;
+    letter-spacing: -0.5px;
+    line-height: 1.3;
+  }
+  .pacing-stat-val.red { color: #c0392b; }
+  .pacing-stat-val.green { color: #27825b; }
+  .pacing-stat-val.dim { color: #aaa; }
+  .pacing-stat-lbl { font-size: 9.5px; text-transform: uppercase; letter-spacing: 1px; color: #aaa; margin-top: 3px; }
+
+  /* ── KPI Row ─────────────────────────────── */
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    border: 1px solid #e8e8e5;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 0;
+  }
+  .kpi-card {
+    padding: 22px 18px;
+    border-right: 1px solid #e8e8e5;
+    position: relative;
+  }
+  .kpi-card:last-child { border-right: none; }
+  .kpi-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #999;
+    font-weight: 500;
+    margin-bottom: 10px;
+  }
+  .kpi-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    font-weight: 600;
+    color: #1a1a1a;
+    letter-spacing: -0.5px;
+    margin-bottom: 6px;
+    line-height: 1.2;
+  }
+  .kpi-bench {
+    font-size: 11px;
+    color: #888;
+    line-height: 1.55;
+    margin-bottom: 6px;
+  }
+  .kpi-bench strong { color: #1a1a1a; }
+  .kpi-status {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 100px;
+    display: inline-block;
+  }
+  .kpi-status.on-track { color: #27825b; background: #f0faf5; }
+  .kpi-status.behind { color: #c0392b; background: #fdf6f5; }
+  .kpi-status.watch { color: #b8860b; background: #fdfaf3; }
+
+  /* ── Subject line lists ─────────────────── */
+  .subject-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  .subject-col {}
+  .subject-col-title {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #999;
+    font-weight: 500;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #1a1a1a;
+  }
+  .subject-item {
+    padding: 10px 0;
+    border-bottom: 1px solid #f0eeea;
+  }
+  .subject-item:last-child { border-bottom: none; }
+  .subject-line-text {
+    font-size: 12px;
+    font-weight: 500;
+    color: #1a1a1a;
+    line-height: 1.5;
+    margin-bottom: 4px;
+  }
+  .subject-line-rate {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #2d7060;
+    letter-spacing: -0.3px;
+  }
+  .subject-line-rate-label {
+    font-size: 10px;
+    color: #aaa;
+    font-weight: 400;
+    font-family: 'Inter', sans-serif;
+    margin-left: 4px;
+    letter-spacing: 0;
+  }
+
+  /* ── Insights blocks ─────────────────────── */
+  .insight-block {
+    margin-bottom: 20px;
+  }
+  .insight-block:last-child { margin-bottom: 0; }
+  .insight-heading {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .insight-icon {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    flex-shrink: 0;
+  }
+  .insight-icon.win { background: #f0faf5; color: #27825b; }
+  .insight-icon.concern { background: #fdf6f5; color: #c0392b; }
+  .insight-icon.watch { background: #fdfaf3; color: #b8860b; }
+  .insight-title {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .insight-title.win { color: #27825b; }
+  .insight-title.concern { color: #c0392b; }
+  .insight-title.watch { color: #b8860b; }
+  .insight-body {
+    font-size: 13px;
+    color: #444;
+    line-height: 1.7;
+    padding-left: 30px;
+  }
+  .insight-body strong { color: #1a1a1a; }
+
+  /* ── Top links table ────────────────────── */
+  .links-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+  .links-table th {
+    text-align: left;
+    padding: 9px 8px;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #999;
+    font-weight: 500;
+    border-bottom: 2px solid #1a1a1a;
+    white-space: nowrap;
+  }
+  .links-table th.right { text-align: right; }
+  .links-table td {
+    padding: 9px 8px;
+    border-bottom: 1px solid #f0eeea;
+    color: #444;
+    vertical-align: middle;
+  }
+  .links-table td.link-name {
+    font-weight: 500;
+    color: #1a1a1a;
+    max-width: 380px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .links-table td.num {
+    text-align: right;
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    letter-spacing: -0.3px;
+    color: #1a1a1a;
+  }
+
+  @media (max-width: 600px) {
+    .header, .content, .footer { padding-left: 24px; padding-right: 24px; }
+    .header-title { font-size: 28px; }
+    .glance-grid, .kpi-row { grid-template-columns: 1fr; }
+    .kpi-card { border-right: none; border-bottom: 1px solid #e8e8e5; }
+    .kpi-card:last-child { border-bottom: none; }
+    .subject-grid { grid-template-columns: 1fr; }
+    .digest-nav { padding-left: 24px; padding-right: 24px; }
+  }
+</style>
+</head>
+<body>
+<div style="background:#fff8e6;border:1.5px solid #f0c040;border-radius:10px;padding:14px 20px;margin:0 0 28px 0;font-family:'Inter',sans-serif;font-size:13.5px;color:#7a5c00;line-height:1.6;">
+  <strong style="font-size:14px;color:#5a4000;">📋 Funnel Stage Name Update</strong><br>
+  We've aligned our pipeline stage names with Sales nomenclature. <strong>No definitions or thresholds have changed</strong> — only the labels.<br>
+  <span style="display:inline-block;margin-top:6px;">
+    <span style="background:#fdefc3;border-radius:4px;padding:2px 8px;margin-right:4px;">Opps Created → <strong>Meeting Booked</strong></span>
+    <span style="background:#fdefc3;border-radius:4px;padding:2px 8px;">Discovery → <strong>Pre-pipeline</strong></span>
+  </span>
+</div>
+
+
+<nav class="digest-nav">
+  <a class="nav-back" href="index.html">← All Digests</a>
+  <div></div>
+</nav>
+
+<div class="email-wrapper">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo-row">
+      <span class="logo-mark">✳</span>
+      <span class="logo-text">delight.ai</span>
+    </div>
+    <h1 class="header-title">Email Performance<br>Report</h1>
+    <p class="header-date">Monday, April 14, 2026 · FY2027 Q1 · Week 11 of 13</p>
+  </div>
+
+  <!-- Hero -->
+  <div class="hero-image"></div>
+
+  <div class="content">
+
+    <!-- SUMMARY -->
+    <div class="summary-block">
+      <div class="section-label">Summary</div>
+      <p class="summary-text">
+        This week's 30-day email portfolio continues to outperform benchmarks on all engagement metrics except unsubscribes. Open rate stands at <strong>33.1%</strong>, up from 32.8% last week and comfortably above the 31.35% benchmark. Click-through rate of <strong>4.3%</strong> runs <strong>1.5× the industry standard</strong> of 2.78%. Delivered rate holds at <strong>99%</strong> with bounce rate a healthy <strong>0.5%</strong> — well below the 1.0% ceiling. The April newsletter entered the 30-day window this week, with the AMER edition delivering a <strong>42.68% open rate and 4.83% CTR</strong> on 13,090 delivered — the strongest single newsletter send since the December 2025 issue. The Delight Spark #save-your-seat CTA drove <strong>227 clicks</strong> from the April AMER issue alone, making it the top-performing link this period. Meanwhile, the AICC conference follow-up survey continues to post an extraordinary <strong>41.22% CTR</strong>. The persistent concern: <strong>unsubscribe rate at 0.3%</strong> remains 2× above the 0.15% benchmark, and Spark event invites continue to drag down portfolio-level open rates with their 11–13% open performance on high-volume sends.
+      </p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- SECTION 1: PERFORMANCE SCORECARD -->
+    <div class="section-label">Performance Scorecard</div>
+    <div class="kpi-row">
+
+      <div class="kpi-card">
+        <div class="kpi-label">Open Rate</div>
+        <div class="kpi-value">33.1%</div>
+        <div class="kpi-bench">Benchmark: <strong>31.35%</strong><br>+1.8pp above</div>
+        <span class="kpi-status on-track">✓ On Track</span>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-label">Click-Through Rate</div>
+        <div class="kpi-value">4.3%</div>
+        <div class="kpi-bench">Benchmark: <strong>2.78%</strong><br>+1.5pp above</div>
+        <span class="kpi-status on-track">✓ On Track</span>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-label">Unsubscribe Rate</div>
+        <div class="kpi-value">0.3%</div>
+        <div class="kpi-bench">Benchmark: <strong>0.15%</strong><br>2× above target</div>
+        <span class="kpi-status behind">↑ Behind</span>
+      </div>
+
+    </div>
+
+    <div style="margin-top:12px;">
+      <div class="kpi-row" style="grid-template-columns: repeat(2, 1fr);">
+        <div class="kpi-card">
+          <div class="kpi-label">Delivered Rate</div>
+          <div class="kpi-value">99%</div>
+          <div class="kpi-bench">Benchmark: <strong>95%</strong><br>+4.0pp above</div>
+          <span class="kpi-status on-track">✓ On Track</span>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Bounce Rate</div>
+          <div class="kpi-value">0.5%</div>
+          <div class="kpi-bench">Benchmark: <strong>1.00%</strong><br>0.5pp below ceiling</div>
+          <span class="kpi-status on-track">✓ On Track</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- SECTION 2: PROGRAM BREAKDOWN -->
+    <div class="section-label">Program Breakdown — Top Sends</div>
+    <table class="events-table">
+      <thead>
+        <tr>
+          <th>Program</th>
+          <th class="right">Sent</th>
+          <th class="right">Open Rate</th>
+          <th class="right">CTR</th>
+          <th class="right">Unsub</th>
+          <th class="center">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="name">Newsletter (Global)</td>
+          <td class="num">38,664</td>
+          <td class="num">41.01%</td>
+          <td class="num">4.09%</td>
+          <td class="num">0.31%</td>
+          <td class="pill-cell"><span class="status-pill on-track">Strong</span></td>
+        </tr>
+        <tr>
+          <td class="name">Spark Event (AMER)</td>
+          <td class="num">18,593</td>
+          <td class="num">16.10%</td>
+          <td class="num">1.65%</td>
+          <td class="num">0.21%</td>
+          <td class="pill-cell"><span class="status-pill behind">Low Open</span></td>
+        </tr>
+        <tr>
+          <td class="name">Shoptalk Spring Booth (AMER)</td>
+          <td class="num">332</td>
+          <td class="num">44.38%</td>
+          <td class="num">2.82%</td>
+          <td class="num">0.31%</td>
+          <td class="pill-cell"><span class="status-pill on-track">On Track</span></td>
+        </tr>
+        <tr>
+          <td class="name">AICC Conference (APAC)</td>
+          <td class="num">311</td>
+          <td class="num">43.38%</td>
+          <td class="num">41.22%</td>
+          <td class="num">0.00%</td>
+          <td class="pill-cell"><span class="status-pill on-track">Exceptional</span></td>
+        </tr>
+        <tr>
+          <td class="name">AI Readiness Webinar (AMER)</td>
+          <td class="num">89</td>
+          <td class="num">50.00%</td>
+          <td class="num">18.18%</td>
+          <td class="num">0.00%</td>
+          <td class="pill-cell"><span class="status-pill on-track">Strong</span></td>
+        </tr>
+        <tr>
+          <td class="name">Talk to Sales Autoresponder</td>
+          <td class="num">87</td>
+          <td class="num">42.68%</td>
+          <td class="num">22.86%</td>
+          <td class="num">0.00%</td>
+          <td class="pill-cell"><span class="status-pill on-track">Strong</span></td>
+        </tr>
+        <tr>
+          <td class="name">Delight TTS Autoresponder</td>
+          <td class="num">64</td>
+          <td class="num">42.86%</td>
+          <td class="num">8.33%</td>
+          <td class="num">0.00%</td>
+          <td class="pill-cell"><span class="status-pill on-track">On Track</span></td>
+        </tr>
+        <tr class="grand-total">
+          <td class="grand-label">All Programs (30-day)</td>
+          <td class="num">58,200+</td>
+          <td class="num">33.1%</td>
+          <td class="num">4.3%</td>
+          <td class="num">0.3%</td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="table-key">
+      Programs with &lt;30 delivered emails excluded from this view. &nbsp;&middot;&nbsp;
+      <strong>Strong</strong> — open rate above benchmark with healthy CTR &nbsp;&middot;&nbsp;
+      <strong>Low Open</strong> — open rate significantly below portfolio average &nbsp;&middot;&nbsp;
+      <strong>Exceptional</strong> — CTR &gt;10×  benchmark. The Spark Event program accounts for <strong>149 of 259 total bounces (58%)</strong> across the 30-day window and carries a <strong>0.80% bounce rate</strong> — the highest among major programs. Note: The AI Readiness Webinar window now only captures low-volume reminder and follow-up sends (89 sent), as the high-volume invite waves have rolled out of the 30-day window. The April newsletter entering the window this week lifted the newsletter program's overall open rate from 40.27% to <strong>41.01%</strong>.
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- SECTION 3: WEEK-OVER-WEEK TRENDS -->
+    <div class="section-label">Week-over-Week Trends</div>
+    <table class="wow-table">
+      <thead>
+        <tr>
+          <th>Sent Week</th>
+          <th>Open Rate</th>
+          <th>CTR</th>
+          <th>Open Δ</th>
+          <th>CTR Δ</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Apr 6</td>
+          <td><span class="num-curr">25.0%</span></td>
+          <td><span class="num-curr">0.0%</span></td>
+          <td><span class="down">↓ −14.4pp</span></td>
+          <td><span class="down">↓ −12.8pp</span></td>
+        </tr>
+        <tr>
+          <td>Mar 30</td>
+          <td><span class="num-curr">39.4%</span></td>
+          <td><span class="num-curr">12.8%</span></td>
+          <td><span class="up">↑ +25.1pp</span></td>
+          <td><span class="up">↑ +9.2pp</span></td>
+        </tr>
+        <tr>
+          <td>Mar 23</td>
+          <td><span class="num-prev">14.3%</span></td>
+          <td><span class="num-prev">3.6%</span></td>
+          <td><span class="down">↓ −25.3pp</span></td>
+          <td><span class="down">↓ −0.6pp</span></td>
+        </tr>
+        <tr>
+          <td>Mar 16</td>
+          <td><span class="num-prev">39.6%</span></td>
+          <td><span class="num-prev">4.2%</span></td>
+          <td><span class="down">↓ −10.4pp</span></td>
+          <td><span class="up">↑ +4.2pp</span></td>
+        </tr>
+        <tr>
+          <td>Mar 9</td>
+          <td><span class="num-prev">50.0%</span></td>
+          <td><span class="num-prev">100.0%</span></td>
+          <td><span class="flat">—</span></td>
+          <td><span class="flat">—</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="table-key">
+      <strong>Apr 6 note:</strong> The 25.0% open rate and 0.0% CTR reflect a partial week with limited send volume — primarily the Spark Invite 5 (18,201 sent, 11.69% open) which suppressed the blended open rate, plus some low-volume sends. The 0.0% CTR suggests only event invite emails went out this week, which typically carry lower click engagement. <strong>Mar 30 was the strongest high-volume week</strong> at 39.4% open and 12.8% CTR, driven by the March newsletter AMER send (21,221 delivered, 39.61% open) and the AICC follow-up survey (41.22% CTR). <strong>Mar 23 dip:</strong> The week the Spark Invite 4 (18,348 sent, 13.22% open) dropped, pulling the blended rate to 14.3%. <strong>Mar 9 spike:</strong> Very small send volume (autoresponders and confirmations only) producing statistically unreliable 50.0%/100.0% rates.
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- SECTION 4: SUBJECT LINE PERFORMANCE -->
+    <div class="section-label">Subject Line Performance</div>
+    <div class="subject-grid">
+
+      <div class="subject-col">
+        <div class="subject-col-title">Top Performers</div>
+        <div class="subject-item">
+          <div class="subject-line-text">[설문조사 이벤트] Sendbird 부스에 방문해 주셔서…</div>
+          <div><span class="subject-line-rate">43.38%</span><span class="subject-line-rate-label">open rate</span></div>
+        </div>
+        <div class="subject-item">
+          <div class="subject-line-text">Great meeting you!</div>
+          <div><span class="subject-line-rate">42.74%</span><span class="subject-line-rate-label">open rate</span></div>
+        </div>
+        <div class="subject-item">
+          <div class="subject-line-text">Delight Dispatch | April 2026</div>
+          <div><span class="subject-line-rate">42.05%</span><span class="subject-line-rate-label">open rate</span></div>
+        </div>
+        <div class="subject-item">
+          <div class="subject-line-text">Delight Dispatch | March 2026</div>
+          <div><span class="subject-line-rate">39.61%</span><span class="subject-line-rate-label">open rate</span></div>
+        </div>
+        <div class="subject-item">
+          <div class="subject-line-text">We received your request!</div>
+          <div><span class="subject-line-rate">39.60%</span><span class="subject-line-rate-label">open rate</span></div>
+        </div>
+      </div>
+
+      <div class="subject-col">
+        <div class="subject-col-title">Bottom Performers</div>
+        <div class="subject-item">
+          <div class="subject-line-text">See the first fully autonomous AI agent. Live at…</div>
+          <div><span class="subject-line-rate" style="color:#c0392b;">11.69%</span><span class="subject-line-rate-label">open rate</span></div>
+        </div>
+        <div class="subject-item">
+          <div class="subject-line-text">The King of CX + Taylor Swift's playbook</div>
+          <div><span class="subject-line-rate" style="color:#c0392b;">13.22%</span><span class="subject-line-rate-label">open rate</span></div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="table-key" style="margin-top:12px;">
+      Emails with &lt;100 delivered excluded. <strong>Pattern:</strong> The branded newsletter format "Delight Dispatch |" continues to perform reliably in the 39–42% range, with the April issue (42.05%) outperforming March (39.61%) — a welcome uptick. Personal, concise subject lines ("Great meeting you!" at 42.74%) and localized event follow-ups (Korean AICC at 43.38%) continue to top the charts. The two bottom performers are both Spark event invites — "See the first fully autonomous AI agent" (Invite 5, 11.69%) and "The King of CX + Taylor Swift's playbook" (Invite 4, 13.22%) — confirming continued audience fatigue in the event series at 3–4× below the portfolio average.
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- SECTION 5: NEWSLETTER DEEP DIVE -->
+    <div class="section-label">Newsletter Deep Dive — Delight Dispatch</div>
+
+    <!-- Issue scorecards: 3 months from 180-day data -->
+    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:20px;">
+
+      <!-- April card -->
+      <div style="border:1px solid #e0ede8;border-radius:10px;padding:16px 18px;">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#2d7060;margin-bottom:12px;">April 2026</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div>
+            <div style="font-size:20px;font-weight:700;color:#1a1a1a;line-height:1;">42.27%</div>
+            <div style="font-size:11px;color:#888;margin-top:2px;">Open Rate <span style="color:#27825b;">↑ +1.7pp</span></div>
+          </div>
+          <div>
+            <div style="font-size:20px;font-weight:700;color:#1a1a1a;line-height:1;">4.10%</div>
+            <div style="font-size:11px;color:#888;margin-top:2px;">CTR <span style="color:#c0392b;">↓ −0.7pp</span></div>
+          </div>
+          <div>
+            <div style="font-size:20px;font-weight:700;color:#1a1a1a;line-height:1;">18,835</div>
+            <div style="font-size:11px;color:#888;margin-top:2px;">Sent (Global)</div>
+          </div>
+          <div>
+            <div style="font-size:20px;font-weight:700;color:#1a1a1a;line-height:1;">320</div>
+            <div style="font-size:11px;color:#888;margin-top:2px;">Total Clicks</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- March card -->
+      <div style="border:1px solid #ebebeb;border-radius:10px;padding:16px 18px;opacity:.8;">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#aaa;margin-bottom:12px;">March 2026</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div>
+            <div style="font-size:20px;font-weight:700;color:#1a1a1a;line-height:1;">40.59%</div>
+            <div style="font-size:11px;color:#888;margin-top:2px;">Open Rate <span style="color:#27825b;">↑ +1.6pp</span></div>
+          </div>
+          <div>
+            <div style="font-size:20px;font-weight:700;color:#1a1a1a;line-height:1;">4.78%</div>
+            <div style="font-size:11px;color:#888;margin-top:2px;">CTR <span style="color:#c0392b;">↓ −2.1pp</span></div>
+          </div>
+          <div>
+            <div style="font-size:20px;font-weight:700;color:#1a1a1a;line-height:1;">38,735</div>
+            <div style="font-size:11px;color:#888;margin-top:2px;">Sent (Global)</div>
+          </div>
+          <div>
+            <div style="font-size:20px;font-weight:700;color:#1a1a1a;line-height:1;">746</div>
+            <div style="font-size:11px;color:#888;margin-top:2px;">Total Clicks</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- February card -->
+      <div style="border:1px solid #ebebeb;border-radius:10px;padding:16px 18px;opacity:.65;">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#bbb;margin-bottom:12px;">February 2026</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div>
+            <div style="font-size:20px;font-weight:700;color:#999;line-height:1;">34.68%</div>
+            <div style="font-size:11px;color:#bbb;margin-top:2px;">Open Rate</div>
+          </div>
+          <div>
+            <div style="font-size:20px;font-weight:700;color:#999;line-height:1;">6.87%</div>
+            <div style="font-size:11px;color:#bbb;margin-top:2px;">CTR</div>
+          </div>
+          <div>
+            <div style="font-size:20px;font-weight:700;color:#999;line-height:1;">41,531</div>
+            <div style="font-size:11px;color:#bbb;margin-top:2px;">Sent (Global)</div>
+          </div>
+          <div>
+            <div style="font-size:20px;font-weight:700;color:#999;line-height:1;">1,106</div>
+            <div style="font-size:11px;color:#bbb;margin-top:2px;">Total Clicks</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="table-key" style="margin-bottom:20px;">
+      April includes AMER and EMEA sends (18,835 combined). March included AMER and EMEA (38,735). February included AMER and EMEA (41,531). <strong>Open rate trend:</strong> Feb 34.7% → Mar 40.6% → Apr 42.3% — two consecutive months of improvement, now at a <strong>3-month high</strong>. <strong>CTR trend:</strong> Feb 6.9% → Mar 4.8% → Apr 4.1% — continuing to decline as the February Spark event CTA (899 clicks on one link) created an artificially high baseline. April's 4.1% remains well above the 2.78% benchmark. <strong>Note on April volume:</strong> The April issue was sent to ~18.8K contacts (vs. March's ~38.7K) because only AMER and EMEA have sent so far and the AMER list was 13.2K — significantly smaller than March's 32.9K AMER send.
+    </div>
+
+    <!-- Unified ranked links table -->
+    <table class="links-table" style="margin-bottom:6px;">
+      <thead>
+        <tr>
+          <th>Content</th>
+          <th>Issue</th>
+          <th class="right">Clicks</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="link-name">Delight Spark event page</td>
+          <td><span style="font-size:11px;font-weight:600;color:#aaa;background:#f2f2f2;padding:2px 7px;border-radius:4px;">Feb</span></td>
+          <td class="num"><strong>899</strong></td>
+        </tr>
+        <tr>
+          <td class="link-name">Staging Environment (product release)</td>
+          <td><span style="font-size:11px;font-weight:600;color:#bbb;background:#f8f8f8;padding:2px 7px;border-radius:4px;">Jan</span></td>
+          <td class="num">831</td>
+        </tr>
+        <tr>
+          <td class="link-name">Software Ate the World… (perspective)</td>
+          <td><span style="font-size:11px;font-weight:600;color:#999;background:#f2f2f2;padding:2px 7px;border-radius:4px;">Mar</span></td>
+          <td class="num">675</td>
+        </tr>
+        <tr>
+          <td class="link-name">Norse Atlantic Customer Story</td>
+          <td><span style="font-size:11px;font-weight:600;color:#aaa;background:#f2f2f2;padding:2px 7px;border-radius:4px;">Feb</span></td>
+          <td class="num">298</td>
+        </tr>
+        <tr>
+          <td class="link-name">hipages Customer Story</td>
+          <td><span style="font-size:11px;font-weight:600;color:#999;background:#f2f2f2;padding:2px 7px;border-radius:4px;">Mar</span></td>
+          <td class="num">301</td>
+        </tr>
+        <tr>
+          <td class="link-name">Desk Glossary (product release)</td>
+          <td><span style="font-size:11px;font-weight:600;color:#aaa;background:#f2f2f2;padding:2px 7px;border-radius:4px;">Feb</span></td>
+          <td class="num">280</td>
+        </tr>
+        <tr>
+          <td class="link-name">AI Readiness Webinar</td>
+          <td><span style="font-size:11px;font-weight:600;color:#aaa;background:#f2f2f2;padding:2px 7px;border-radius:4px;">Feb</span></td>
+          <td class="num">279</td>
+        </tr>
+        <tr>
+          <td class="link-name">Spark #save-your-seat</td>
+          <td><span style="font-size:11px;font-weight:600;color:#2d7060;background:#e8f4f0;padding:2px 7px;border-radius:4px;">Apr</span></td>
+          <td class="num">256</td>
+        </tr>
+        <tr>
+          <td class="link-name">delight.ai Homepage</td>
+          <td><span style="font-size:11px;font-weight:600;color:#aaa;background:#f2f2f2;padding:2px 7px;border-radius:4px;">Feb</span></td>
+          <td class="num">359</td>
+        </tr>
+        <tr>
+          <td class="link-name">delight.ai Homepage</td>
+          <td><span style="font-size:11px;font-weight:600;color:#999;background:#f2f2f2;padding:2px 7px;border-radius:4px;">Mar</span></td>
+          <td class="num">188</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="table-key" style="margin-bottom:20px;">UTM variants deduplicated by destination. Social footer links excluded. Rankings sourced from 180-day newsletter data. The April Spark #save-your-seat CTA is now the <strong>top link from any April newsletter send</strong>, generating 227 clicks from AMER and 29 from EMEA (256 combined) — confirming that event CTAs embedded in newsletters continue to drive outsized click volume (as the February Spark CTA did at 899).</div>
+
+    <!-- Content themes — April -->
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#2d7060;margin-bottom:10px;">April 2026 — Clicks by Content Theme</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:6px;">
+      <div style="background:#f0f7f5;border-radius:8px;padding:14px 12px;text-align:center;">
+        <div style="font-size:24px;font-weight:700;color:#2d7060;">256</div>
+        <div style="font-size:12px;color:#555;margin-top:4px;font-weight:600;">Event CTA</div>
+        <div style="font-size:11px;color:#aaa;margin-top:2px;">42% of clicks</div>
+      </div>
+      <div style="background:#f0f7f5;border-radius:8px;padding:14px 12px;text-align:center;">
+        <div style="font-size:24px;font-weight:700;color:#2d7060;">118</div>
+        <div style="font-size:12px;color:#555;margin-top:4px;font-weight:600;">Thought Leadership</div>
+        <div style="font-size:11px;color:#aaa;margin-top:2px;">19% of clicks</div>
+      </div>
+      <div style="background:#f0f7f5;border-radius:8px;padding:14px 12px;text-align:center;">
+        <div style="font-size:24px;font-weight:700;color:#2d7060;">77</div>
+        <div style="font-size:12px;color:#555;margin-top:4px;font-weight:600;">Customer Stories</div>
+        <div style="font-size:11px;color:#aaa;margin-top:2px;">13% of clicks</div>
+      </div>
+      <div style="background:#f0f7f5;border-radius:8px;padding:14px 12px;text-align:center;">
+        <div style="font-size:24px;font-weight:700;color:#2d7060;">74</div>
+        <div style="font-size:12px;color:#555;margin-top:4px;font-weight:600;">Homepage</div>
+        <div style="font-size:11px;color:#aaa;margin-top:2px;">12% of clicks</div>
+      </div>
+    </div>
+    <div class="table-key">The Delight Spark #save-your-seat CTA dominated April engagement with <strong>42% of all newsletter clicks</strong> — mirroring February's pattern where the Spark event link captured the lion's share of click volume. The "Voice AI is an Iceberg" perspective piece drove 69 clicks (AMER 57 + EMEA 12), while "What If CX Didn't Exist?" contributed 61 clicks (AMER 46 + EMEA 15). The Dr. Cool Services customer story performed well at 77 clicks (AMER 63 + EMEA 14). This confirms the pattern: <strong>when newsletters include a clear event CTA, total click volume concentrates heavily on it</strong>, reducing relative share for editorial content.</div>
+
+    <div class="divider"></div>
+
+    <!-- SECTION 6: WINS, CONCERNS, WATCH ITEMS -->
+    <div class="section-label">Wins, Concerns &amp; Watch Items</div>
+
+    <div class="insight-block">
+      <div class="insight-heading">
+        <div class="insight-icon win">✓</div>
+        <div class="insight-title win">Wins</div>
+      </div>
+      <div class="insight-body">
+        <strong>Newsletter open rate hit a 3-month high at 42.27%</strong>, continuing the recovery trend from February's 34.68% trough — now firmly above both the 31.35% benchmark and the 180-day average. The April AMER newsletter specifically achieved <strong>42.68% open rate and 4.83% CTR</strong> on 13,090 delivered, the strongest single newsletter edition since December 2025 (43.76%). The EMEA edition maintained parity at <strong>40.58% open rate</strong>, narrowing the AMER-EMEA gap to just 2.1pp (vs. 3.5pp in previous weeks). The Spark #save-your-seat CTA generated <strong>256 combined clicks</strong> (AMER 227 + EMEA 29), validating that embedding event CTAs in newsletters is the most reliable click-driving tactic. Delivery infrastructure continues to excel at <strong>99% delivered / 0.5% bounce</strong>, both improved from last week's 0.6% bounce. The AICC follow-up survey sustained its extraordinary <strong>41.22% CTR</strong> — still the highest-engagement email in the entire portfolio.
+      </div>
+    </div>
+
+    <div class="insight-block">
+      <div class="insight-heading">
+        <div class="insight-icon concern">!</div>
+        <div class="insight-title concern">Concerns</div>
+      </div>
+      <div class="insight-body">
+        <strong>Unsubscribe rate of 0.3% remains 2× above the 0.15% benchmark</strong>, unchanged from last week. The Spark event invite series continues to be the primary offender: Invite 4 (13.22% open) and Invite 5 (11.69% open) are the two lowest-performing emails in the entire portfolio, confirming severe list fatigue at this cadence. The Spark program's <strong>0.80% bounce rate on 149 bounces</strong> accounts for the majority of the portfolio's delivery issues. Additionally, the <strong>week of Apr 6 showed 0.0% CTR</strong> — while driven by low-volume and event-only sends, it's the first zero-CTR week in the reporting window and signals a gap week without meaningful content distribution. The <strong>newsletter CTR continues its downward trend</strong>: Feb 6.87% → Mar 4.78% → Apr 4.10%, now approaching the 180-day trendline floor.
+      </div>
+    </div>
+
+    <div class="insight-block">
+      <div class="insight-heading">
+        <div class="insight-icon watch">
+<div id="digest-source-data" style="display:none;white-space:pre">=== email_csv ===
+=== click_through_rate.csv ===
+,Click Through Rate,Click Through Rate Benchmark
+1,4.99%,2.78%
+
+
+=== top_10_subject_lines_by_open_rate.csv ===
+,Subject Line,Opened Rate
+1,Great meeting you!,43.39%
+2,[설문조사 이벤트] Sendbird 부스에 방문해 주셔서 감사합니다.,43.38%
+3,Delight Dispatch | March 2026,40.48%
+4,We received your request!,38.39%
+5,Attend our live AI readiness webinar Wednesday and get the CX leader's guide to AI agents,35.38%
+6,The King of CX + Taylor Swift's playbook,13.11%
+7,Come see how a top US retailer is reinventing the sales floor with AI,11.76%
+
+
+=== open_rate.csv ===
+,Opened Rate,Opened Rate Benchmark
+1,32.83%,31.35%
+
+
+=== delivered_rate.csv ===
+,Delivered Rate,Delivered Benchmark
+1,98.98%,95%
+
+
+=== by_email.csv ===
+,Email Name,Sent Count,Delivered Count,Delivered Rate,Open Count,Opened Rate,Click Count,Click Through Rate,Bounced Count,Bounced Rate,Unsubscribe Count,Unsubscribe Rate
+1,fy27-q1-glbl-newsletter-generic.Delight March Newsletter - AMER (katie),"32,872","32,657",99.35%,"13,234",40.52%,663,5.01%,68,0.21%,88,0.27%
+2,fy27-q1-amer-event-spark-delight.04. Invite 4 (Ken),"18,480","18,348",99.29%,"2,406",13.11%,36,1.50%,100,0.54%,21,0.11%
+3,fy27-q1-amer-event-spark-delight.03. Invite 3 (katie),"13,851","13,720",99.05%,"1,614",11.76%,37,2.29%,115,0.83%,28,0.20%
+4,fy27-q1-amer-event-webinar-AI-readiness.03. Invite 3 (katie),"8,058","8,015",99.47%,"2,836",35.38%,108,3.81%,41,0.51%,21,0.26%
+5,fy27-q1-glbl-newsletter-generic.Delight March Newsletter - EMEA (katie),"5,863","5,815",99.18%,"2,340",40.24%,81,3.46%,18,0.31%,20,0.34%
+6,fy27-q1-amer-event-conference-shoptalk-spring.00. Visited Booth,332,320,96.39%,142,44.38%,4,2.82%,6,1.81%,1,0.31%
+7,fy27-q1-apac-event-conference-aicc.01. Follow-up Survey,311,302,97.11%,131,43.38%,54,41.22%,0,0.00%,0,0.00%
+8,fy27-q1-amer-event-conference-himss.00. Visited Booth (katie),99,95,95.96%,43,45.26%,3,6.98%,1,1.01%,0,0.00%
+9,fy25-q1-glbl-website-talk-to-sales.Autoresponder - No Chilipiper,87,82,94.25%,33,40.24%,10,30.30%,1,1.15%,0,0.00%
+10,fy27-q1-amer-event-webinar-AI-readiness.07. Reminder (2 hours),84,83,98.81%,30,36.14%,3,10.00%,0,0.00%,0,0.00%
+11,fy26-q4-glbl-website-talk-to-sales-delight.Autoresponder Delight,81,69,85.19%,28,40.58%,2,7.14%,0,0.00%,0,0.00%
+12,fy27-q1-amer-event-webinar-AI-readiness.06. Reminder (2 day) (katie),76,75,98.68%,26,34.67%,0,0.00%,0,0.00%,0,0.00%
+13,fy27-q1-amer-event-webinar-AI-readiness.04. Reminder (katie),41,34,82.93%,16,47.06%,1,6.25%,0,0.00%,0,0.00%
+14,fy27-q1-amer-event-webinar-AI-readiness.Follow-Up No-show,38,37,97.37%,12,32.43%,3,25.00%,1,2.63%,0,0.00%
+15,fy27-q1-amer-event-conference-fintech-meetup.00. Visited Booth,36,34,94.44%,10,29.41%,1,10.00%,0,0.00%,0,0.00%
+16,fy25-q1-glbl-website-request-a-demo.Autoresponder - No Chilipiper,34,29,85.29%,10,34.48%,0,0.00%,0,0.00%,0,0.00%
+17,fy27-q1-amer-event-spark-delight.01. Waitlist,33,32,96.97%,15,46.88%,0,0.00%,0,0.00%,0,0.00%
+18,fy27-q1-assessment-AI-Readiness-Assessment.04. Email - Foundation Phase,19,10,52.63%,7,70.00%,0,0.00%,0,0.00%,0,0.00%
+19,fy25-q1-glbl-website-talk-to-sales.Autoresponder - Korean,17,17,100.00%,9,52.94%,3,33.33%,0,0.00%,0,0.00%
+20,fy27-q1-amer-event-webinar-AI-readiness.Follow-Up Attended,14,14,100.00%,7,50.00%,1,14.29%,0,0.00%,0,0.00%
+21,fy27-q1-amer-event-spark-delight.02. Confirmation,13,12,92.31%,7,58.33%,0,0.00%,0,0.00%,0,0.00%
+22,fy26-q1-emea-event-list-product-con-london.Email-2-productcon-london-event-list,9,0,0.00%,0,,0,,0,0.00%,0,
+23,fy26-q4-glbl-event-spark-delight-on-demand.01. Autoresponder,8,8,100.00%,2,25.00%,0,0.00%,0,0.00%,0,0.00%
+24,fy27-q1-amer-event-webinar-AI-readiness.01. On-demand Confirmation,5,5,100.00%,4,80.00%,2,50.00%,0,0.00%,0,0.00%
+25,fy26-q4-glbl-content-ebook-ai-readiness.Autoresponder,4,4,100.00%,0,0.00%,0,,0,0.00%,0,0.00%
+26,fy26-q4-website-korean-ai-agent-talk-to-sales-delight.Autoresponder - KO,4,3,75.00%,1,33.33%,0,0.00%,0,0.00%,0,0.00%
+27,fy26-q1-content-ebook-8-support-challenges-to-overcome-with-agentic-AI.Autoresponder,4,3,75.00%,1,33.33%,0,0.00%,0,0.00%,0,0.00%
+28,fy27-q1-amer-event-conference-etail-palm-springs.00. Visited Booth,3,3,100.00%,1,33.33%,0,0.00%,1,33.33%,0,0.00%
+29,fy26-q4-glbl-content-ebook-retail-playbook.Autoresponder,3,3,100.00%,0,0.00%,0,,0,0.00%,0,0.00%
+30,fy27-q1-assessment-AI-Readiness-Assessment.02. Email - Near Ready,2,2,100.00%,2,100.00%,0,0.00%,0,0.00%,0,0.00%
+31,2022-08-24 10:00:00 Event- Advanced time management principles & tactics for leaders.Autoresponder OnDemand,2,2,100.00%,1,50.00%,0,0.00%,0,0.00%,0,0.00%
+32,fy27-q1-amer-event-conference-ViVE.00. Visited Booth,2,2,100.00%,1,50.00%,0,0.00%,0,0.00%,0,0.00%
+33,fy27-q1-emea-event-april-26-ancillaryevent-uk.01. Waitlist,1,1,100.00%,1,100.00%,1,100.00%,0,0.00%,0,0.00%
+34,fy26-q4-glbl-content-ebook-finance-playbook.Autoresponder,1,1,100.00%,0,0.00%,0,,0,0.00%,0,0.00%
+35,fy26-q4-apac-event-spark-delight-on-demand.01. Autoresponder,1,0,0.00%,0,,0,,0,0.00%,0,
+36,fy27-q1-assessment-AI-Readiness-Assessment.03. Email - Building Blocks,1,1,100.00%,1,100.00%,0,0.00%,0,0.00%,0,0.00%
+37,fy27-q1-glbl-content-ebook-b2b-playbook.Autoresponder,1,1,100.00%,0,0.00%,0,,0,0.00%,0,0.00%
+38,fy26-q3-glbl-content-ebook-leading-ai-agent-leap.Autoresponder,1,1,100.00%,0,0.00%,0,,0,0.00%,0,0.00%
+39,2019-09-11 WBN Accolade OnDemand.Autoresponder,1,1,100.00%,0,0.00%,0,,0,0.00%,0,0.00%
+40,fy25-q1-glbl-website-talk-to-sales.Autoresponder - w Chilipiper,1,1,100.00%,0,0.00%,0,,0,0.00%,0,0.00%
+41,fy26-q4-website-ai-agent-talk-to-sales-delight-voice.Autoresponder Delight,1,1,100.00%,0,0.00%,0,,0,0.00%,0,0.00%
+
+
+=== open_rate_1.csv ===
+,Sent Week,Opened Rate
+1,2026-04-06,50.00%
+2,2026-03-30,39.39%
+3,2026-03-23,14.23%
+4,2026-03-16,39.53%
+5,2026-03-09,30.01%
+6,2026-03-02,0.00%
+
+
+=== click_through_rate__.csv ===
+,Sent Week,Click Through Rate
+1,2026-04-06,0.00%
+2,2026-03-30,12.82%
+3,2026-03-23,3.58%
+4,2026-03-16,4.22%
+5,2026-03-09,5.03%
+6,2026-03-02,
+
+
+=== bottom_10_subject_lines_by_open_rate.csv ===
+,Subject Line,Opened Rate
+1,Come see how a top US retailer is reinventing the sales floor with AI,11.76%
+2,The King of CX + Taylor Swift's playbook,13.12%
+3,Attend our live AI readiness webinar Wednesday and get the CX leader's guide to AI agents,35.38%
+4,We received your request!,38.05%
+5,Delight Dispatch | March 2026,40.49%
+6,[설문조사 이벤트] Sendbird 부스에 방문해 주셔서 감사합니다.,43.38%
+7,Great meeting you!,43.39%
+
+
+=== bottom_10_messaging_by_ctr.csv ===
+,Messaging,Click Through Rate
+1,"Delight Spark is where we reveal the next era of AI concierge.
+Ken Hughes, ""The King of Customer Experience,"" is coming to San Francisco on May 7.
+",1.50%
+2,"Delight Spark is where we reveal the next era of AI concierge.
+One of the most tech-forward airlines in the world. ",2.29%
+3,It was so great to meet you just now at Shoptalk Spring!,2.82%
+4,"Join LeighAnne Manwiller, author of From AI Hype to AI Readiness, and Shailesh Nalawadi, AI Transformation Architect at Sendbird, for a practical session built around one question: is your organization actually ready for AI agents?
+",3.80%
+5,"AI agents are transforming how companies engage customers, but scaling them requires the right operational safeguards. This month's releases give you the control and visibility to deploy AI confidently.",4.78%
+6,"안녕하세요,  [제 13회 AICC & CX 인사이트 2026] 에 참석해주신 모든 분들께 감사드립니다!  행사 기간 중 Sendbird 부스를",41.22%
+
+
+=== unsubscribe_rate__.csv ===
+,Unsubscribe Rate,Unsubscribe Rate Benchmark
+1,0.31%,0.15%
+
+
+=== bounce_rate__.csv ===
+,Bounced Rate,Bounced Benchmark
+1,0.60%,1%
+
+
+=== top_10_messaging_by_ctr.csv ===
+,Messaging,Click Through Rate
+1,"안녕하세요,  [제 13회 AICC & CX 인사이트 2026] 에 참석해주신 모든 분들께 감사드립니다!  행사 기간 중 Sendbird 부스를",41.22%
+2,"AI agents are transforming how companies engage customers, but scaling them requires the right operational safeguards. This month's releases give you the control and visibility to deploy AI confidently.",4.78%
+3,"Join LeighAnne Manwiller, author of From AI Hype to AI Readiness, and Shailesh Nalawadi, AI Transformation Architect at Sendbird, for a practical session built around one question: is your organization actually ready for AI agents?
+",3.80%
+4,It was so great to meet you just now at Shoptalk Spring!,2.82%
+5,"Delight Spark is where we reveal the next era of AI concierge.
+One of the most tech-forward airlines in the world. ",2.29%
+6,"Delight Spark is where we reveal the next era of AI concierge.
+Ken Hughes, ""The King of Customer Experience,"" is coming to San Francisco on May 7.
+",1.50%
+
+
+=== by_program.csv ===
+,Program Name,Sent Count,Delivered Count,Delivered Rate,Open Count,Opened Rate,Click Count,Click Through Rate,Bounced Count,Bounced Rate,Unsubscribe Count,Unsubscribe Rate
+1,fy27-q1-glbl-newsletter-generic,"38,735","38,472",99.32%,"15,576",40.49%,744,4.78%,86,0.22%,108,0.28%
+2,fy27-q1-amer-event-spark-delight,"19,005","18,777",98.80%,"2,846",15.16%,63,2.21%,215,1.13%,49,0.26%
+3,fy27-q1-amer-event-webinar-AI-readiness,"8,151","8,101",99.39%,"2,882",35.58%,116,4.02%,42,0.52%,21,0.26%
+4,fy27-q1-amer-event-conference-shoptalk-spring,332,320,96.39%,142,44.38%,4,2.82%,6,1.81%,1,0.31%
+5,fy27-q1-apac-event-conference-aicc,311,302,97.11%,131,43.38%,54,41.22%,0,0.00%,0,0.00%
+6,fy27-q1-amer-event-conference-himss,99,95,95.96%,43,45.26%,3,6.98%,1,1.01%,0,0.00%
+7,fy25-q1-glbl-website-talk-to-sales,93,90,96.77%,38,42.22%,12,31.58%,1,1.08%,0,0.00%
+8,fy26-q4-glbl-website-talk-to-sales-delight,80,68,85.00%,27,39.71%,2,7.41%,0,0.00%,0,0.00%
+9,fy27-q1-amer-event-conference-fintech-meetup,36,34,94.44%,10,29.41%,1,10.00%,0,0.00%,0,0.00%
+10,fy25-q1-glbl-website-request-a-demo,34,29,85.29%,10,34.48%,0,0.00%,0,0.00%,0,0.00%
+11,fy27-q1-assessment-AI-Readiness-Assessment,21,12,57.14%,9,75.00%,0,0.00%,0,0.00%,0,0.00%
+12,WF-Request-Contact Us 1016 (2019-12),13,11,84.62%,4,36.36%,1,25.00%,0,0.00%,0,0.00%
+13,fy26-q1-emea-event-list-product-con-london,9,0,0.00%,0,,0,,0,0.00%,0,
+14,fy26-q4-amer-paid-social-linkedinleadgen-spark-on-demand-event,7,7,100.00%,2,28.57%,0,0.00%,0,0.00%,0,0.00%
+15,fy26-q4-glbl-content-ebook-ai-readiness,4,4,100.00%,0,0.00%,0,,0,0.00%,0,0.00%
+16,fy26-q4-website-korean-ai-agent-talk-to-sales-delight,4,3,75.00%,1,33.33%,0,0.00%,0,0.00%,0,0.00%
+17,fy26-q1-content-ebook-8-support-challenges-to-overcome-with-agentic-AI,4,3,75.00%,1,33.33%,0,0.00%,0,0.00%,0,0.00%
+18,fy27-q1-amer-event-conference-etail-palm-springs,3,3,100.00%,1,33.33%,0,0.00%,1,33.33%,0,0.00%
+19,fy26-q4-glbl-content-ebook-retail-playbook,3,3,100.00%,0,0.00%,0,,0,0.00%,0,0.00%
+20,fy27-q1-amer-event-webinar-AI-readiness-li-leadgen,2,2,100.00%,2,100.00%,1,50.00%,0,0.00%,0,0.00%
+21,fy27-q1-amer-event-conference-ViVE,2,2,100.00%,1,50.00%,0,0.00%,0,0.00%,0,0.00%
+22,2022-08-24 10:00:00 Event- Advanced time management principles & tactics for leaders,2,2,100.00%,1,50.00%,0,0.00%,0,0.00%,0,0.00%
+23,2019-09-11 WBN Accolade OnDemand,1,1,100.00%,0,0.00%,0,,0,0.00%,0,0.00%
+24,fy26-q4-website-ai-agent-talk-to-sales-delight-voice,1,1,100.00%,0,0.00%,0,,0,0.00%,0,0.00%
+25,fy26-q4-website-ai-agent-talk-to-sales-delight,1,1,100.00%,1,100.00%,0,0.00%,0,0.00%,0,0.00%
+26,fy26-q4-apac-event-spark-delight-on-demand,1,0,0.00%,0,,0,,0,0.00%,0,
+27,fy27-q1-emea-event-april-26-ancillaryevent-uk,1,1,100.00%,1,100.00%,1,100.00%,0,0.00%,0,0.00%
+28,fy26-q3-glbl-content-ebook-leading-ai-agent-leap,1,1,100.00%,0,0.00%,0,,0,0.00%,0,0.00%
+29,fy26-q4-glbl-event-spark-delight-on-demand,1,1,100.00%,0,0.00%,0,,0,0.00%,0,0.00%
+30,fy27-q1-glbl-content-ebook-b2b-playbook,1,1,100.00%,0,0.00%,0,,0,0.00%,0,0.00%
+31,fy26-q4-glbl-content-ebook-finance-playbook,1,1,100.00%,0,0.00%,0,,0,0.00%,0,0.00%
+
+
+=== by_link.csv ===
+,Link Clicked,Email Name,Click Count
+1,https://delight.ai/perspective/software-ate-the-world-agents-are-eating-software,fy27-q1-glbl-newsletter-generic.Delight March Newsletter - AMER (katie),517
+2,http://delight.ai/?utm_medium=email&utm_source=marketo&utm_content=mar-newsletter&utm_campaign=fy27-q1-glbl-newsletter-generic,fy27-q1-glbl-newsletter-generic.Delight March Newsletter - AMER (katie),187
+3,https://delight.ai/perspective/software-ate-the-world-agents-are-eating-software??utm_medium=email&utm_source=marketo&utm_content=mar-newsletter&utm_campaign=fy27-q1-glbl-newsletter-generic,fy27-q1-glbl-newsletter-generic.Delight March Newsletter - AMER (katie),155
+4,https://delight.ai/customers/hipages??utm_medium=email&utm_source=marketo&utm_content=mar-newsletter&utm_campaign=fy27-q1-glbl-newsletter-generic,fy27-q1-glbl-newsletter-generic.Delight March Newsletter - AMER (katie),152
+5,https://delight.ai/customers/hipages,fy27-q1-glbl-newsletter-generic.Delight March Newsletter - AMER (katie),149
+6,https://delight.ai/resources/ai-readiness-101-webinar?utm_medium=email&utm_source=marketo&utm_content=invite-3&utm_campaign=fy27-q1-amer-event-webinar-ai-readiness,fy27-q1-amer-event-webinar-AI-readiness.03. Invite 3 (katie),63
+7,https://delight.ai/resources/ai-readiness-101-webinar?utm_medium=email&utm_source=marketo&utm_content=invite-3&utm_campaign=fy27-q1-amer-event-webinar-ai-readiness?,fy27-q1-amer-event-webinar-AI-readiness.03. Invite 3 (katie),61
+8,https://forms.gle/JySkwZiwgBk6QhMY9,fy27-q1-apac-event-conference-aicc.01. Follow-up Survey,54
+9,https://delight.ai/product-release/low-csat-analysis,fy27-q1-glbl-newsletter-generic.Delight March Newsletter - AMER (katie),45
+10,https://facebook.com/sendbird,fy27-q1-amer-event-webinar-AI-readiness.03. Invite 3 (katie),45
+11,https://delight.ai/perspective/software-ate-the-world-agents-are-eating-software,fy27-q1-glbl-newsletter-generic.Delight March Newsletter - EMEA (katie),45
+12,https://digitaltravelconnectus.wbresearch.com/?utm_campaign=29163.008_BLUE_GPPC&extTreatId=7629236&utm_term=digital%20travel%20summit%20san%20diego&utm_campaign=BOD+29163.008+Digital+Travel+Connect+2026&utm_source=adwords&utm_medium=ppc&hsa_acc=7681424832&hsa_cam=23377725534&hsa_grp=189176857383&hsa_ad=789130708462&hsa_src=g&hsa_tgt=kwd-789630337812&hsa_kw=digital%20travel%20summit%20san%20diego&hsa_mt=p&hsa_net=adwords&hsa_ver=3&gad_source=1&gad_campaignid=23377725534&gbraid=0AAAAADjOCX2cESFb8F0SMDAvy2hW5grpj&gclid=CjwKCAiA2PrMBhA4EiwAwpHyC5E_E-pceokJDCj3u5_YOl1ybvW_nZ5xGTZ7Ed6NUDenf51PhGF_2xoCCscQAvD_BwE,fy27-q1-glbl-newsletter-generic.Delight March Newsletter - AMER (katie),44
+13,https://www.linkedin.com/company/sendbird,fy27-q1-amer-event-webinar-AI-readiness.03. Invite 3 (katie),44
+14,https://twitter.com/sendbird,fy27-q1-amer-event-webinar-AI-readiness.03. Invite 3 (katie),42
+15,https://delight.ai/product-release/gradual-rollout??utm_medium=email&utm_source=marketo&utm_content=mar-newsletter&utm_campaign=fy27-q1-glbl-newsletter-generic,fy27-q1-glbl-newsletter-generic.Delight March Newsletter - AMER (katie),41
+16,https://delight.ai/product-release/gradual-rollout,fy27-q1-glbl-newsletter-generic.Delight March Newsletter - AMER (katie),38
+17,https://delight.ai/product-release/low-csat-analysis?utm_medium=email&utm_source=marketo&utm_content=mar-newsletter&utm_campaign=fy27-q1-glbl-newsletter-generic,fy27-q1-glbl-newsletter-generic.Delight March Newsletter - AMER (katie),36
+18,https://delight.ai/product-release/sound-notification,fy27-q1-glbl-newsletter-generic.Delight March Newsletter - AMER (katie),32
+19,https://delight.ai/product-release/sound-notification?utm_medium=email&utm_source=marketo&utm_content=mar-newsletter&utm_campaign=fy27-q1-glbl-newsletter-generic,fy27-q1-glbl-newsletter-generic.Delight March Newsletter - AMER (katie),31
+20,http://delight.ai/?utm_medium=email&utm_source=marketo&utm_content=mar-newsletter&utm_campaign=fy27-q1-glbl-newsletter-generic,fy27-q1-glbl-newsletter-generic.Delight March Newsletter - EMEA (katie),31
+21,https://github.com/sendbird,fy27-q1-amer-event-webinar-AI-readiness.03. Invite 3 (katie),23
+22,https://delight.ai/resources/ai-readiness-101-webinar,fy27-q1-glbl-newsletter-generic.Delight March Newsletter - AMER (katie),23
+23,https://www.linkedin.com/pulse/infinity-game-john-s-kim-b3kkc/,fy27-q1-glbl-newsletter-generic.Delight March Newsletter - AMER (katie),20
+24,https://delight.ai/customers/hipages??utm_medium=email&utm_source=marketo&utm_content=mar-newsletter&utm_campaign=fy27-q1-glbl-newsletter-generic,fy27-q1-glbl-newsletter-generic.Delight March Newsletter - EMEA (katie),20
+25,https://digitaltravelconnectus.wbresearch.com/?utm_campaign=29163.008_BLUE_GPPC&extTreatId=7629236&utm_term=digital%20travel%20summit%20san%20diego&utm_campaign=BOD+29163.008+Digital+Travel+Connect+2026&utm_source=adwords&utm_medium=ppc&hsa_acc=7681424832&hsa_cam=23377725534&hsa_grp=189176857383&hsa_ad=789130708462&hsa_src=g&hsa_tgt=kwd-789630337812&hsa_kw=digital%20travel%20summit%20san%20diego&hsa_mt=p&hsa_net=adwords&hsa_ver=3&gad_source=1&gad_campaignid=23377725534&gbraid=0AAAAADjOCX2cESFb8F0SMDAvy2hW5grpj&gclid=CjwKCAiA2PrMBhA4EiwAwpHyC5E_E-pceokJDCj3u5_YOl1ybvW_nZ5xGTZ7Ed6NUDenf51PhGF_2xoCCscQAvD_BwE,fy27-q1-glbl-newsletter-generic.Delight March Newsletter - EMEA (katie),19
+26,https://delight.ai/customers/hipages,fy27-q1-glbl-newsletter-generic.Delight March Newsletter - EMEA (katie),19
+27,https://delight.ai/spark?utm_medium=email&utm_source=marketo&utm_content=invite-3&utm_campaign=fy27-q1-amer-event-spark-delight?,fy27-q1-amer-event-spark-delight.03. Invite 3 (katie),18
+28,https://delight.ai/product-release/gradual-rollout,fy27-q1-glbl-newsletter-generic.Delight March Newsletter - EMEA (katie),17
+29,https://delight.ai/perspective/why-your-ai-agent-needs-a-manager,fy27-q1-glbl-newsletter-generic.Delight March Newsletter - AMER (katie),17
+30,https://delight.ai/perspective/software-ate-the-world-agents-are-eating-software??utm_medium=email&utm_source=marketo&utm_content=mar-newsletter&utm_campaign=fy27-q1-glbl-newsletter-generic,fy27-q1-glbl-newsletter-generic.Delight March Newsletter - EMEA (katie),17
+31,https://delight.ai/spark?utm_medium=email&utm_source=marketo&utm_content=invite-3&utm_campaign=fy27-q1-amer-event-spark-delight,fy27-q1-amer-event-spark-delight.03. Invite 3 (katie),17
+32,https://delight.ai/product-release/sound-notification,fy27-q1-glbl-newsletter-generic.Delight March Newsletter - EMEA (katie),17
+33,https://facebook.com/sendbird,fy27-q1-amer-event-spark-delight.03. Invite 3 (katie),16
+34,https://delight.ai/product-release/sound-notification?utm_medium=email&utm_source=marketo&utm_content=mar-newsletter&utm_campaign=fy27-q1-glbl-newsletter-generic,fy27-q1-glbl-newsletter-generic.Delight March Newsletter - EMEA (katie),16
+35,https://twitter.com/sendbird,fy27-q1-amer-event-spark-delight.03. Invite 3 (katie),16
+36,https://delight.ai/product-release/low-csat-analysis?utm_medium=email&utm_source=marketo&utm_content=mar-newsletter&utm_campaign=fy27-q1-glbl-newsletter-generic,fy27-q1-glbl-newsletter-generic.Delight March Newsletter - EMEA (katie),16
+37,https://delight.ai/spark?utm_medium=email&utm_source=marketo&utm_content=invite-4&utm_campaign=fy27-q1-amer-event-spark-delight,fy27-q1-amer-event-spark-delight.04. Invite 4 (Ken),16
+38,https://www.linkedin.com/company/sendbird,fy27-q1-amer-event-spark-delight.03. Invite 3 (katie),16
+39,https://delight.ai/spark?utm_medium=email&utm_source=marketo&utm_content=invite-4&utm_campaign=fy27-q1-amer-event-spark-delight?,fy27-q1-amer-event-spark-delight.04. Invite 4 (Ken),15
+40,https://delight.ai/spark,fy27-q1-glbl-newsletter-generic.Delight March Newsletter - AMER (katie),15
+41,https://twitter.com/sendbird,fy27-q1-amer-event-spark-delight.04. Invite 4 (Ken),15
+42,https://fintechmeetup.com/page/about-fintech-meetup-ppc,fy27-q1-glbl-newsletter-generic.Delight March Newsletter - AMER (katie),15
+43,https://delight.ai/product-release/low-csat-analysis,fy27-q1-glbl-newsletter-generic.Delight March Newsletter - EMEA (katie),14
+44,https://delight.ai/resources/ai-readiness-101-webinar,fy27-q1-glbl-newsletter-generic.Delight March Newsletter - EMEA (katie),13
+45,https://www.linkedin.com/company/sendbird,fy27-q1-glbl-newsletter-generic.Delight March Newsletter - AMER (katie),13
+46,https://delight.ai/product-release/gradual-rollout??utm_medium=email&utm_source=marketo&utm_content=mar-newsletter&utm_campaign=fy27-q1-glbl-newsletter-generic,fy27-q1-glbl-newsletter-generic.Delight March Newsletter - EMEA (katie),13
+47,https://facebook.com/sendbird,fy27-q1-glbl-newsletter-generic.Delight March Newsletter - AMER (katie),13
+48,https://delight.ai/contact-sales?utm_medium=email&utm_source=marketo&utm_content=feb-newsletter&utm_campaign=fy27-q1-glbl-newsletter-generic?,fy27-q1-glbl-newsletter-generic.Delight March Newsletter - AMER (katie),13
+49,https://spring.shoptalk.com/home,fy27-q1-glbl-newsletter-generic.Delight March Newsletter - AMER (katie),12
+50,https://facebook.com/sendbird,fy27-q1-amer-event-spark-delight.04. Invite 4 (Ken),12
+51,https://facebook.com/sendbird,fy27-q1-glbl-newsletter-generic.Delight March Newsletter - EMEA (katie),11
+52,https://twitter.com/sendbird,fy27-q1-glbl-newsletter-generic.Delight March Newsletter - AMER (katie),11
+53,https://www.linkedin.com/posts/doshkim_ive-gone-through-almost-every-wiki-style-activity-7431386046908760064-SfRI,fy27-q1-glbl-newsletter-generic.Delight March Newsletter - AMER (katie),11
+54,https://github.com/sendbird,fy27-q1-glbl-newsletter-generic.Delight March Newsletter - AMER (katie),11
+55,https://www.linkedin.com/company/sendbird,fy27-q1-amer-event-spark-delight.04. Invite 4 (Ken),10
+56,https://delight.ai/spark,fy27-q1-glbl-newsletter-generic.Delight March Newsletter - EMEA (katie),10
+57,https://www.linkedin.com/posts/doshkim_ive-gone-through-almost-every-wiki-style-activity-7431386046908760064-SfRI,fy27-q1-glbl-newsletter-generic.Delight March Newsletter - EMEA (katie),10
+58,https://twitter.com/sendbird,fy27-q1-glbl-newsletter-generic.Delight March Newsletter - EMEA (katie),10
+59,https://www.linkedin.com/pulse/infinity-game-john-s-kim-b3kkc/,fy27-q1-glbl-newsletter-generic.Delight March Newsletter - EMEA (katie),9
+60,https://delight.ai/contact-sales?utm_medium=email&utm_source=marketo&utm_content=feb-newsletter&utm_campaign=fy27-q1-glbl-newsletter-generic?,fy27-q1-glbl-newsletter-generic.Delight March Newsletter - EMEA (katie),8
+61,https://spring.shoptalk.com/home,fy27-q1-glbl-newsletter-generic.Delight March Newsletter - EMEA (katie),8
+62,https://delight.ai/perspective/why-your-ai-agent-needs-a-manager,fy27-q1-glbl-newsletter-generic.Delight March Newsletter - EMEA (katie),7
+63,https://www.linkedin.com/company/sendbird,fy27-q1-glbl-newsletter-generic.Delight March Newsletter - EMEA (katie),7
+64,https://fintechmeetup.com/page/about-fintech-meetup-ppc,fy27-q1-glbl-newsletter-generic.Delight March Newsletter - EMEA (katie),7
+65,https://github.com/sendbird,fy27-q1-amer-event-spark-delight.03. Invite 3 (katie),7
+66,https://github.com/sendbird,fy27-q1-glbl-newsletter-generic.Delight March Newsletter - EMEA (katie),5
+67,https://delight.ai/industries/healthcare,fy27-q1-amer-event-conference-himss.00. Visited Booth (katie),3
+68,https://delight.ai/industries/retail?utm_medium=email&utm_source=marketo&utm_content=visited-booth&utm_campaign=fy27-q1-amer-event-conference-etail-palm-springs,fy27-q1-amer-event-conference-shoptalk-spring.00. Visited Booth,3
+69,https://delight.ai/resources/ai-readiness-101-webinar?utm_medium=email&utm_source=marketo&utm_content=invite-3&utm_campaign=fy27-q1-amer-event-webinar-ai-readiness,fy27-q1-amer-event-webinar-AI-readiness.07. Reminder (2 hours),3
+70,https://blog.sendbird.com/,fy25-q1-glbl-website-talk-to-sales.Autoresponder - Korean,3
+71,https://watch.getcontrast.io/watch/sendbird-ai-readiness-101-close-the-gap-between-ai-hype-and-real-results,fy27-q1-amer-event-webinar-AI-readiness.Follow-Up No-show,2
+72,https://get.sendbird.com/rs/047-LOL-803/images/2026%20Delight%20Healthcare%20e-book.pdf?version=0,fy27-q1-amer-event-conference-himss.00. Visited Booth (katie),2
+73,https://www.linkedin.com/company/sendbird,fy27-q1-amer-event-conference-himss.00. Visited Booth (katie),2
+74,https://sendbird.com/products/chat-messaging?utm_medium=email&utm_source=marketo&utm_campaign=fy26-q2-amer-email-marketo-ai-agent-autoresponder,fy25-q1-glbl-website-talk-to-sales.Autoresponder - No Chilipiper,2
+75,https://sendbird.com/blog/category/ai-agent?utm_medium=email&utm_source=marketo&utm_campaign=fy26-q2-amer-email-marketo-ai-agent-autoresponder,fy25-q1-glbl-website-talk-to-sales.Autoresponder - No Chilipiper,2
+76,https://github.com/sendbird,fy27-q1-amer-event-spark-delight.04. Invite 4 (Ken),2
+77,https://watch.getcontrast.io/watch/sendbird-ai-readiness-101-close-the-gap-between-ai-hype-and-real-results,fy27-q1-amer-event-webinar-AI-readiness.01. On-demand Confirmation,2
+78,https://sendbird.chilipiper.com/book/emea-ibsdr?id=joost@clickdrive.nl&utm_medium=email&utm_source=marketo&utm_content=autoresponder&utm_campaign=fy25-q1-glbl-website-talk-to-sales,fy25-q1-glbl-website-talk-to-sales.Autoresponder - No Chilipiper,1
+79,https://get.sendbird.com/rs/047-LOL-803/images/%5BSingle%20page%5D%20From%20AI%20Hype%20to%20AI%20Readiness_v2.pdf?version=0,fy27-q1-amer-event-webinar-AI-readiness.Follow-Up Attended,1
+80,https://sendbird.com/,fy25-q1-glbl-website-talk-to-sales.Autoresponder - No Chilipiper,1
+81,https://delight.ai/resources?utm_medium=email&utm_source=marketo&utm_content=autoresponder&utm_campaign=fy27-q1-emea-event-april-26-ancillaryevent-uk,fy27-q1-emea-event-april-26-ancillaryevent-uk.01. Waitlist,1
+82,https://facebook.com/sendbird,fy27-q1-amer-event-conference-shoptalk-spring.00. Visited Booth,1
+83,https://delight.ai/ai-readiness-intro?utm_medium=email&utm_source=marketo&utm_content=noshow&utm_campaign=fy27-q1-amer-event-webinar-ai-readiness,fy27-q1-amer-event-webinar-AI-readiness.Follow-Up No-show,1
+84,https://delight.ai/contact-sales?utm_medium=email&utm_source=marketo&utm_content=noshow-followup&utm_campaign=fy27-q1-amer-event-webinar-ai-readiness,fy27-q1-amer-event-webinar-AI-readiness.Follow-Up No-show,1
+85,https://delight.ai/contact-sales?utm_medium=email&utm_source=marketo&utm_content=on-demand-followup&utm_campaign=fy27-q1-amer-event-webinar-ai-readiness,fy27-q1-amer-event-webinar-AI-readiness.01. On-demand Confirmation,1
+86,https://sendbird.chilipiper.com/book/amer-ibsdr?id=asif.tirosh@verbit.ai&utm_medium=email&utm_source=marketo&utm_content=autoresponder&utm_campaign=fy25-q1-glbl-website-talk-to-sales,fy25-q1-glbl-website-talk-to-sales.Autoresponder - No Chilipiper,1
+87,https://github.com/sendbird,fy27-q1-amer-event-webinar-AI-readiness.04. Reminder (katie),1
+88,https://github.com/sendbird,fy27-q1-apac-event-conference-aicc.01. Follow-up Survey,1
+89,http://sendbird.com/blog/introducing-agent-memory-platform?utm_medium=email&utm_source=marketo&utm_content=tts-autoresponder&utm_campaign=fy26-q4-glbl-website-talk-to-sales-delight,fy26-q4-glbl-website-talk-to-sales-delight.Autoresponder Delight,1
+90,https://sendbird.chilipiper.com/book/amer-ibsdr?id=sergey@fanfix.io&utm_medium=email&utm_source=marketo&utm_content=autoresponder&utm_campaign=fy25-q1-glbl-website-talk-to-sales,fy25-q1-glbl-website-talk-to-sales.Autoresponder - No Chilipiper,1
+91,https://twitter.com/sendbird,fy27-q1-amer-event-webinar-AI-readiness.04. Reminder (katie),1
+92,https://www.facebook.com/sendbird,fy25-q1-glbl-website-talk-to-sales.Autoresponder - No Chilipiper,1
+93,https://delight.ai/trust-os?utm_medium=email&utm_source=marketo&utm_content=visited-booth&utm_campaign=fy27-q1-amer-event-conference-himss,fy27-q1-amer-event-conference-himss.00. Visited Booth (katie),1
+94,https://sendbird.chilipiper.com/book/emea-ibsdr?id=adam@syllabi.co.uk&utm_medium=email&utm_source=marketo&utm_content=autoresponder&utm_campaign=fy25-q1-glbl-website-talk-to-sales,fy25-q1-glbl-website-talk-to-sales.Autoresponder - No Chilipiper,1
+95,https://facebook.com/sendbird,fy27-q1-amer-event-conference-himss.00. Visited Booth (katie),1
+96,https://www.linkedin.com/company/sendbird,fy27-q1-amer-event-webinar-AI-readiness.04. Reminder (katie),1
+97,https://github.com/sendbird,fy27-q1-amer-event-conference-shoptalk-spring.00. Visited Booth,1
+98,https://delight.ai/ai-readiness-intro?utm_medium=email&utm_source=marketo&utm_content=on-demand-followup&utm_campaign=fy27-q1-amer-event-webinar-ai-readiness,fy27-q1-amer-event-webinar-AI-readiness.01. On-demand Confirmation,1
+99,https://sendbird.chilipiper.com/book/emea-ibsdr?id=keti.kvitsaridze@profy.ge&utm_medium=email&utm_source=marketo&utm_content=autoresponder&utm_campaign=fy25-q1-glbl-website-talk-to-sales,fy25-q1-glbl-website-talk-to-sales.Autoresponder - No Chilipiper,1
+100,https://delight.ai/resources/ai-readiness-101-webinar?utm_medium=email&utm_source=marketo&utm_content=invite-3&utm_campaign=fy27-q1-amer-event-webinar-ai-readiness,fy27-q1-amer-event-webinar-AI-readiness.04. Reminder (katie),1
+101,https://get.sendbird.com/rs/047-LOL-803/images/Delight.ai%20Financial%20Services%20Use%20Cases%20e-book.pdf?version=0,fy27-q1-amer-event-conference-fintech-meetup.00. Visited Booth,1
+102,http://sendbird.com/blog/connection-starts-with-omnipresence,fy26-q4-glbl-website-talk-to-sales-delight.Autoresponder Delight,1
+103,https://facebook.com/sendbird,fy27-q1-amer-event-webinar-AI-readiness.04. Reminder (katie),1
+104,,fy26-q4-glbl-content-ebook-retail-playbook.Autoresponder,0
+105,,fy27-q1-amer-event-conference-himss.00. Visited Booth (katie),0
+106,,fy25-q1-glbl-website-talk-to-sales.Autoresponder - Korean,0
+107,,fy27-q1-amer-event-webinar-AI-readiness.06. Reminder (2 day) (katie),0
+108,,fy26-q3-glbl-content-ebook-leading-ai-agent-leap.Autoresponder,0
+109,,fy27-q1-glbl-content-ebook-b2b-playbook.Autoresponder,0
+110,,fy25-q1-glbl-website-talk-to-sales.Autoresponder - w Chilipiper,0
+111,,2022-08-24 10:00:00 Event- Advanced time management principles & tactics for leaders.Autoresponder OnDemand,0
+112,,fy27-q1-assessment-AI-Readiness-Assessment.02. Email - Near Ready,0
+113,,fy27-q1-amer-event-spark-delight.04. Invite 4 (Ken),0
+114,,fy27-q1-glbl-newsletter-generic.Delight March Newsletter - EMEA (katie),0
+115,,fy26-q4-glbl-content-ebook-ai-readiness.Autoresponder,0
+116,,fy27-q1-amer-event-conference-fintech-meetup.00. Visited Booth,0
+117,,fy26-q4-website-ai-agent-talk-to-sales-delight-voice.Autoresponder Delight,0
+118,,2019-09-11 WBN Accolade OnDemand.Autoresponder,0
+119,,fy27-q1-amer-event-conference-etail-palm-springs.00. Visited Booth,0
+120,,fy27-q1-glbl-newsletter-generic.Delight March Newsletter - AMER (katie),0
+121,,fy27-q1-amer-event-conference-ViVE.00. Visited Booth,0
+122,,fy27-q1-amer-event-webinar-AI-readiness.Follow-Up Attended,0
+123,,fy27-q1-amer-event-webinar-AI-readiness.Follow-Up No-show,0
+124,,fy27-q1-amer-event-spark-delight.01. Waitlist,0
+125,,fy27-q1-amer-event-webinar-AI-readiness.07. Reminder (2 hours),0
+126,,fy25-q1-glbl-website-request-a-demo.Autoresponder - No Chilipiper,0
+127,,fy26-q4-website-korean-ai-agent-talk-to-sales-delight.Autoresponder - KO,0
+128,,fy27-q1-apac-event-conference-aicc.01. Follow-up Survey,0
+129,,fy26-q4-apac-event-spark-delight-on-demand.01. Autoresponder,0
+130,,fy26-q1-content-ebook-8-support-challenges-to-overcome-with-agentic-AI.Autoresponder,0
+131,,fy26-q4-glbl-content-ebook-finance-playbook.Autoresponder,0
+132,,fy27-q1-amer-event-webinar-AI-readiness.03. Invite 3 (katie),0
+133,,fy26-q4-glbl-event-spark-delight-on-demand.01. Autoresponder,0
+134,,fy27-q1-assessment-AI-Readiness-Assessment.03. Email - Building Blocks,0
+135,,fy27-q1-assessment-AI-Readiness-Assessment.04. Email - Foundation Phase,0
+136,,fy27-q1-amer-event-conference-shoptalk-spring.00. Visited Booth,0
+137,,fy26-q1-emea-event-list-product-con-london.Email-2-productcon-london-event-list,0
+138,,fy26-q4-glbl-website-talk-to-sales-delight.Autoresponder Delight,0
+139,,fy27-q1-amer-event-webinar-AI-readiness.04. Reminder (katie),0
+140,,fy25-q1-glbl-website-talk-to-sales.Autoresponder - No Chilipiper,0
+141,,fy27-q1-amer-event-spark-delight.03. Invite 3 (katie),0
+142,,fy27-q1-amer-event-spark-delight.02. Confirmation,0
+143,,fy27-q1-amer-event-webinar-AI-readiness.01. On-demand Confirmation,0
+</div>
