@@ -259,7 +259,7 @@ INSTRUCTIONS:
 Generate a complete new HTML report for {week_label}. Rules:
 
 1. OUTPUT only the raw HTML document — no markdown fences, no explanation.
-2. Keep ALL CSS identical to the template. Do not change any styles.
+2. Keep ALL CSS identical to the template. Do not change any styles. Do NOT include any yellow "Funnel Stage Name Update" banner — omit it entirely.
 3. Update <title> and header-date to reflect {week_label} and Week {week_num} of 13.
 4. Recalculate all 5 pacing metrics (MQLs, SALs, Meeting Booked, Pre-pipeline, Qualified):
    - IMPORTANT: Stage names are now: MQL, SAL, Meeting Booked (formerly Opps Created/Pre-Pipe), Pre-pipeline (formerly Discovery), Qualified Pipeline.
@@ -667,7 +667,6 @@ def slack_notify(weekly_url: str, events_url: str, email_url: str, pr_url: str, 
         (SLACK_CHARLES, f"Hi Charles! This week's <{weekly_url}|Weekly Dashboard Digest> for {week_label} is ready to view. 📊"),
         (SLACK_LEXI,    f"Hi Lexi! This week's <{events_url}|Events Pipeline Digest> for {week_label} is ready to view. 📊"),
         (SLACK_CHERYL,  f"Hi Cheryl! This week's <{email_url}|Email Performance Digest> for {week_label} is ready to view. 📊"),
-        (SLACK_CAROLYN, f"Hi Carolyn! This week's <{email_url}|Email Performance Digest> for {week_label} is ready to view. 📊"),
     ]
     for user_id, text in stakeholders:
         client.chat_scheduleMessage(channel=user_id, text=text, post_at=post_at)
