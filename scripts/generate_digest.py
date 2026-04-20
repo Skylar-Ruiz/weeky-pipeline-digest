@@ -796,8 +796,7 @@ def main():
     branch = f"digest/{week_label.replace(' ', '-').replace(',', '')}"
     git_push(weekly_filename, events_filename, email_filename, week_label)
 
-    branch_slug = branch.lower().replace("/", "-").replace("_", "-")
-    base = f"https://weeky-pipeline-digest-git-{branch_slug}-sendbird-ai.vercel.app"
+    base = f"https://raw.githack.com/Skylar-Ruiz/weeky-pipeline-digest/{branch}"
     weekly_url = f"{base}/{weekly_filename}"
     events_url = f"{base}/{events_filename}"
     email_url  = f"{base}/{email_filename}"
