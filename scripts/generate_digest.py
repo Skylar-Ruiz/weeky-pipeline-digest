@@ -797,9 +797,11 @@ def main():
     git_push(weekly_filename, events_filename, email_filename, week_label)
 
     base = f"https://raw.githack.com/Skylar-Ruiz/weeky-pipeline-digest/{branch}"
-    weekly_url = f"{base}/{weekly_filename}"
-    events_url = f"{base}/{events_filename}"
-    email_url  = f"{base}/{email_filename}"
+    def _encode(fname):
+        return fname.replace("_", "%5F")
+    weekly_url = f"{base}/{_encode(weekly_filename)}"
+    events_url = f"{base}/{_encode(events_filename)}"
+    email_url  = f"{base}/{_encode(email_filename)}"
     pr_url     = f"https://github.com/Skylar-Ruiz/weeky-pipeline-digest/compare/{branch}"
 
     print("\n📣 Sending Slack notifications...")
