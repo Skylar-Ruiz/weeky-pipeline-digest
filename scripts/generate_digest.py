@@ -32,7 +32,7 @@ _ssl_context = ssl.create_default_context(cafile=certifi.where())
 
 # ── One-time flags ────────────────────────────────────────────────────────────
 # Set to False after the first run that includes the banner.
-SHOW_RENAME_BANNER = True
+SHOW_RENAME_BANNER = False
 
 # ── Config ────────────────────────────────────────────────────────────────────
 REPO_PATH            = "/Users/skylar.ruiz/weeky-pipeline-digest"
@@ -78,12 +78,25 @@ Q1_START = datetime(2026, 2, 2)
 # ─────────────────────────────────────────────────────────────────────────────
 
 
+def _rclone_bin() -> str:
+    """Return the full path to rclone, checking common install locations."""
+    import shutil
+    path = shutil.which("rclone")
+    if path:
+        return path
+    for candidate in ["/opt/homebrew/bin/rclone", "/usr/local/bin/rclone"]:
+        if os.path.isfile(candidate):
+            return candidate
+    raise FileNotFoundError("rclone not found. Install with: brew install rclone")
+
+
 def download_csvs() -> dict:
     """Download CSVs from both Google Drive folders using rclone."""
+    rclone = _rclone_bin()
     with tempfile.TemporaryDirectory() as tmp:
         # Download from Exec Summary folder
         result = subprocess.run(
-            ["rclone", "copy", DRIVE_FOLDER, tmp, "-v"],
+            [rclone, "copy", DRIVE_FOLDER, tmp, "-v"],
             capture_output=True, text=True
         )
         if result.returncode != 0:
@@ -91,7 +104,7 @@ def download_csvs() -> dict:
 
         # Download from Events folder (adds full_funnel_campaigns)
         result = subprocess.run(
-            ["rclone", "copy", EVENTS_DRIVE_FOLDER, tmp, "-v"],
+            [rclone, "copy", EVENTS_DRIVE_FOLDER, tmp, "-v"],
             capture_output=True, text=True
         )
         if result.returncode != 0:
@@ -99,7 +112,7 @@ def download_csvs() -> dict:
 
         # Download from Email folder (adds Weekly_email_report_csv + Weekly_email_report_pdf)
         result = subprocess.run(
-            ["rclone", "copy", EMAIL_DRIVE_FOLDER, tmp, "-v"],
+            [rclone, "copy", EMAIL_DRIVE_FOLDER, tmp, "-v"],
             capture_output=True, text=True
         )
         if result.returncode != 0:
@@ -171,12 +184,29 @@ def download_csvs() -> dict:
         return csvs
 
 
+def _sort_key_by_date(path: str) -> datetime:
+    """Parse the date from a digest filename for proper chronological sorting."""
+    import re
+    basename = os.path.basename(path)
+    m = re.search(r'_(\w+_\d+__\d{4})\.html$', basename)
+    if m:
+        date_str = m.group(1).replace('__', ' ').replace('_', ' ')
+        for fmt in ('%b %d %Y', '%B %d %Y'):
+            try:
+                return datetime.strptime(date_str, fmt)
+            except ValueError:
+                continue
+    return datetime.min
+
+
 def load_previous_report() -> str:
     """Return the HTML of the most recent weekly digest as a structural template."""
-    files = sorted(glob.glob(f"{REPO_PATH}/Weekly_Dashboard_Digest_-_*.html"))
+    today_filename = f"Weekly_Dashboard_Digest_-_{datetime.now().strftime('%b_%-d__%Y')}.html"
+    files = [f for f in glob.glob(f"{REPO_PATH}/Weekly_Dashboard_Digest_-_*.html")
+             if os.path.basename(f) != today_filename]
     if not files:
         raise FileNotFoundError("No existing digest files found in repo")
-    latest = files[-1]
+    latest = max(files, key=_sort_key_by_date)
     print(f"  ✓ Weekly template: {os.path.basename(latest)}")
     with open(latest) as f:
         return f.read()
@@ -184,9 +214,11 @@ def load_previous_report() -> str:
 
 def load_previous_events_report(weekly_template: str) -> str:
     """Return the HTML of the most recent Events report, or weekly digest as fallback."""
-    files = sorted(glob.glob(f"{REPO_PATH}/Events_Digest_-_*.html"))
+    today_filename = f"Events_Digest_-_{datetime.now().strftime('%b_%-d__%Y')}.html"
+    files = [f for f in glob.glob(f"{REPO_PATH}/Events_Digest_-_*.html")
+             if os.path.basename(f) != today_filename]
     if files:
-        latest = files[-1]
+        latest = max(files, key=_sort_key_by_date)
         print(f"  ✓ Events template: {os.path.basename(latest)}")
         with open(latest) as f:
             return f.read()
@@ -418,9 +450,11 @@ def update_index_events(filename: str, week_label: str):
 
 def load_previous_email_report(events_template: str) -> str:
     """Return the HTML of the most recent Email report, or events digest as fallback."""
-    files = sorted(glob.glob(f"{REPO_PATH}/Email_Digest_-_*.html"))
+    today_filename = f"Email_Digest_-_{datetime.now().strftime('%b_%-d__%Y')}.html"
+    files = [f for f in glob.glob(f"{REPO_PATH}/Email_Digest_-_*.html")
+             if os.path.basename(f) != today_filename]
     if files:
-        latest = files[-1]
+        latest = max(files, key=_sort_key_by_date)
         print(f"  ✓ Email template: {os.path.basename(latest)}")
         with open(latest) as f:
             return f.read()
@@ -468,17 +502,17 @@ Generate a complete Email Performance Report for {week_label}. Rules:
    ::before radial: rgba(200,230,220,0.7)
    ::after radial: rgba(150,210,195,0.3)
    All link hover colors and action number colors: #2d7060
-6. Sections to include:
-   a. Performance Summary — pacing grid with Open Rate, CTR, Unsubscribe Rate vs benchmarks
-      (use the 30-day newsletter PDF for overall email KPIs)
-   b. Program Breakdown — table of top email programs (clean program names)
-   c. Week-over-Week Trends — open rate and CTR across last 4 weeks
-   d. Newsletter Deep Dive — Delight Dispatch section:
+6. Sections to include (in this exact order):
+   a. Newsletter Deep Dive — Delight Dispatch section FIRST (always at the top, before all other sections):
       - Show 3-month issue scorecards (month, sent, open rate, CTR, total clicks)
         using the 180-day newsletter PDF which covers the last 3 months of newsletter sends
       - Unified ranked links table with issue badge (Mar/Feb/Jan) and click counts
       - Content theme breakdown tiles (Thought Leadership, Customer Stories, Product Releases, Homepage)
         with click counts and % of total from the current month's newsletter
+   b. Performance Summary — pacing grid with Open Rate, CTR, Unsubscribe Rate vs benchmarks
+      (use the 30-day newsletter PDF for overall email KPIs)
+   c. Program Breakdown — table of top email programs (clean program names)
+   d. Week-over-Week Trends — open rate and CTR across last 4 weeks
    e. Wins, Concerns, Watch Items — email-specific observations
    f. Recommended Actions — 3-4 email-specific action items
 7. Navigation: "← All Digests" → index.html. Previous email report from template nav if exists.

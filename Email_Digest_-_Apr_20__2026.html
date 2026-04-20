@@ -418,79 +418,6 @@
   }
   .nav-back:hover { color: #2d7060; }
 
-  /* ── Pacing Block ─────────────────────────────── */
-  .pacing-block {
-    border: 1px solid #c4ddd6;
-    border-radius: 10px;
-    padding: 22px 24px;
-    background: #f5faf8;
-  }
-  .pacing-hdr {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 18px;
-  }
-  .pacing-main { font-size: 13.5px; font-weight: 600; color: #1a1a1a; margin-bottom: 3px; }
-  .pacing-sub { font-size: 11px; color: #999; }
-  .pacing-bar-wrap { position: relative; padding-bottom: 24px; margin-bottom: 6px; }
-  .pacing-track {
-    height: 10px;
-    background: #edecea;
-    border-radius: 100px;
-    display: flex;
-    overflow: hidden;
-  }
-  .pacing-fill-actual {
-    height: 100%;
-    background: #2d7060;
-    flex-shrink: 0;
-  }
-  .pacing-fill-projected {
-    height: 100%;
-    background: #9ec4b8;
-    flex-shrink: 0;
-  }
-  .pacing-fill-gap { flex: 1; }
-  .pacing-tick {
-    position: absolute;
-    top: -3px;
-    width: 1.5px;
-    height: 16px;
-    background: #aaa;
-    transform: translateX(-50%);
-  }
-  .pacing-annot {
-    position: absolute;
-    font-size: 10px;
-    white-space: nowrap;
-    top: 15px;
-    transform: translateX(-50%);
-  }
-  .pacing-annot.actual { color: #2d7060; font-weight: 600; }
-  .pacing-annot.projected { color: #888; }
-  .pacing-stat-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    border-top: 1px solid #c4ddd6;
-    padding-top: 14px;
-    margin-top: 2px;
-  }
-  .pacing-stat { text-align: center; padding: 0 6px; border-right: 1px solid #c4ddd6; }
-  .pacing-stat:last-child { border-right: none; }
-  .pacing-stat-val {
-    font-family: 'Playfair Display', serif;
-    font-size: 17px;
-    font-weight: 600;
-    color: #1a1a1a;
-    letter-spacing: -0.5px;
-    line-height: 1.3;
-  }
-  .pacing-stat-val.red { color: #c0392b; }
-  .pacing-stat-val.green { color: #27825b; }
-  .pacing-stat-val.dim { color: #aaa; }
-  .pacing-stat-lbl { font-size: 9.5px; text-transform: uppercase; letter-spacing: 1px; color: #aaa; margin-top: 3px; }
-
   /* ── KPI Row ─────────────────────────────── */
   .kpi-row {
     display: grid;
@@ -680,15 +607,6 @@
 </style>
 </head>
 <body>
-<div style="background:#fff8e6;border:1.5px solid #f0c040;border-radius:10px;padding:14px 20px;margin:0 0 28px 0;font-family:'Inter',sans-serif;font-size:13.5px;color:#7a5c00;line-height:1.6;">
-  <strong style="font-size:14px;color:#5a4000;">📋 Funnel Stage Name Update</strong><br>
-  We've aligned our pipeline stage names with Sales nomenclature. <strong>No definitions or thresholds have changed</strong> — only the labels.<br>
-  <span style="display:inline-block;margin-top:6px;">
-    <span style="background:#fdefc3;border-radius:4px;padding:2px 8px;margin-right:4px;">Opps Created → <strong>Meeting Booked</strong></span>
-    <span style="background:#fdefc3;border-radius:4px;padding:2px 8px;">Discovery → <strong>Pre-pipeline</strong></span>
-  </span>
-</div>
-
 
 <nav class="digest-nav">
   <a class="nav-back" href="index.html">← All Digests</a>
@@ -712,18 +630,185 @@
 
   <div class="content">
 
-    <!-- SUMMARY -->
-    <div class="summary-block">
-      <div class="section-label">Summary</div>
-      <p class="summary-text">
-        This week's 30-day email portfolio delivers its strongest performance of the quarter. Open rate climbed to <strong>35.2%</strong> (up from 33.1% last week), now running <strong>+3.8pp above the 31.35% benchmark</strong>. Click-through rate holds at <strong>4.7%</strong> — nearly <strong>1.7× the 2.78% industry standard</strong>. The April newsletter is now fully in-window with both AMER and EMEA editions performing strongly: AMER at <strong>44.09% open / 4.97% CTR</strong> on 32,734 delivered, the best single newsletter send since December 2025. The Spark #save-your-seat CTA drove <strong>649 combined clicks</strong> from the April newsletter alone, making it the top link this period by a wide margin. The AICC conference follow-up survey continues its extraordinary <strong>41.22% CTR</strong>. Delivered rate holds at a pristine <strong>99%</strong> with bounce rate at <strong>0.8%</strong> — comfortably below the 1% ceiling. The persistent concern: <strong>unsubscribe rate at 0.3%</strong> remains 2× above the 0.15% benchmark, and the Spark event invite series (Invites 4, 5, and Invite 6 A/B test) continues to suppress portfolio-level open rates with 9.8–13.2% open performance across 54,000+ high-volume sends.
-      </p>
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SECTION A: NEWSLETTER DEEP DIVE            -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="section-label">Newsletter Deep Dive — Delight Dispatch</div>
+
+    <!-- 3-month issue scorecards -->
+    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:20px;">
+
+      <!-- April card -->
+      <div style="border:1px solid #e0ede8;border-radius:10px;padding:16px 18px;">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#2d7060;margin-bottom:12px;">April 2026</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div>
+            <div style="font-size:20px;font-weight:700;color:#1a1a1a;line-height:1;">44.04%</div>
+            <div style="font-size:11px;color:#888;margin-top:2px;">Open Rate <span style="color:#27825b;">↑ +3.4pp</span></div>
+          </div>
+          <div>
+            <div style="font-size:20px;font-weight:700;color:#1a1a1a;line-height:1;">4.59%</div>
+            <div style="font-size:11px;color:#888;margin-top:2px;">CTR <span style="color:#c0392b;">↓ −0.2pp</span></div>
+          </div>
+          <div>
+            <div style="font-size:20px;font-weight:700;color:#1a1a1a;line-height:1;">38,585</div>
+            <div style="font-size:11px;color:#888;margin-top:2px;">Sent (Global)</div>
+          </div>
+          <div>
+            <div style="font-size:20px;font-weight:700;color:#1a1a1a;line-height:1;">776</div>
+            <div style="font-size:11px;color:#888;margin-top:2px;">Total Clicks</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- March card -->
+      <div style="border:1px solid #ebebeb;border-radius:10px;padding:16px 18px;opacity:.8;">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#aaa;margin-bottom:12px;">March 2026</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div>
+            <div style="font-size:20px;font-weight:700;color:#1a1a1a;line-height:1;">40.62%</div>
+            <div style="font-size:11px;color:#888;margin-top:2px;">Open Rate <span style="color:#27825b;">↑ +1.6pp</span></div>
+          </div>
+          <div>
+            <div style="font-size:20px;font-weight:700;color:#1a1a1a;line-height:1;">4.78%</div>
+            <div style="font-size:11px;color:#888;margin-top:2px;">CTR <span style="color:#c0392b;">↓ −2.1pp</span></div>
+          </div>
+          <div>
+            <div style="font-size:20px;font-weight:700;color:#1a1a1a;line-height:1;">38,735</div>
+            <div style="font-size:11px;color:#888;margin-top:2px;">Sent (Global)</div>
+          </div>
+          <div>
+            <div style="font-size:20px;font-weight:700;color:#1a1a1a;line-height:1;">746</div>
+            <div style="font-size:11px;color:#888;margin-top:2px;">Total Clicks</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- February card -->
+      <div style="border:1px solid #ebebeb;border-radius:10px;padding:16px 18px;opacity:.65;">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#bbb;margin-bottom:12px;">February 2026</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div>
+            <div style="font-size:20px;font-weight:700;color:#999;line-height:1;">34.69%</div>
+            <div style="font-size:11px;color:#bbb;margin-top:2px;">Open Rate</div>
+          </div>
+          <div>
+            <div style="font-size:20px;font-weight:700;color:#999;line-height:1;">6.87%</div>
+            <div style="font-size:11px;color:#bbb;margin-top:2px;">CTR</div>
+          </div>
+          <div>
+            <div style="font-size:20px;font-weight:700;color:#999;line-height:1;">41,531</div>
+            <div style="font-size:11px;color:#bbb;margin-top:2px;">Sent (Global)</div>
+          </div>
+          <div>
+            <div style="font-size:20px;font-weight:700;color:#999;line-height:1;">1,106</div>
+            <div style="font-size:11px;color:#bbb;margin-top:2px;">Total Clicks</div>
+          </div>
+        </div>
+      </div>
+
     </div>
+
+    <div class="table-key" style="margin-bottom:20px;">
+      <strong>Open rate trend:</strong> Feb 34.7% → Mar 40.6% → Apr 44.0% — <strong>three consecutive months of improvement</strong>, now at the highest level since December 2025 (43.76%). <strong>CTR trend:</strong> Feb 6.9% → Mar 4.8% → Apr 4.6% — a modest decline but stabilising, and still well above the 2.78% benchmark. February's elevated CTR was driven by the Spark event CTA (899 clicks on one link) which created an artificially high baseline. <strong>Volume note:</strong> April's 38,585 sent is comparable to March's 38,735, with both AMER and EMEA editions deployed. The April AMER edition (32,734 delivered, 44.09% open, 4.97% CTR) is the strongest single newsletter send since the December 2025 Exec edition (46.12% open).
+    </div>
+
+    <!-- Unified ranked links table -->
+    <table class="links-table" style="margin-bottom:6px;">
+      <thead>
+        <tr>
+          <th>Content</th>
+          <th>Issue</th>
+          <th class="right">Clicks</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="link-name">Delight Spark event page</td>
+          <td><span style="font-size:11px;font-weight:600;color:#aaa;background:#f2f2f2;padding:2px 7px;border-radius:4px;">Feb</span></td>
+          <td class="num"><strong>899</strong></td>
+        </tr>
+        <tr>
+          <td class="link-name">Staging Environment (product release)</td>
+          <td><span style="font-size:11px;font-weight:600;color:#bbb;background:#f8f8f8;padding:2px 7px;border-radius:4px;">Jan</span></td>
+          <td class="num">831</td>
+        </tr>
+        <tr>
+          <td class="link-name">Software Ate the World… (perspective)</td>
+          <td><span style="font-size:11px;font-weight:600;color:#999;background:#f2f2f2;padding:2px 7px;border-radius:4px;">Mar</span></td>
+          <td class="num">675</td>
+        </tr>
+        <tr>
+          <td class="link-name">Spark #save-your-seat</td>
+          <td><span style="font-size:11px;font-weight:600;color:#2d7060;background:#e8f4f0;padding:2px 7px;border-radius:4px;">Apr</span></td>
+          <td class="num"><strong>649</strong></td>
+        </tr>
+        <tr>
+          <td class="link-name">delight.ai Homepage</td>
+          <td><span style="font-size:11px;font-weight:600;color:#aaa;background:#f2f2f2;padding:2px 7px;border-radius:4px;">Feb</span></td>
+          <td class="num">359</td>
+        </tr>
+        <tr>
+          <td class="link-name">hipages Customer Story</td>
+          <td><span style="font-size:11px;font-weight:600;color:#999;background:#f2f2f2;padding:2px 7px;border-radius:4px;">Mar</span></td>
+          <td class="num">301</td>
+        </tr>
+        <tr>
+          <td class="link-name">Norse Atlantic Customer Story</td>
+          <td><span style="font-size:11px;font-weight:600;color:#aaa;background:#f2f2f2;padding:2px 7px;border-radius:4px;">Feb</span></td>
+          <td class="num">298</td>
+        </tr>
+        <tr>
+          <td class="link-name">Desk Glossary (product release)</td>
+          <td><span style="font-size:11px;font-weight:600;color:#aaa;background:#f2f2f2;padding:2px 7px;border-radius:4px;">Feb</span></td>
+          <td class="num">280</td>
+        </tr>
+        <tr>
+          <td class="link-name">AI Readiness Webinar</td>
+          <td><span style="font-size:11px;font-weight:600;color:#aaa;background:#f2f2f2;padding:2px 7px;border-radius:4px;">Feb</span></td>
+          <td class="num">279</td>
+        </tr>
+        <tr>
+          <td class="link-name">Dr. Cool Services Customer Story</td>
+          <td><span style="font-size:11px;font-weight:600;color:#2d7060;background:#e8f4f0;padding:2px 7px;border-radius:4px;">Apr</span></td>
+          <td class="num">174</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="table-key" style="margin-bottom:20px;">UTM variants deduplicated by destination. Social footer links excluded. Rankings sourced from 180-day newsletter data. The April Spark #save-your-seat CTA generated <strong>649 clicks</strong> (AMER 616 + EMEA 33) — the <strong>#1 link in any April newsletter send</strong> and the second-highest single-link click count in the last 6 months, behind only February's Spark CTA (899). This confirms that event CTAs embedded in newsletters consistently dominate click share.</div>
+
+    <!-- Content themes — April -->
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#2d7060;margin-bottom:10px;">April 2026 — Clicks by Content Theme</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:6px;">
+      <div style="background:#f0f7f5;border-radius:8px;padding:14px 12px;text-align:center;">
+        <div style="font-size:24px;font-weight:700;color:#2d7060;">649</div>
+        <div style="font-size:12px;color:#555;margin-top:4px;font-weight:600;">Event CTA</div>
+        <div style="font-size:11px;color:#aaa;margin-top:2px;">84% of clicks</div>
+      </div>
+      <div style="background:#f0f7f5;border-radius:8px;padding:14px 12px;text-align:center;">
+        <div style="font-size:24px;font-weight:700;color:#2d7060;">293</div>
+        <div style="font-size:12px;color:#555;margin-top:4px;font-weight:600;">Thought Leadership</div>
+        <div style="font-size:11px;color:#aaa;margin-top:2px;">38% of clicks</div>
+      </div>
+      <div style="background:#f0f7f5;border-radius:8px;padding:14px 12px;text-align:center;">
+        <div style="font-size:24px;font-weight:700;color:#2d7060;">174</div>
+        <div style="font-size:12px;color:#555;margin-top:4px;font-weight:600;">Customer Stories</div>
+        <div style="font-size:11px;color:#aaa;margin-top:2px;">22% of clicks</div>
+      </div>
+      <div style="background:#f0f7f5;border-radius:8px;padding:14px 12px;text-align:center;">
+        <div style="font-size:24px;font-weight:700;color:#2d7060;">164</div>
+        <div style="font-size:12px;color:#555;margin-top:4px;font-weight:600;">Homepage</div>
+        <div style="font-size:11px;color:#aaa;margin-top:2px;">21% of clicks</div>
+      </div>
+    </div>
+    <div class="table-key">The Delight Spark #save-your-seat CTA dominated April engagement with <strong>649 clicks across both regions</strong>. Thought leadership was led by "Voice AI is an Iceberg" (AMER 142 + EMEA 15 = 157 clicks) and "What If CX Didn't Exist?" (AMER 120 + EMEA 16 = 136 clicks). The Dr. Cool Services voice AI customer story drove <strong>174 clicks</strong> (AMER 158 + EMEA 16) — the strongest customer story performance since hipages in March (301 combined). Product release content ("Human-Initiated Proactive Email in Desk") contributed 25 clicks (AMER 16 + EMEA 9). <strong>Note:</strong> Percentages sum to &gt;100% because readers click multiple content types per session.</div>
 
     <div class="divider"></div>
 
-    <!-- SECTION 1: PERFORMANCE SCORECARD -->
-    <div class="section-label">Performance Scorecard</div>
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SECTION B: PERFORMANCE SUMMARY              -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="section-label">Performance Scorecard — All Email Types (30-Day)</div>
     <div class="kpi-row">
 
       <div class="kpi-card">
@@ -767,12 +852,14 @@
     </div>
 
     <div class="table-key">
-      <strong>Week-over-week change:</strong> Open rate <strong>+2.1pp</strong> (33.1% → 35.2%), CTR <strong>+0.4pp</strong> (4.3% → 4.7%), bounce rate <strong>+0.3pp</strong> (0.5% → 0.8%). The open rate improvement is driven by the full April newsletter now in the 30-day window (38,363 delivered at 44.04% open). Bounce rate ticked up as the Spark Invite 6 A/B test added 190 bounces on 17,734 sent — now the single highest-bounce campaign in the portfolio.
+      All five KPIs except unsubscribe rate beat industry benchmarks. <strong>Open rate improved +2.4pp</strong> from last week's 32.8%, driven by the April newsletter entering the 30-day window at 44.04% open. <strong>CTR of 4.7%</strong> represents 1.7× the 2.78% industry standard — up from last week's 4.3%. <strong>Bounce rate ticked up</strong> from 0.5% to 0.8%, primarily due to the Spark Invite 6 A/B test (190 bounces, 1.07% bounce rate). Unsubscribe rate holds flat at 0.3% — unchanged for three consecutive weeks.
     </div>
 
     <div class="divider"></div>
 
-    <!-- SECTION 2: PROGRAM BREAKDOWN -->
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SECTION C: PROGRAM BREAKDOWN                -->
+    <!-- ═══════════════════════════════════════════ -->
     <div class="section-label">Program Breakdown — Top Sends</div>
     <table class="events-table">
       <thead>
@@ -795,7 +882,7 @@
           <td class="pill-cell"><span class="status-pill on-track">Strong</span></td>
         </tr>
         <tr>
-          <td class="name">Spark Event (AMER)</td>
+          <td class="name">Spark Event Invites (AMER)</td>
           <td class="num">18,619</td>
           <td class="num">16.22%</td>
           <td class="num">1.64%</td>
@@ -865,12 +952,14 @@
       Programs with &lt;30 delivered emails excluded from this view. &nbsp;&middot;&nbsp;
       <strong>Strong</strong> — open rate above benchmark with healthy CTR &nbsp;&middot;&nbsp;
       <strong>Low Open</strong> — open rate significantly below portfolio average &nbsp;&middot;&nbsp;
-      <strong>Exceptional</strong> — CTR &gt;10× benchmark. <strong>Key change from last week:</strong> The Spark Invite 6 A/B test (17,734 sent) entered the window as a new program row — its <strong>9.78% open rate</strong> is the lowest of any major send and its <strong>190 bounces (1.07% bounce rate)</strong> are the single largest bounce contributor in the portfolio. Combined, the three Spark event programs (Invites 4 + 5 + 6 A/B) account for <strong>54,353 sends at a blended 12.27% open rate</strong>, heavily suppressing the portfolio average. The Newsletter program lifted from 41.01% to <strong>44.04% open rate</strong> as the full April issue (both AMER + EMEA) is now reflected. The AI Readiness Webinar program has fully rolled out of the 30-day window.
+      <strong>Exceptional</strong> — CTR &gt;10× benchmark. This week's window includes a new high-volume send: the <strong>Spark Invite 6 A/B subject line test</strong> (17,734 sent) which posted the worst open rate of any send in the portfolio at <strong>9.78%</strong> with a <strong>1.07% bounce rate (190 bounces)</strong> — the single largest source of bounces in the 30-day window. Combined, the two Spark programs (Invites + Invite 6 A/B) sent <strong>36,353 emails with a blended 13.0% open rate</strong>, accounting for 48% of all send volume but delivering only 15% of all opens. The AICC follow-up survey continues its exceptional <strong>41.22% CTR</strong> on 302 delivered.
     </div>
 
     <div class="divider"></div>
 
-    <!-- SECTION 3: WEEK-OVER-WEEK TRENDS -->
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SECTION D: WEEK-OVER-WEEK TRENDS            -->
+    <!-- ═══════════════════════════════════════════ -->
     <div class="section-label">Week-over-Week Trends</div>
     <table class="wow-table">
       <thead>
@@ -899,10 +988,10 @@
         </tr>
         <tr>
           <td>Mar 30</td>
-          <td><span class="num-curr">39.4%</span></td>
-          <td><span class="num-curr">12.8%</span></td>
+          <td><span class="num-prev">39.4%</span></td>
+          <td><span class="num-prev">12.8%</span></td>
           <td><span class="up">↑ +25.0pp</span></td>
-          <td><span class="up">↑ +9.2pp</span></td>
+          <td><span class="up">↑ +9.3pp</span></td>
         </tr>
         <tr>
           <td>Mar 23</td>
@@ -922,12 +1011,14 @@
     </table>
 
     <div class="table-key">
-      <strong>Apr 13 (current week):</strong> The 27.6% open rate reflects the Spark Invite 6 A/B test (17,534 delivered at 9.78% open) pulling down the week's blended rate. The 4.8% CTR is the strongest of any recent high-volume week outside the Mar 30 anomaly. <strong>Apr 6:</strong> Driven by the April AMER newsletter (32,734 delivered, 44.09% open) blended with Spark Invite 5 (18,148 delivered, 11.91% open), resulting in a 28.3% composite. <strong>Mar 30 remains the strongest week</strong> at 39.4% open and 12.8% CTR, driven by the AICC follow-up survey (41.22% CTR) and lower Spark volume. <strong>Mar 23:</strong> Spark Invite 4 week (18,348 sent at 13.24% open) suppressed the blended rate. <strong>Mar 16:</strong> Very low volume (autoresponders/confirmations only) producing statistically unreliable rates.
+      <strong>Apr 13</strong> saw the newsletter AMER edition land (32,734 delivered, 44.09% open) alongside the Spark Invite 6 A/B test (17,534 delivered, 9.78% open) — the high-open newsletter was offset by the low-open event invite, producing a blended 27.6%. CTR improved to 4.8% driven by the newsletter's 4.97% CTR. <strong>Apr 6</strong> was dominated by Spark Invite 5 (18,148 delivered, 11.91% open) with limited other sends. <strong>Mar 30 remains the strongest full-volume week</strong> at 39.4% open and 12.8% CTR, driven by the March newsletter and AICC survey. <strong>Mar 23 dip:</strong> Spark Invite 4 week (18,348 sent, 13.24% open). <strong>Mar 16:</strong> Very low volume (autoresponders/confirmations) producing statistically unreliable rates.
     </div>
 
     <div class="divider"></div>
 
-    <!-- SECTION 4: SUBJECT LINE PERFORMANCE -->
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SECTION E: SUBJECT LINE PERFORMANCE         -->
+    <!-- ═══════════════════════════════════════════ -->
     <div class="section-label">Subject Line Performance</div>
     <div class="subject-grid">
 
@@ -962,195 +1053,14 @@
     </div>
 
     <div class="table-key" style="margin-top:12px;">
-      Emails with &lt;100 delivered excluded. <strong>Pattern:</strong> The branded newsletter format "Delight Dispatch |" achieved its highest open rate this quarter at 44.04%, overtaking last week's 42.05% as the full April issue data settled. Personal, concise subject lines ("Great meeting you!" at 42.74%) and localized event follow-ups (Korean AICC at 43.38%) continue to perform well. The two bottom performers are Spark event invites — "See the first fully autonomous AI agent" (Invite 5, 11.91%) and "The King of CX + Taylor Swift's playbook" (Invite 4, 13.24%). <strong>Note:</strong> The Invite 6 A/B subject line test (9.78% open on 17,534 delivered) did not appear in the top/bottom chart because the dashboard combines A/B variants, but it represents the <strong>lowest open rate of any major send this quarter</strong>. Spark invite open rates are declining with each successive wave: Invite 4 (13.24%) → Invite 5 (11.91%) → Invite 6 A/B (9.78%).
+      Emails with &lt;100 delivered excluded. <strong>Pattern:</strong> The branded newsletter format "Delight Dispatch |" hit its <strong>highest open rate of 2026 at 44.04%</strong>, continuing a three-month climb (Feb 34.69% → Mar 40.62% → Apr 44.04%). Personal, concise subject lines ("Great meeting you!" at 42.74%) and localized event follow-ups (Korean AICC at 43.38%) continue to outperform. The two bottom performers are again both Spark event invites — "See the first fully autonomous AI agent" (Invite 5, 11.91%) and "The King of CX + Taylor Swift's playbook" (Invite 4, 13.24%) — confirming continued audience fatigue. <strong>New this week:</strong> The Spark Invite 6 A/B subject line test scored 9.78% open on 17,534 delivered, the worst open rate of any high-volume send in the 30-day window, but was excluded from the top/bottom chart due to the 100-delivered filter applying at subject-line level.
     </div>
 
     <div class="divider"></div>
 
-    <!-- SECTION 5: NEWSLETTER DEEP DIVE -->
-    <div class="section-label">Newsletter Deep Dive — Delight Dispatch</div>
-
-    <!-- Issue scorecards: 3 months from 180-day data -->
-    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:20px;">
-
-      <!-- April card -->
-      <div style="border:1px solid #e0ede8;border-radius:10px;padding:16px 18px;">
-        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#2d7060;margin-bottom:12px;">April 2026</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-          <div>
-            <div style="font-size:20px;font-weight:700;color:#1a1a1a;line-height:1;">44.04%</div>
-            <div style="font-size:11px;color:#888;margin-top:2px;">Open Rate <span style="color:#27825b;">↑ +3.4pp</span></div>
-          </div>
-          <div>
-            <div style="font-size:20px;font-weight:700;color:#1a1a1a;line-height:1;">4.59%</div>
-            <div style="font-size:11px;color:#888;margin-top:2px;">CTR <span style="color:#c0392b;">↓ −0.2pp</span></div>
-          </div>
-          <div>
-            <div style="font-size:20px;font-weight:700;color:#1a1a1a;line-height:1;">38,585</div>
-            <div style="font-size:11px;color:#888;margin-top:2px;">Sent (Global)</div>
-          </div>
-          <div>
-            <div style="font-size:20px;font-weight:700;color:#1a1a1a;line-height:1;">776</div>
-            <div style="font-size:11px;color:#888;margin-top:2px;">Total Clicks</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- March card -->
-      <div style="border:1px solid #ebebeb;border-radius:10px;padding:16px 18px;opacity:.8;">
-        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#aaa;margin-bottom:12px;">March 2026</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-          <div>
-            <div style="font-size:20px;font-weight:700;color:#1a1a1a;line-height:1;">40.62%</div>
-            <div style="font-size:11px;color:#888;margin-top:2px;">Open Rate <span style="color:#27825b;">↑ +5.9pp</span></div>
-          </div>
-          <div>
-            <div style="font-size:20px;font-weight:700;color:#1a1a1a;line-height:1;">4.78%</div>
-            <div style="font-size:11px;color:#888;margin-top:2px;">CTR <span style="color:#c0392b;">↓ −2.1pp</span></div>
-          </div>
-          <div>
-            <div style="font-size:20px;font-weight:700;color:#1a1a1a;line-height:1;">38,735</div>
-            <div style="font-size:11px;color:#888;margin-top:2px;">Sent (Global)</div>
-          </div>
-          <div>
-            <div style="font-size:20px;font-weight:700;color:#1a1a1a;line-height:1;">746</div>
-            <div style="font-size:11px;color:#888;margin-top:2px;">Total Clicks</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- February card -->
-      <div style="border:1px solid #ebebeb;border-radius:10px;padding:16px 18px;opacity:.65;">
-        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#bbb;margin-bottom:12px;">February 2026</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-          <div>
-            <div style="font-size:20px;font-weight:700;color:#999;line-height:1;">34.69%</div>
-            <div style="font-size:11px;color:#bbb;margin-top:2px;">Open Rate</div>
-          </div>
-          <div>
-            <div style="font-size:20px;font-weight:700;color:#999;line-height:1;">6.87%</div>
-            <div style="font-size:11px;color:#bbb;margin-top:2px;">CTR</div>
-          </div>
-          <div>
-            <div style="font-size:20px;font-weight:700;color:#999;line-height:1;">41,531</div>
-            <div style="font-size:11px;color:#bbb;margin-top:2px;">Sent (Global)</div>
-          </div>
-          <div>
-            <div style="font-size:20px;font-weight:700;color:#999;line-height:1;">1,106</div>
-            <div style="font-size:11px;color:#bbb;margin-top:2px;">Total Clicks</div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <div class="table-key" style="margin-bottom:20px;">
-      <strong>Open rate trend:</strong> Feb 34.7% → Mar 40.6% → Apr 44.0% — <strong>three consecutive months of improvement, now at a quarter high</strong>. The April issue achieved the highest open rate since the December 2025 Exec edition (46.12%). <strong>CTR trend:</strong> Feb 6.9% → Mar 4.8% → Apr 4.6% — the decline is flattening as the February Spark CTA baseline effect fades. April's 4.6% remains well above the 2.78% benchmark. <strong>Volume note:</strong> April (38,585 sent) is nearly identical to March (38,735), as the AMER list grew from ~32.9K to ~32.9K while EMEA held steady at ~5.7K. February's higher volume (41,531) reflected a larger AMER list at that time.
-    </div>
-
-    <!-- Unified ranked links table -->
-    <table class="links-table" style="margin-bottom:6px;">
-      <thead>
-        <tr>
-          <th>Content</th>
-          <th>Issue</th>
-          <th class="right">Clicks</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td class="link-name">Delight Spark event page</td>
-          <td><span style="font-size:11px;font-weight:600;color:#aaa;background:#f2f2f2;padding:2px 7px;border-radius:4px;">Feb</span></td>
-          <td class="num"><strong>899</strong></td>
-        </tr>
-        <tr>
-          <td class="link-name">Staging Environment (product release)</td>
-          <td><span style="font-size:11px;font-weight:600;color:#bbb;background:#f8f8f8;padding:2px 7px;border-radius:4px;">Jan</span></td>
-          <td class="num">831</td>
-        </tr>
-        <tr>
-          <td class="link-name">Software Ate the World… (perspective)</td>
-          <td><span style="font-size:11px;font-weight:600;color:#999;background:#f2f2f2;padding:2px 7px;border-radius:4px;">Mar</span></td>
-          <td class="num">675</td>
-        </tr>
-        <tr>
-          <td class="link-name">Spark #save-your-seat</td>
-          <td><span style="font-size:11px;font-weight:600;color:#2d7060;background:#e8f4f0;padding:2px 7px;border-radius:4px;">Apr</span></td>
-          <td class="num"><strong>649</strong></td>
-        </tr>
-        <tr>
-          <td class="link-name">delight.ai Homepage</td>
-          <td><span style="font-size:11px;font-weight:600;color:#aaa;background:#f2f2f2;padding:2px 7px;border-radius:4px;">Feb</span></td>
-          <td class="num">359</td>
-        </tr>
-        <tr>
-          <td class="link-name">hipages Customer Story</td>
-          <td><span style="font-size:11px;font-weight:600;color:#999;background:#f2f2f2;padding:2px 7px;border-radius:4px;">Mar</span></td>
-          <td class="num">301</td>
-        </tr>
-        <tr>
-          <td class="link-name">Norse Atlantic Customer Story</td>
-          <td><span style="font-size:11px;font-weight:600;color:#aaa;background:#f2f2f2;padding:2px 7px;border-radius:4px;">Feb</span></td>
-          <td class="num">298</td>
-        </tr>
-        <tr>
-          <td class="link-name">Desk Glossary (product release)</td>
-          <td><span style="font-size:11px;font-weight:600;color:#aaa;background:#f2f2f2;padding:2px 7px;border-radius:4px;">Feb</span></td>
-          <td class="num">280</td>
-        </tr>
-        <tr>
-          <td class="link-name">AI Readiness Webinar</td>
-          <td><span style="font-size:11px;font-weight:600;color:#aaa;background:#f2f2f2;padding:2px 7px;border-radius:4px;">Feb</span></td>
-          <td class="num">279</td>
-        </tr>
-        <tr>
-          <td class="link-name">Dr. Cool Services Voice AI (customer story)</td>
-          <td><span style="font-size:11px;font-weight:600;color:#2d7060;background:#e8f4f0;padding:2px 7px;border-radius:4px;">Apr</span></td>
-          <td class="num">174</td>
-        </tr>
-        <tr>
-          <td class="link-name">delight.ai Homepage</td>
-          <td><span style="font-size:11px;font-weight:600;color:#2d7060;background:#e8f4f0;padding:2px 7px;border-radius:4px;">Apr</span></td>
-          <td class="num">164</td>
-        </tr>
-        <tr>
-          <td class="link-name">Voice AI Is an Iceberg (perspective)</td>
-          <td><span style="font-size:11px;font-weight:600;color:#2d7060;background:#e8f4f0;padding:2px 7px;border-radius:4px;">Apr</span></td>
-          <td class="num">157</td>
-        </tr>
-      </tbody>
-    </table>
-    <div class="table-key" style="margin-bottom:20px;">UTM variants deduplicated by destination. Social footer links excluded. Rankings sourced from 180-day newsletter data. The April Spark #save-your-seat CTA generated <strong>649 clicks</strong> (AMER 616 + EMEA 33) — the <strong>second-highest single link in the entire 180-day window</strong>, trailing only February's Spark CTA (899). April now has <strong>4 links in the top 12</strong>, demonstrating strong content diversity this month.</div>
-
-    <!-- Content themes — April -->
-    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#2d7060;margin-bottom:10px;">April 2026 — Clicks by Content Theme</div>
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:6px;">
-      <div style="background:#f0f7f5;border-radius:8px;padding:14px 12px;text-align:center;">
-        <div style="font-size:24px;font-weight:700;color:#2d7060;">649</div>
-        <div style="font-size:12px;color:#555;margin-top:4px;font-weight:600;">Event CTA</div>
-        <div style="font-size:11px;color:#aaa;margin-top:2px;">52% of clicks</div>
-      </div>
-      <div style="background:#f0f7f5;border-radius:8px;padding:14px 12px;text-align:center;">
-        <div style="font-size:24px;font-weight:700;color:#2d7060;">293</div>
-        <div style="font-size:12px;color:#555;margin-top:4px;font-weight:600;">Thought Leadership</div>
-        <div style="font-size:11px;color:#aaa;margin-top:2px;">23% of clicks</div>
-      </div>
-      <div style="background:#f0f7f5;border-radius:8px;padding:14px 12px;text-align:center;">
-        <div style="font-size:24px;font-weight:700;color:#2d7060;">174</div>
-        <div style="font-size:12px;color:#555;margin-top:4px;font-weight:600;">Customer Stories</div>
-        <div style="font-size:11px;color:#aaa;margin-top:2px;">14% of clicks</div>
-      </div>
-      <div style="background:#f0f7f5;border-radius:8px;padding:14px 12px;text-align:center;">
-        <div style="font-size:24px;font-weight:700;color:#2d7060;">164</div>
-        <div style="font-size:12px;color:#555;margin-top:4px;font-weight:600;">Homepage</div>
-        <div style="font-size:11px;color:#aaa;margin-top:2px;">13% of clicks</div>
-      </div>
-    </div>
-    <div class="table-key">The Delight Spark #save-your-seat CTA dominated April engagement with <strong>52% of all newsletter clicks</strong> — up from 42% last week as the full AMER send data settled. This mirrors the February pattern where the Spark event CTA captured the lion's share. Thought Leadership content performed well: "Voice AI Is an Iceberg" drove 157 clicks (AMER 142 + EMEA 15), "What If CX Didn't Exist?" contributed 136 clicks (AMER 120 + EMEA 16). The Dr. Cool Services customer story delivered 174 clicks (AMER 158 + EMEA 16) — <strong>the strongest customer story performance since the hipages piece in March (301 clicks)</strong>. Product release content (Human-Initiated Proactive Email in Desk) added 25 clicks. <strong>Key insight:</strong> Event CTAs continue to concentrate clicks but this month's non-event content is also performing above historical averages.</div>
-
-    <div class="divider"></div>
-
-    <!-- SECTION 6: WINS, CONCERNS, WATCH ITEMS -->
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SECTION F: WINS, CONCERNS, WATCH ITEMS      -->
+    <!-- ═══════════════════════════════════════════ -->
     <div class="section-label">Wins, Concerns &amp; Watch Items</div>
 
     <div class="insight-block">
@@ -1159,7 +1069,48 @@
         <div class="insight-title win">Wins</div>
       </div>
       <div class="insight-body">
-        <strong>Newsletter open rate hit a quarter-high at 44.04%</strong>, continuing the three-month ascent from February's 34.69% — now the strongest newsletter since December 2025's Exec edition (
+        <strong>Newsletter open rate hit a 2026 high at 44.04%</strong>, continuing a three-month recovery from February's 34.69% trough — now the highest since December 2025's Exec edition (46.12%). The April AMER newsletter specifically achieved <strong>44.09% open rate and 4.97% CTR</strong> on 32,734 delivered, making it the strongest single high-volume newsletter send since January's AMER edition (42.22% on 37,530 delivered). The EMEA edition maintained strong parity at <strong>43.70% open rate</strong>, narrowing the AMER-EMEA gap to just 0.4pp — the tightest in 2026. The Spark #save-your-seat CTA generated <strong>649 combined clicks</strong> (AMER 616 + EMEA 33) from the newsletter alone, the second-highest single-link click count in 6 months. Portfolio-level CTR improved to <strong>4.7% (1.7× benchmark)</strong>, up from last week's 4.3%. Delivery infrastructure holds excellent at <strong>99% delivered</strong>. The AICC survey sustained its extraordinary <strong>41.22% CTR</strong>.
+      </div>
+    </div>
+
+    <div class="insight-block">
+      <div class="insight-heading">
+        <div class="insight-icon concern">!</div>
+        <div class="insight-title concern">Concerns</div>
+      </div>
+      <div class="insight-body">
+        <strong>Spark event invites continue to suppress portfolio metrics.</strong> The three Spark sends in the 30-day window (Invite 4, Invite 5, Invite 6 A/B) account for <strong>36,353 sent emails with a blended 12.97% open rate</strong> — 48% of all volume but dragging the portfolio open rate down by an estimated 9pp. The Invite 6 A/B test is the new worst performer at <strong>9.78% open and 1.07% bounce rate (190 bounces)</strong> — the single largest bounce source in the portfolio. <strong>Unsubscribe rate at 0.3% remains 2× above the 0.15% benchmark</strong>, unchanged for three consecutive weeks; the newsletter alone generated 122 unsubscribes (0.32%), suggesting it's not solely a Spark problem. <strong>Bounce rate ticked up</strong> from 0.5% to 0.8%, still below the 1.0% ceiling but trending in the wrong direction due to the Invite 6 A/B test's high bounce count.
+      </div>
+    </div>
+
+    <div class="insight-block">
+      <div class="insight-heading">
+        <div class="insight-icon watch">△</div>
+        <div class="insight-title watch">Watch Items</div>
+      </div>
+      <div class="insight-body">
+        <strong>Newsletter CTR continues its gradual decline:</strong> Feb 6.87% → Mar 4.78% → Apr 4.59%. While still well above the 2.78% benchmark, the trend warrants monitoring — the February peak was inflated by the Spark event CTA, but April's 4.59% is approaching the 180-day trendline floor. <strong>Spark Invite 6 A/B test results pending:</strong> At 9.78% open on 17,534 sent, this is the weakest open in the Spark series — worth analysing which subject line variant performed better and whether the audience has fully fatigued. <strong>Spark event is May 7:</strong> With 2.5 weeks until the event, expect at least one more invite push; consider whether additional volume will further erode list health. <strong>EMEA newsletter engagement</strong> at 43.70% open is excellent but CTR at 2.36% (vs. AMER's 4.97%) represents a 2.6pp gap — the lowest EMEA CTR of 2026 and worth investigating content-click parity.
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SECTION G: RECOMMENDED ACTIONS              -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="section-label">Recommended Actions</div>
+
+    <div class="action-item">
+      <div class="action-num">1</div>
+      <div class="action-body">
+        <strong>Audit the Spark Invite 6 A/B test results immediately.</strong> At 9.78% open on 17,534 sent, this is the lowest-performing email in the entire 30-day portfolio. Determine which subject line variant won, quantify the open-rate delta between variants, and use the learnings to inform any final pre-event push. If neither variant exceeded 12%, consider a fundamentally different messaging approach for the last invite — something that breaks from the "autonomous AI agent" framing that has fatigued the list.
+      </div>
+    </div>
+
+    <div class="action-item">
+      <div class="action-num">2</div>
+      <div class="action-body">
+        <strong>Cap remaining Spark event invites to suppress-engaged-only sends.</strong> The three Spark invites in the window have a blended 12.97% open rate on 36K+ sends and generated 340 of the portfolio's 446 total bounces (76%). For any remaining pre-May 7 pushes, suppress contacts who have received 3+ Spark invites without opening, and consider a re
 <div id="digest-source-data" style="display:none;white-space:pre">=== email_csv ===
 === by_email.csv ===
 ,Email Name,Sent Count,Delivered Count,Delivered Rate,Open Count,Opened Rate,Click Count,Click Through Rate,Bounced Count,Bounced Rate,Unsubscribe Count,Unsubscribe Rate
