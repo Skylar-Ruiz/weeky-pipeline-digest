@@ -226,7 +226,7 @@ def load_previous_events_report(weekly_template: str) -> str:
     return weekly_template
 
 
-def generate_report(csvs: dict, template_html: str, week_label: str, week_num: int, events_filename: str = "") -> str:
+def generate_report(csvs: dict, template_html: str, week_label: str, week_num: int, events_filename: str = "", email_filename: str = "") -> str:
     """Send CSVs + template to Claude and get back a complete weekly HTML report."""
     client = anthropic.Anthropic(api_key=ANTHROPIC_KEY)
 
@@ -241,7 +241,8 @@ def generate_report(csvs: dict, template_html: str, week_label: str, week_num: i
 
 Today: {datetime.now().strftime('%A, %B %-d, %Y')}
 Report week: {week_label} · FY2027 Q1 · Week {week_num} of 13
-Events Deep Dive filename for this week: {events_filename}
+Events Report filename for this week: {events_filename}
+Email Report filename for this week: {email_filename}
 
 ────────────────────────────────────────────────
 CSV DATA FROM EXEC DASHBOARDS:
@@ -275,16 +276,16 @@ Generate a complete new HTML report for {week_label}. Rules:
    based entirely on this week's CSV data.
 7. Update the navigation bar:
    - "← All Digests" stays as index.html
-   - "← Previous" should link to the previous digest filename from the template
-   - Add an "Events Deep Dive →" pill button linking to {events_filename}
-   - The pill button should use class="nav-events" with this CSS (add to the <style> block):
-     .nav-events {{ font-size:12px; font-weight:600; color:#fff; background:#1a1a1a;
-       text-decoration:none; padding:6px 14px; border-radius:100px; letter-spacing:0.2px;
-       transition:background 0.2s ease; }}
-     .nav-events:hover {{ background:#b8654a; }}
-8. Update the footer date attribution.
-9. Keep the hero gradient, logo, and all structural HTML identical.
-10. Do NOT include an Events section or Events Pipeline Spotlight section — omit it entirely.
+   - "← Previous" nav link should link to the previous week's Weekly digest filename from the template
+   - Do NOT add any pill button to the nav bar
+8. In the header (after <p class="header-date">), add cross-report pill buttons exactly like this:
+   <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;">
+     <a href="{events_filename}" style="display:inline-flex;align-items:center;gap:6px;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:#fff;background:#1a1a1a;border:1px solid #1a1a1a;border-radius:100px;padding:6px 14px;text-decoration:none;letter-spacing:-.1px;">Events Report →</a>
+     <a href="{email_filename}" style="display:inline-flex;align-items:center;gap:6px;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:#fff;background:#1a1a1a;border:1px solid #1a1a1a;border-radius:100px;padding:6px 14px;text-decoration:none;letter-spacing:-.1px;">Email Report →</a>
+   </div>
+9. Update the footer date attribution.
+10. Keep the hero gradient, logo, and all structural HTML identical.
+11. Do NOT include an Events section or Events Pipeline Spotlight section — omit it entirely.
 """
 
     print("  ✓ Calling Claude API for Weekly Digest (this may take ~30s)...")
@@ -302,7 +303,7 @@ Generate a complete new HTML report for {week_label}. Rules:
     return html
 
 
-def generate_events_report(csvs: dict, template_html: str, week_label: str, week_num: int) -> str:
+def generate_events_report(csvs: dict, template_html: str, week_label: str, week_num: int, weekly_filename: str = "", email_filename: str = "") -> str:
     """Generate an Events-focused sub-report using Claude."""
     client = anthropic.Anthropic(api_key=ANTHROPIC_KEY)
 
@@ -353,12 +354,17 @@ Generate a complete Events Pipeline Report for {week_label}. Rules:
    e. Wins, Concerns, Watch Items — specific to events performance only
    f. Recommended Actions — events-focused action items only
 7. Do NOT include MQLs, SALs, or non-events pipeline data.
-7. Update the navigation bar: "← All Digests" stays as index.html,
-   "← Previous Events Report" should link to the previous events report filename from the template
-   (look for Events_Digest_-_ in the template nav links).
-8. Update the footer date attribution.
-9. Keep the logo and all structural HTML identical.
-10. The hero gradient MUST use delight brand blue: linear-gradient(135deg, #e8efff 0%, #b8cafc 30%, #8facf9 60%, #7092fb 80%, #5577e8 100%).
+8. Update the navigation bar: "← All Digests" stays as index.html,
+   "← Previous" nav link should link to the previous week's Events digest filename from the template.
+   Do NOT add any pill button to the nav bar.
+9. In the header (after <p class="header-date">), add cross-report pill buttons exactly like this:
+   <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;">
+     <a href="{weekly_filename}" style="display:inline-flex;align-items:center;gap:6px;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:#fff;background:#1a1a1a;border:1px solid #1a1a1a;border-radius:100px;padding:6px 14px;text-decoration:none;letter-spacing:-.1px;">Weekly Dashboard →</a>
+     <a href="{email_filename}" style="display:inline-flex;align-items:center;gap:6px;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:#fff;background:#1a1a1a;border:1px solid #1a1a1a;border-radius:100px;padding:6px 14px;text-decoration:none;letter-spacing:-.1px;">Email Report →</a>
+   </div>
+10. Update the footer date attribution.
+11. Keep the logo and all structural HTML identical.
+12. The hero gradient MUST use delight brand blue: linear-gradient(135deg, #e8efff 0%, #b8cafc 30%, #8facf9 60%, #7092fb 80%, #5577e8 100%).
     Radial overlays: ::before uses rgba(220,235,255,0.7), ::after uses rgba(180,210,255,0.3).
     Link hover color and action number color: #7092fb.
 """
@@ -462,7 +468,7 @@ def load_previous_email_report(events_template: str) -> str:
     return events_template
 
 
-def generate_email_report(csvs: dict, template_html: str, week_label: str, week_num: int) -> str:
+def generate_email_report(csvs: dict, template_html: str, week_label: str, week_num: int, weekly_filename: str = "", events_filename: str = "") -> str:
     """Generate an Email-focused sub-report using Claude."""
     client = anthropic.Anthropic(api_key=ANTHROPIC_KEY)
 
@@ -515,9 +521,15 @@ Generate a complete Email Performance Report for {week_label}. Rules:
    d. Week-over-Week Trends — open rate and CTR across last 4 weeks
    e. Wins, Concerns, Watch Items — email-specific observations
    f. Recommended Actions — 3-4 email-specific action items
-7. Navigation: "← All Digests" → index.html. Previous email report from template nav if exists.
-8. Update footer date.
-9. Do NOT include pipeline ARR, MQLs, SALs, or non-email data.
+7. Navigation: "← All Digests" → index.html. "← Previous" nav link should link to the previous
+   week's Email digest filename from the template. Do NOT add any pill button to the nav bar.
+8. In the header (after <p class="header-date">), add cross-report pill buttons exactly like this:
+   <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;">
+     <a href="{weekly_filename}" style="display:inline-flex;align-items:center;gap:6px;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:#fff;background:#1a1a1a;border:1px solid #1a1a1a;border-radius:100px;padding:6px 14px;text-decoration:none;letter-spacing:-.1px;">Weekly Dashboard →</a>
+     <a href="{events_filename}" style="display:inline-flex;align-items:center;gap:6px;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:#fff;background:#1a1a1a;border:1px solid #1a1a1a;border-radius:100px;padding:6px 14px;text-decoration:none;letter-spacing:-.1px;">Events Report →</a>
+   </div>
+9. Update footer date.
+10. Do NOT include pipeline ARR, MQLs, SALs, or non-email data.
 10. The 30-day newsletter PDF covers all email types for the past 30 days — use it for sections a, b, c, e, f.
 11. The 180-day newsletter PDF covers only newsletter sends for the past 180 days — use it ONLY for section d (Newsletter Deep Dive).
 """
@@ -770,19 +782,19 @@ def main():
     email_template  = load_previous_email_report(events_template)
 
     print("\n🤖 Generating Weekly Digest with Claude...")
-    weekly_html = inject_source_data(inject_rename_banner(inject_chat_widget(generate_report(csvs, weekly_template, week_label, week_num, events_filename))), csvs, "weekly")
+    weekly_html = inject_source_data(inject_rename_banner(inject_chat_widget(generate_report(csvs, weekly_template, week_label, week_num, events_filename, email_filename))), csvs, "weekly")
     with open(f"{REPO_PATH}/{weekly_filename}", "w") as f:
         f.write(weekly_html)
     print(f"  ✓ Saved: {weekly_filename}")
 
     print("\n🤖 Generating Events Report with Claude...")
-    events_html = inject_source_data(inject_rename_banner(inject_chat_widget(generate_events_report(csvs, events_template, week_label, week_num))), csvs, "events")
+    events_html = inject_source_data(inject_rename_banner(inject_chat_widget(generate_events_report(csvs, events_template, week_label, week_num, weekly_filename, email_filename))), csvs, "events")
     with open(f"{REPO_PATH}/{events_filename}", "w") as f:
         f.write(events_html)
     print(f"  ✓ Saved: {events_filename}")
 
     print("\n🤖 Generating Email Report with Claude...")
-    email_html = inject_source_data(inject_rename_banner(inject_chat_widget(generate_email_report(csvs, email_template, week_label, week_num))), csvs, "email")
+    email_html = inject_source_data(inject_rename_banner(inject_chat_widget(generate_email_report(csvs, email_template, week_label, week_num, weekly_filename, events_filename))), csvs, "email")
     with open(f"{REPO_PATH}/{email_filename}", "w") as f:
         f.write(email_html)
     print(f"  ✓ Saved: {email_filename}")
