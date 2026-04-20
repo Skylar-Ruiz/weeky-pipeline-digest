@@ -336,7 +336,7 @@ INSTRUCTIONS:
 Generate a complete Events Pipeline Report for {week_label}. Rules:
 
 1. OUTPUT only the raw HTML document — no markdown fences, no explanation.
-2. Keep ALL CSS identical to the template. Do not change any styles.
+2. Keep ALL CSS identical to the template. Do not change any styles. Do NOT include any yellow "Funnel Stage Name Update" banner — omit it entirely.
 3. Update <title> to "Events Pipeline Report — {week_label}" and header to read
    "Events Pipeline Report" with the date line "Monday, {week_label} · FY2027 Q1 · Week {week_num} of 13".
 4. This report is EVENTS-FOCUSED — only show events pipeline data.
@@ -493,7 +493,7 @@ INSTRUCTIONS:
 Generate a complete Email Performance Report for {week_label}. Rules:
 
 1. OUTPUT only the raw HTML document — no markdown fences, no explanation.
-2. Keep ALL CSS structure identical to the template.
+2. Keep ALL CSS structure identical to the template. Do NOT include any yellow "Funnel Stage Name Update" banner — omit it entirely.
 3. Update <title> to "Email Performance Report — {week_label}" and header to read
    "Email Performance Report" with date line "Monday, {week_label} · FY2027 Q1 · Week {week_num} of 13".
 4. This report is EMAIL-FOCUSED — only show email marketing performance data.
