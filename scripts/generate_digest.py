@@ -796,10 +796,11 @@ def main():
     branch = f"digest/{week_label.replace(' ', '-').replace(',', '')}"
     git_push(weekly_filename, events_filename, email_filename, week_label)
 
-    base = "https://htmlpreview.github.io/?https://github.com/Skylar-Ruiz/weeky-pipeline-digest/blob"
-    weekly_url = f"{base}/{branch}/{weekly_filename}"
-    events_url = f"{base}/{branch}/{events_filename}"
-    email_url  = f"{base}/{branch}/{email_filename}"
+    branch_slug = branch.lower().replace("/", "-").replace("_", "-")
+    base = f"https://weeky-pipeline-digest-git-{branch_slug}-sendbird-ai.vercel.app"
+    weekly_url = f"{base}/{weekly_filename}"
+    events_url = f"{base}/{events_filename}"
+    email_url  = f"{base}/{email_filename}"
     pr_url     = f"https://github.com/Skylar-Ruiz/weeky-pipeline-digest/compare/{branch}"
 
     print("\n📣 Sending Slack notifications...")
