@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Events Pipeline Report — April 27, 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Helvetica+Neue:wght@400;500;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background: #f5f4f0;
+    color: #1a1a1a;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .email-wrapper {
+    max-width: 640px;
+    margin: 0 auto;
+    background: #ffffff;
+  }
+
+  /* Header */
+  .header {
+    background: #ffffff;
+    padding: 48px 48px 0;
+    border-bottom: none;
+  }
+  .logo-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 40px;
+  }
+  .logo-mark {
+    font-size: 22px;
+    line-height: 1;
+  }
+  .logo-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: #1a1a1a;
+    letter-spacing: -0.5px;
+  }
+  .header-title {
+    font-family: 'Playfair Display', 'Georgia', serif;
+    font-size: 36px;
+    font-weight: 500;
+    color: #1a1a1a;
+    letter-spacing: -1px;
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+  .header-date {
+    font-size: 14px;
+    color: #888;
+    font-weight: 400;
+    margin-bottom: 36px;
+  }
+
+  /* Hero */
+  .hero-image {
+    width: 100%;
+    height: 120px;
+    background: linear-gradient(135deg, #e8efff 0%, #b8cafc 30%, #8facf9 60%, #7092fb 80%, #5577e8 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-image::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -40px;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(220,235,255,0.7) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .hero-image::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: 20%;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(180,210,255,0.3) 0%, transparent 60%);
+    border-radius: 50%;
+  }
+
+  /* Content */
+  .content { padding: 36px 48px 48px; }
+
+  /* Summary */
+  .summary-block {
+    margin-bottom: 32px;
+  }
+  .summary-text {
+    font-size: 15px;
+    color: #444;
+    line-height: 1.75;
+  }
+  .summary-text strong { color: #1a1a1a; }
+
+  /* Section label */
+  .section-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #999;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+
+  /* Divider */
+  .divider {
+    height: 1px;
+    background: #e8e8e5;
+    margin: 32px 0;
+  }
+
+  /* Glance cards */
+  .glance-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    border: 1px solid #e8e8e5;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .glance-card {
+    padding: 22px 18px;
+    border-right: 1px solid #e8e8e5;
+  }
+  .glance-card:last-child { border-right: none; }
+  .glance-metric {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #999;
+    font-weight: 500;
+    margin-bottom: 10px;
+  }
+  .glance-amount {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    font-weight: 600;
+    color: #1a1a1a;
+    letter-spacing: -0.5px;
+    margin-bottom: 6px;
+    line-height: 1.2;
+  }
+  .glance-sub {
+    font-size: 11px;
+    color: #888;
+    line-height: 1.55;
+    margin-bottom: 6px;
+  }
+  .glance-sub strong { color: #1a1a1a; }
+  .glance-change {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 100px;
+    display: inline-block;
+  }
+  .glance-change.up { color: #27825b; background: #f0faf5; }
+  .glance-change.down { color: #c0392b; background: #fdf6f5; }
+  .glance-pacing {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 100px;
+    display: inline-block;
+    color: #c0392b;
+    background: #fdf6f5;
+  }
+
+  /* Events table */
+  .events-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12.5px;
+  }
+  .events-table th {
+    text-align: left;
+    padding: 9px 8px;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #999;
+    font-weight: 500;
+    border-bottom: 2px solid #1a1a1a;
+    white-space: nowrap;
+  }
+  .events-table th.center { text-align: center; }
+  .events-table th.right { text-align: right; }
+  .events-table td {
+    padding: 9px 8px;
+    border-bottom: 1px solid #f0eeea;
+    color: #444;
+    vertical-align: middle;
+  }
+  .events-table td.name {
+    font-weight: 500;
+    color: #1a1a1a;
+  }
+  .events-table td.center { text-align: center; color: #888; font-size: 11.5px; }
+  .events-table td.num {
+    text-align: right;
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    letter-spacing: -0.3px;
+    color: #1a1a1a;
+  }
+  .events-table td.num-dim {
+    text-align: right;
+    font-family: 'Playfair Display', serif;
+    font-size: 12.5px;
+    letter-spacing: -0.3px;
+    color: #aaa;
+  }
+  .events-table td.pill-cell { text-align: center; }
+
+  /* Table section row */
+  .table-section-row td {
+    padding: 10px 8px 6px;
+    font-size: 9.5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #bbb;
+    border-bottom: none;
+    background: transparent;
+  }
+  .table-section-row.current td { color: #7092fb; padding-top: 0; }
+
+  /* Subtotal rows */
+  .events-table tr.subtotal td {
+    padding: 8px 8px;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: #1a1a1a;
+    border-top: 1.5px solid #e0e0da;
+    border-bottom: 2px solid #e8e8e5;
+    background: #fafaf8;
+  }
+  .events-table tr.subtotal td.num {
+    font-family: 'Playfair Display', serif;
+    font-size: 12.5px;
+    color: #1a1a1a;
+    text-align: right;
+  }
+  .events-table tr.subtotal td.label { color: #888; font-size: 10.5px; font-weight: 500; }
+  .events-table tr.prior.subtotal td { color: #bbb; background: #fafaf8; border-color: #edecea; }
+  .events-table tr.prior.subtotal td.num { color: #bbb; font-size: 12px; }
+
+  /* Grand total row */
+  .events-table tr.grand-total td {
+    padding: 11px 8px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #1a1a1a;
+    border-top: 2px solid #1a1a1a;
+    border-bottom: none;
+    background: #f5f4f0;
+  }
+  .events-table tr.grand-total td.num {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #1a1a1a;
+    text-align: right;
+  }
+  .events-table tr.grand-total td.grand-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #1a1a1a;
+    letter-spacing: 0.2px;
+  }
+  .events-table tr.grand-total td.grand-note {
+    font-size: 10px;
+    font-weight: 400;
+    color: #aaa;
+  }
+
+  /* Dimmed prior-quarter rows */
+  .events-table tr.prior td.name { color: #aaa; font-weight: 400; }
+  .events-table tr.prior td { color: #bbb; border-bottom-color: #f8f7f5; }
+  .events-table tr.prior td.num,
+  .events-table tr.prior td.num-dim { color: #ccc; }
+  .events-table tr.prior td.center { color: #ccc; }
+
+  /* Status pills */
+  .status-pill {
+    display: inline-block;
+    padding: 2px 9px;
+    border-radius: 100px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+  .status-pill.on-track { color: #27825b; background: #f0faf5; }
+  .status-pill.watch { color: #b8860b; background: #fdfaf3; }
+  .status-pill.behind { color: #c0392b; background: #fdf6f5; }
+
+  /* Table key */
+  .table-key {
+    font-size: 11px;
+    color: #aaa;
+    line-height: 1.7;
+    margin-top: 12px;
+    padding: 10px 14px;
+    background: #fafaf8;
+    border-radius: 6px;
+    border: 1px solid #f0eeea;
+  }
+  .table-key strong { color: #888; }
+
+  /* WoW table */
+  .wow-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .wow-table th {
+    text-align: left;
+    padding: 9px 0;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #999;
+    font-weight: 500;
+    border-bottom: 2px solid #1a1a1a;
+  }
+  .wow-table th:not(:first-child) { text-align: right; }
+  .wow-table td {
+    padding: 12px 0;
+    border-bottom: 1px solid #f0eeea;
+    color: #444;
+    vertical-align: middle;
+  }
+  .wow-table td:first-child { font-weight: 500; color: #1a1a1a; }
+  .wow-table td:not(:first-child) { text-align: right; }
+  .wow-table .num-curr {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    letter-spacing: -0.3px;
+    color: #1a1a1a;
+  }
+  .wow-table .num-prev {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    letter-spacing: -0.3px;
+    color: #bbb;
+  }
+  .wow-table .up { color: #27825b; font-weight: 600; font-size: 12px; }
+  .wow-table .down { color: #c0392b; font-weight: 600; font-size: 12px; }
+
+  /* Action items */
+  .action-item {
+    display: flex;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid #f0eeea;
+  }
+  .action-item:last-child { border-bottom: none; }
+  .action-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: #7092fb;
+    min-width: 22px;
+    line-height: 1.5;
+  }
+  .action-body {
+    font-size: 13.5px;
+    color: #444;
+    line-height: 1.65;
+  }
+  .action-body strong { color: #1a1a1a; }
+
+  /* Footer */
+  .footer {
+    background: #1a1a1a;
+    padding: 32px 48px;
+  }
+  .footer-logo {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 10px;
+  }
+  .footer p {
+    font-size: 12px;
+    color: rgba(255,255,255,0.45);
+    line-height: 1.8;
+  }
+
+  /* Digest navigation */
+  .digest-nav {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 20px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .nav-back {
+    font-size: 13px;
+    font-weight: 500;
+    color: #888;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+  .nav-back:hover { color: #7092fb; }
+
+  /* ── Discovery Pacing Block ─────────────────────────────── */
+  .pacing-block {
+    border: 1px solid #dce6fe;
+    border-radius: 10px;
+    padding: 22px 24px;
+    background: #f8faff;
+  }
+  .pacing-hdr {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 18px;
+  }
+  .pacing-main { font-size: 13.5px; font-weight: 600; color: #1a1a1a; margin-bottom: 3px; }
+  .pacing-sub { font-size: 11px; color: #999; }
+  .pacing-bar-wrap { position: relative; padding-bottom: 24px; margin-bottom: 6px; }
+  .pacing-track {
+    height: 10px;
+    background: #edecea;
+    border-radius: 100px;
+    display: flex;
+    overflow: hidden;
+  }
+  .pacing-fill-actual {
+    height: 100%;
+    background: #7092fb;
+    flex-shrink: 0;
+  }
+  .pacing-fill-projected {
+    height: 100%;
+    background: #c2d0fd;
+    flex-shrink: 0;
+  }
+  .pacing-fill-gap { flex: 1; }
+  .pacing-tick {
+    position: absolute;
+    top: -3px;
+    width: 1.5px;
+    height: 16px;
+    background: #aaa;
+    transform: translateX(-50%);
+  }
+  .pacing-annot {
+    position: absolute;
+    font-size: 10px;
+    white-space: nowrap;
+    top: 15px;
+    transform: translateX(-50%);
+  }
+  .pacing-annot.actual { color: #7092fb; font-weight: 600; }
+  .pacing-annot.projected { color: #888; }
+  .pacing-stat-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-top: 1px solid #dce6fe;
+    padding-top: 14px;
+    margin-top: 2px;
+  }
+  .pacing-stat { text-align: center; padding: 0 6px; border-right: 1px solid #dce6fe; }
+  .pacing-stat:last-child { border-right: none; }
+  .pacing-stat-val {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: #1a1a1a;
+    letter-spacing: -0.5px;
+    line-height: 1.3;
+  }
+  .pacing-stat-val.red { color: #c0392b; }
+  .pacing-stat-val.dim { color: #aaa; }
+  .pacing-stat-lbl { font-size: 9.5px; text-transform: uppercase; letter-spacing: 1px; color: #aaa; margin-top: 3px; }
+  .pacing-run-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 14px;
+    align-items: center;
+    margin-top: 14px;
+    padding: 10px 14px;
+    background: #fff3f2;
+    border-radius: 6px;
+    border: 1px solid #fad8d6;
+  }
+  .pacing-run-item { display: flex; align-items: center; gap: 5px; }
+  .pacing-run-key { font-size: 11px; color: #888; }
+  .pacing-run-val { font-size: 12px; font-weight: 600; color: #1a1a1a; }
+  .pacing-run-val.red { color: #c0392b; }
+  .pacing-run-div { color: #ddd; font-size: 11px; }
+
+  /* ── Region Split ─────────────────────────────────────── */
+  .region-chart { display: flex; flex-direction: column; gap: 20px; }
+  .region-group {}
+  .region-group-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #999;
+    font-weight: 500;
+    margin-bottom: 10px;
+  }
+  .region-group-total {
+    text-transform: none;
+    letter-spacing: 0;
+    font-weight: 400;
+    color: #bbb;
+    margin-left: 6px;
+  }
+  .region-rows { display: flex; flex-direction: column; gap: 8px; }
+  .region-row { display: flex; align-items: center; gap: 10px; }
+  .region-name {
+    font-size: 11px;
+    font-weight: 600;
+    color: #777;
+    width: 36px;
+    flex-shrink: 0;
+    text-align: right;
+    letter-spacing: 0.3px;
+  }
+  .region-bar-track {
+    flex: 1;
+    height: 26px;
+    background: #f0eeea;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .region-bar-fill {
+    height: 100%;
+    min-width: 4px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    font-size: 11px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.9);
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .region-bar-fill.amer { background: #7092fb; }
+  .region-bar-fill.emea { background: #a0b4fa; }
+  .region-bar-fill.apac { background: #c8d6fd; color: #5577e8; }
+  .region-amt { font-size: 11.5px; color: #777; flex-shrink: 0; width: 52px; text-align: right; }
+  .region-pct { font-size: 10.5px; color: #bbb; flex-shrink: 0; width: 28px; text-align: right; }
+  .region-legend {
+    display: flex;
+    gap: 16px;
+    margin-top: 6px;
+    padding-top: 14px;
+    border-top: 1px solid #f0eeea;
+  }
+  .region-legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: #888; }
+  .region-legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .region-legend-dot.amer { background: #7092fb; }
+  .region-legend-dot.emea { background: #a0b4fa; }
+  .region-legend-dot.apac { background: #c8d6fd; }
+
+  @media (max-width: 600px) {
+    .header, .content, .footer { padding-left: 24px; padding-right: 24px; }
+    .header-title { font-size: 28px; }
+    .glance-grid { grid-template-columns: 1fr; }
+    .glance-card { border-right: none; border-bottom: 1px solid #e8e8e5; }
+    .glance-card:last-child { border-bottom: none; }
+    .digest-nav { padding-left: 24px; padding-right: 24px; }
+  }
+</style>
+</head>
+<body>
+
+
+<nav class="digest-nav">
+  <a class="nav-back" href="index.html">← All Digests</a>
+  <div class="nav-issues">
+    <a class="nav-prev" href="Events_Digest_-_Apr_20__2026.html">← April 20</a>
+  </div>
+</nav>
+
+<div class="email-wrapper">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo-row">
+      <span class="logo-mark">✳</span>
+      <span class="logo-text">delight.ai</span>
+    </div>
+    <h1 class="header-title">Events Pipeline<br>Report</h1>
+    <p class="header-date">Monday, April 27, 2026 · FY2027 Q1 · Week 13 of 13</p>
+    <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;">
+      <a href="Weekly_Dashboard_Digest_-_Apr_27__2026.html" style="display:inline-flex;align-items:center;gap:6px;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:#fff;background:#1a1a1a;border:1px solid #1a1a1a;border-radius:100px;padding:6px 14px;text-decoration:none;letter-spacing:-.1px;">Weekly Dashboard →</a>
+      <a href="Email_Digest_-_Apr_27__2026.html" style="display:inline-flex;align-items:center;gap:6px;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:#fff;background:#1a1a1a;border:1px solid #1a1a1a;border-radius:100px;padding:6px 14px;text-decoration:none;letter-spacing:-.1px;">Email Report →</a>
+    </div>
+  </div>
+
+  <!-- Hero -->
+  <div class="hero-image"></div>
+
+  <div class="content">
+
+    <!-- SUMMARY -->
+    <div class="summary-block">
+      <div class="section-label">Summary</div>
+      <p class="summary-text">
+        FY27 Q1 closes this week with Events delivering <strong>$18.7M in Meeting Booked</strong> across <strong>773 opps</strong> — the most productive events quarter on record. The final week added <strong>$338K in Meeting Booked</strong>, a soft close driven primarily by KO Roundtable ($295K) and AICC ($41K). Pre-pipeline finished at <strong>$6.9M QTD</strong> after a strong final-week push of <strong>$628K</strong>, landing at <strong>70% of the $9.84M target</strong>. The late surge came from Digital Travel Connect ($468K) and DTC Winery ($75K) finally converting their backlogs. Qualified Pipeline closed at <strong>$1.1M</strong> with no new movement in the final two weeks. While the quarter fell short of its Pre-pipeline target by ~$2.9M, the sheer volume of early-stage pipeline — <strong>334 opps still in pre-Discovery stages</strong> — represents a massive carryover opportunity for Q2 if conversion can be accelerated.
+      </p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- SECTION 1: EVENTS PACING -->
+    <div class="section-label">Events Pacing — Quarter Close</div>
+    <div class="glance-grid">
+
+      <div class="glance-card">
+        <div class="glance-metric">Meeting Booked</div>
+        <div class="glance-amount">$18.7M</div>
+        <div class="glance-sub">Q1 Final &middot; <strong>773</strong> opps created<br>Week ending Apr 25: <strong>$338K</strong></div>
+        <span class="glance-change down">↓ −$360K WoW</span>
+      </div>
+
+      <div class="glance-card">
+        <div class="glance-metric">Pre-Pipeline</div>
+        <div class="glance-amount">$6.9M</div>
+        <div class="glance-sub">Q1 Final &middot; <strong>70%</strong> to $9.84M target<br>Week ending Apr 25: <strong>$628K</strong></div>
+        <span class="glance-change up">↑ +$22K WoW</span>
+      </div>
+
+      <div class="glance-card">
+        <div class="glance-metric">Qualified</div>
+        <div class="glance-amount">$1.1M</div>
+        <div class="glance-sub">Q1 Final<br>Week ending Apr 25: <strong>$0</strong></div>
+        <span class="glance-change down">↓ flat WoW</span>
+      </div>
+
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- PRE-PIPELINE PACING -->
+    <div class="section-label">Pre-Pipeline — Final Q1 Attainment</div>
+    <div class="pacing-block">
+      <div class="pacing-hdr">
+        <div>
+          <div class="pacing-main">Events Pre-Pipeline ARR</div>
+          <div class="pacing-sub">FY2027 Q1 &middot; $9.84M Target &middot; Quarter Complete</div>
+        </div>
+        <span class="status-pill behind">Missed Target</span>
+      </div>
+
+      <div class="pacing-bar-wrap">
+        <div class="pacing-track">
+          <div class="pacing-fill-actual" style="width:70%"></div>
+          <div class="pacing-fill-gap"></div>
+        </div>
+        <div class="pacing-tick" style="left:70%"></div>
+        <div class="pacing-annot actual" style="left:70%">70% final</div>
+      </div>
+
+      <div class="pacing-stat-grid">
+        <div class="pacing-stat">
+          <div class="pacing-stat-val">$6.9M</div>
+          <div class="pacing-stat-lbl">Q1 Actual</div>
+        </div>
+        <div class="pacing-stat">
+          <div class="pacing-stat-val red">70%</div>
+          <div class="pacing-stat-lbl">% to Goal</div>
+        </div>
+        <div class="pacing-stat">
+          <div class="pacing-stat-val red">−$2.9M</div>
+          <div class="pacing-stat-lbl">Gap to Target</div>
+        </div>
+        <div class="pacing-stat">
+          <div class="pacing-stat-val">$9.84M</div>
+          <div class="pacing-stat-lbl">Q1 Target</div>
+        </div>
+      </div>
+
+      <div class="pacing-run-row">
+        <div class="pacing-run-item">
+          <span class="pacing-run-key">Weekly avg (13 wks)</span>
+          <span class="pacing-run-val">$531K/wk</span>
+        </div>
+        <span class="pacing-run-div">&middot;</span>
+        <div class="pacing-run-item">
+          <span class="pacing-run-key">Required avg was</span>
+          <span class="pacing-run-val red">$757K/wk</span>
+        </div>
+        <span class="pacing-run-div">&middot;</span>
+        <div class="pacing-run-item">
+          <span class="pacing-run-key">Carryover opps for Q2</span>
+          <span class="pacing-run-val">334 opps ($11.8M MB)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- SECTION 2: TOP EVENT CAMPAIGNS -->
+    <div class="section-label">Top Event Campaigns</div>
+    <table class="events-table">
+      <thead>
+        <tr>
+          <th>Event Name</th>
+          <th class="center">Quarter</th>
+          <th class="right">Meeting Booked</th>
+          <th class="right">Pre-Pipeline</th>
+          <th class="center">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- FY27 Q1 — Current Quarter -->
+        <tr class="table-section-row current">
+          <td colspan="5">FY27 Q1 — Current Quarter</td>
+        </tr>
+        <tr>
+          <td class="name">Shoptalk Spring (AMER)</td>
+          <td class="center">FY27 Q1</td>
+          <td class="num">$4,001,146</td>
+          <td class="num">$1,128,000</td>
+          <td class="pill-cell"><span class="status-pill watch">Watch</span></td>
+        </tr>
+        <tr>
+          <td class="name">HIMSS Las Vegas (AMER)</td>
+          <td class="center">FY27 Q1</td>
+          <td class="num">$3,647,033</td>
+          <td class="num">$440,000</td>
+          <td class="pill-cell"><span class="status-pill behind">Behind</span></td>
+        </tr>
+        <tr>
+          <td class="name">ViVE Conference (AMER)</td>
+          <td class="center">FY27 Q1</td>
+          <td class="num">$3,280,333</td>
+          <td class="num">$935,000</td>
+          <td class="pill-cell"><span class="status-pill on-track">On Track</span></td>
+        </tr>
+        <tr>
+          <td class="name">eTail Palm Springs (AMER)</td>
+          <td class="center">FY27 Q1</td>
+          <td class="num">$1,860,886</td>
+          <td class="num">$728,219</td>
+          <td class="pill-cell"><span class="status-pill on-track">On Track</span></td>
+        </tr>
+        <tr>
+          <td class="name">CCW Exchange UK (EMEA)</td>
+          <td class="center">FY27 Q1</td>
+          <td class="num">$1,360,167</td>
+          <td class="num">$575,667</td>
+          <td class="pill-cell"><span class="status-pill on-track">On Track</span></td>
+        </tr>
+        <tr>
+          <td class="name">Fintech Meetup (AMER)</td>
+          <td class="center">FY27 Q1</td>
+          <td class="num">$1,034,383</td>
+          <td class="num">$110,000</td>
+          <td class="pill-cell"><span class="status-pill behind">Behind</span></td>
+        </tr>
+        <tr>
+          <td class="name">AICC Conference (APAC)</td>
+          <td class="center">FY27 Q1</td>
+          <td class="num">$543,012</td>
+          <td class="num">$370,125</td>
+          <td class="pill-cell"><span class="status-pill on-track">On Track</span></td>
+        </tr>
+        <tr>
+          <td class="name">KO Roundtable (APAC)</td>
+          <td class="center">FY27 Q1</td>
+          <td class="num">$521,667</td>
+          <td class="num">$80,000</td>
+          <td class="pill-cell"><span class="status-pill behind">Behind</span></td>
+        </tr>
+        <tr>
+          <td class="name">Digital Travel Connect (AMER)</td>
+          <td class="center">FY27 Q1</td>
+          <td class="num">$468,000</td>
+          <td class="num">$468,000</td>
+          <td class="pill-cell"><span class="status-pill on-track">On Track</span></td>
+        </tr>
+        <tr>
+          <td class="name">Sullivan's eTail PS (AMER)</td>
+          <td class="center">FY27 Q1</td>
+          <td class="num">$146,667</td>
+          <td class="num">$146,667</td>
+          <td class="pill-cell"><span class="status-pill on-track">On Track</span></td>
+        </tr>
+        <tr>
+          <td class="name">DTC Winery 2026 (AMER)</td>
+          <td class="center">FY27 Q1</td>
+          <td class="num">$75,000</td>
+          <td class="num">$75,000</td>
+          <td class="pill-cell"><span class="status-pill on-track">On Track</span></td>
+        </tr>
+        <tr>
+          <td class="name">Mastro's at Shoptalk (AMER)</td>
+          <td class="center">FY27 Q1</td>
+          <td class="num-dim">—</td>
+          <td class="num-dim">—</td>
+          <td class="pill-cell"><span class="status-pill watch">Watch</span></td>
+        </tr>
+        <tr class="subtotal">
+          <td class="label" colspan="2">FY27 Q1 Total</td>
+          <td class="num">$16,938,294</td>
+          <td class="num">$5,056,678</td>
+          <td></td>
+        </tr>
+        <!-- Prior Quarter Carryover -->
+        <tr class="table-section-row">
+          <td colspan="5">Prior Quarter Carryover</td>
+        </tr>
+        <tr class="prior">
+          <td class="name">CCW Orlando (AMER)</td>
+          <td class="center">FY26 Q4</td>
+          <td class="num">$82,250</td>
+          <td class="num">$988,333</td>
+          <td class="pill-cell"><span style="font-size:10px;color:#ccc;">—</span></td>
+        </tr>
+        <tr class="prior">
+          <td class="name">CCW Vegas List Upload (AMER)</td>
+          <td class="center">FY26 Q2</td>
+          <td class="num">$248,068</td>
+          <td class="num">$95,579</td>
+          <td class="pill-cell"><span style="font-size:10px;color:#ccc;">—</span></td>
+        </tr>
+        <tr class="prior">
+          <td class="name">CCW Vegas (AMER)</td>
+          <td class="center">FY26 Q2</td>
+          <td class="num">$151,886</td>
+          <td class="num">$211,053</td>
+          <td class="pill-cell"><span style="font-size:10px;color:#ccc;">—</span></td>
+        </tr>
+        <tr class="prior">
+          <td class="name">Reuters CS NYC (AMER)</td>
+          <td class="center">FY26 Q4</td>
+          <td class="num">$78,833</td>
+          <td class="num">$100,000</td>
+          <td class="pill-cell"><span style="font-size:10px;color:#ccc;">—</span></td>
+        </tr>
+        <tr class="prior">
+          <td class="name">Spark Delight (APAC)</td>
+          <td class="center">FY26 Q4</td>
+          <td class="num">$87,048</td>
+          <td class="num">$75,689</td>
+          <td class="pill-cell"><span style="font-size:10px;color:#ccc;">—</span></td>
+        </tr>
+        <tr class="prior">
+          <td class="name">Other Prior Events</td>
+          <td class="center">FY26</td>
+          <td class="num">$1,076,631</td>
+          <td class="num">$381,118</td>
+          <td class="pill-cell"><span style="font-size:10px;color:#ccc;">—</span></td>
+        </tr>
+        <tr class="prior subtotal">
+          <td class="label" colspan="2">Prior Qtrs Total</td>
+          <td class="num">$1,724,716</td>
+          <td class="num">$1,851,772</td>
+          <td></td>
+        </tr>
+        <tr class="grand-total">
+          <td class="grand-label" colspan="2">Q1 Final — All Events</td>
+          <td class="num">$18.7M</td>
+          <td class="num">$6.9M</td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="table-key">
+      Status applies to FY27 Q1 events only. &nbsp;&middot;&nbsp;
+      <strong>On Track</strong> &mdash; Pre-pipeline conversion &gt;20% of Meeting Booked &nbsp;&middot;&nbsp;
+      <strong>Watch</strong> &mdash; large Meeting Booked but Pre-pipeline conversion &lt;20% &nbsp;&middot;&nbsp;
+      <strong>Behind</strong> &mdash; minimal or zero Pre-pipeline movement &nbsp;&middot;&nbsp;
+      Prior quarter rows shown for reference; no active status tracked.
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- PIPELINE BY REGION -->
+    <div class="section-label">Pre-Pipeline by Region</div>
+    <div class="region-chart">
+
+      <div class="region-group">
+        <div class="region-group-label">Pre-Pipeline Q1 Final <span class="region-group-total">$6.91M events total · vs. $9.84M target</span></div>
+        <div class="region-rows">
+          <div class="region-row">
+            <div class="region-name">AMER</div>
+            <div class="region-bar-track">
+              <div class="region-bar-fill amer" style="width:100%">$5.44M</div>
+            </div>
+            <div class="region-amt">$5.44M</div>
+            <div class="region-pct">79%</div>
+          </div>
+          <div class="region-row">
+            <div class="region-name">EMEA</div>
+            <div class="region-bar-track">
+              <div class="region-bar-fill emea" style="width:14.4%">$783K</div>
+            </div>
+            <div class="region-amt">$783K</div>
+            <div class="region-pct">11%</div>
+          </div>
+          <div class="region-row">
+            <div class="region-name">APAC</div>
+            <div class="region-bar-track">
+              <div class="region-bar-fill apac" style="width:10.6%">$576K</div>
+            </div>
+            <div class="region-amt">$576K</div>
+            <div class="region-pct">8%</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="region-legend">
+        <div class="region-legend-item"><div class="region-legend-dot amer"></div> AMER</div>
+        <div class="region-legend-item"><div class="region-legend-dot emea"></div> EMEA</div>
+        <div class="region-legend-item"><div class="region-legend-dot apac"></div> APAC</div>
+        <div style="margin-left:auto; font-size:10.5px; color:#bbb;">Bar width = relative to AMER</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- HISTORICAL PERFORMANCE -->
+    <div class="section-label">Historical Performance</div>
+    <table class="events-table">
+      <thead>
+        <tr>
+          <th>Quarter</th>
+          <th class="right">Events</th>
+          <th class="right">Meeting Booked</th>
+          <th class="right">Pre-Pipeline</th>
+          <th class="right">Pre→Qual %</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="name">FY27 Q1 (final)</td>
+          <td class="center">13+</td>
+          <td class="num">$18.7M</td>
+          <td class="num">$6.9M</td>
+          <td class="center">24%</td>
+        </tr>
+        <tr>
+          <td class="name">FY26 Q4</td>
+          <td class="center">7</td>
+          <td class="num">$0.1M</td>
+          <td class="num">$2.0M</td>
+          <td class="center">38%</td>
+        </tr>
+        <tr>
+          <td class="name">FY26 Q3</td>
+          <td class="center">14</td>
+          <td class="num">$0.5M</td>
+          <td class="num">$0.2M</td>
+          <td class="center">36%</td>
+        </tr>
+        <tr>
+          <td class="name">FY26 Q2</td>
+          <td class="center">11</td>
+          <td class="num">$0.7M</td>
+          <td class="num">$0.4M</td>
+          <td class="center">20%</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div style="margin-top: 16px;"></div>
+
+    <div class="summary-block">
+      <p class="summary-text" style="font-size:13.5px;">
+        <strong>Key historical insights:</strong><br><br>
+        <strong>1. FY27 Q1 was a breakout quarter for events pipeline generation.</strong> At $18.7M Meeting Booked, this quarter produced <strong>27× the Meeting Booked ARR</strong> of any prior quarter. The concentrated tier-1 conference calendar (ViVE, HIMSS, Shoptalk Spring, eTail PS) drove this surge, but the 70% Pre-pipeline attainment reveals a structural conversion bottleneck: the funnel cannot process this volume at historic rates.<br><br>
+        <strong>2. Conversion rates compress as volume scales.</strong> Pre-pipeline-to-Qualified rate sits at 24% this quarter vs. 38% in FY26 Q4 — a 41% decline. Only 439 of 773 opps (57%) reached Pre-pipeline, leaving <strong>334 opps unconverted</strong> as carryover into Q2. The top five events alone account for $14.1M in Meeting Booked but only $3.8M in Pre-pipeline (27% conversion). At the FY26 Q4 conversion rate, these same events would have generated $5.4M — a <strong>$1.6M conversion gap</strong>.<br><br>
+        <strong>3. Small-format events deliver the highest ROI.</strong> Boston Yacht Dinner (FY26 Q2) produced 8.7× ROI on $7.5K spend. Shoptalk Chicago achieved 3.8× on $17.7K. McKinsey Alumni event delivered 50% Qualified-to-Won conversion at $2.4K cost. These formats remain the most capital-efficient path to pipeline — averaging <strong>5.5× ROI vs. 1.4× for large conferences</strong> with known costs.
+      </p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- SECTION 3: WEEK-OVER-WEEK -->
+    <div class="section-label">Week-over-Week</div>
+    <table class="wow-table">
+      <thead>
+        <tr>
+          <th>Metric</th>
+          <th>Prior Week (Apr 18)</th>
+          <th>This Week (Apr 25)</th>
+          <th>Change</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Meeting Booked</td>
+          <td><span class="num-prev">$446,729</span></td>
+          <td><span class="num-curr">$338,205</span></td>
+          <td><span class="down">↓ −$109K (−24%)</span></td>
+        </tr>
+        <tr>
+          <td>Pre-Pipeline</td>
+          <td><span class="num-prev">$629,667</span></td>
+          <td><span class="num-curr">$628,375</span></td>
+          <td><span class="down">↓ −$1K (flat)</span></td>
+        </tr>
+        <tr>
+          <td>Qualified</td>
+          <td><span class="num-prev">$0</span></td>
+          <td><span class="num-curr">$0</span></td>
+          <td><span style="color:#888;font-size:12px;">— flat</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="divider"></div>
+
+    <!-- WINS, CONCERNS, WATCH ITEMS -->
+    <div class="section-label">Wins, Concerns &amp; Watch Items</div>
+
+    <div class="summary-block">
+      <p class="summary-text" style="font-size: 13.5px;">
+        <strong style="color:#27825b;">✦ Wins</strong><br>
+        <strong>Digital Travel Connect converted 100% of Meeting Booked to Pre-pipeline in its final week</strong> — $468K moved from $468K Meeting Booked, the only event to achieve complete conversion this quarter. <strong>ViVE finished as the best-converting tier-1 event</strong> at $935K Pre-pipeline from $3.28M Meeting Booked (29% conversion) with $310K already in Qualified — a full-funnel success story. <strong>AICC (APAC) ended the quarter at 68% Pre-pipeline conversion</strong> ($370K from $543K Meeting Booked), the highest conversion rate among events with &gt;$500K Meeting Booked. <strong>eTail Palm Springs reached 39% conversion</strong> ($728K from $1.86M Meeting Booked), crossing the $700K Pre-pipeline threshold in the final stretch. <strong>Pre-pipeline held steady in the final week at $628K</strong>, matching the prior week's pace and avoiding the end-of-quarter collapse seen in prior quarters.
+      </p>
+      <br>
+      <p class="summary-text" style="font-size: 13.5px;">
+        <strong style="color:#c0392b;">✦ Concerns</strong><br>
+        <strong>HIMSS closes Q1 as the largest conversion gap in the portfolio.</strong> $3.65M Meeting Booked with only $440K Pre-pipeline (12% conversion) — 38 of 43 opps never reached Pre-pipeline this quarter. With zero Qualified, this event's $3.2M in unconverted Meeting Booked is the single largest carryover risk for Q2. <strong>KO Roundtable generated $522K Meeting Booked but only $80K Pre-pipeline</strong> (15% conversion) — 10 of 15 opps remain stuck in early stages. <strong>Qualified Pipeline stalled for two consecutive weeks</strong> — the final Qualified movement was $352K in the week ending April 11. The $1.1M Q1 total came from just three events: ViVE ($310K), CCW Orlando ($800K), and Spark Delight APAC ($3.9K). <strong>The quarter missed its Pre-pipeline target by $2.9M</strong> (70% attainment), the widest gap of any channel to its Q1 OKR.
+      </p>
+      <br>
+      <p class="summary-text" style="font-size: 13.5px;">
+        <strong style="color:#b8860b;">✦ Watch Items</strong><br>
+        <strong>334 opps carrying $11.8M in unconverted Meeting Booked</strong> roll into Q2 — this represents both the biggest risk and biggest opportunity. If these convert at even the Q1 average rate (37% of Meeting Booked → Pre-pipeline), Q2 starts with ~$4.4M in Pre-pipeline from carryover alone. <strong>Fintech Meetup's 12 opps ($1.03M)</strong> are now 3+ weeks old with only $110K in Pre-pipeline — conversion probability decays rapidly past 4 weeks based on historical patterns. <strong>Shoptalk Spring holds $2.87M in unconverted Meeting Booked</strong> (28% of its total) across 38 opps — the largest single-event carryover pool requiring immediate Q2 action.
+      </p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- SECTION 4: ACTIONS -->
+    <div class="section-label">Recommended Actions</div>
+
+    <div class="action-item">
+      <div class="action-num">1</div>
+      <div class="action-body">
+        <strong>Launch a dedicated HIMSS conversion sprint in Q2 Week 1.</strong> $3.2M in unconverted Meeting Booked with 38 stalled opps is the single largest pipeline lever going into Q2. Assign <strong>named SDR coverage to each of the 38 opps</strong>, prioritized by deal size. Historical data shows conversion probability drops below 15% after 6 weeks — these opps were created in mid-March, making the next 2 weeks the critical window. Set a target of converting 10 opps ($800K+) to Pre-pipeline by May 8.
+      </div>
+    </div>
+
+    <div class="action-item">
+      <div class="action-num">2</div>
+      <div class="action-body">
+        <strong>Triage Fintech Meetup and KO Roundtable before pipeline ages out.</strong> Combined $1.55M in Meeting Booked with only $190K in Pre-pipeline across 27 opps. These events are 3–4 weeks old. Run a <strong>joint triage session this week</strong>: classify each opp as "rescue" (active re-engagement) or "deprioritize" (free rep capacity). For rescue opps, deploy personalized outreach from the attending AE with event-specific context. Target: move 8+ opps to Pre-pipeline or flag for disqualification by May 2.
+      </div>
+    </div>
+
+    <div class="action-item">
+      <div class="action-num">3</div>
+      <div class="action-body">
+        <strong>Accelerate the $1.1M Qualified pipeline into active close plans.</strong> Qualified had zero movement for two consecutive weeks. The ViVE ($310K, 3 opps) and CCW Orlando ($800K, 6 opps) Qualified balances represent the entire near-term revenue opportunity from events. Ensure each of these <strong>9 opps has confirmed next steps, executive sponsorship, and close timelines</strong> documented in Salesforce by end of this week. Any opp without a scheduled meeting should be escalated to sales leadership.
+      </div>
+    </div>
+
+    <div class="action-item">
+      <div class="action-num">4</div>
+      <div class="action-body">
+        <strong>Conduct a Q1 events retrospective and apply learnings to Q2 planning.</strong> Key takeaway: <strong>conversion rates correlate inversely with event size and timing.</strong> AICC (68% conversion), Digital Travel Connect (100%), and Sullivan's eTail PS (100%) — all smaller, mid-quarter events — dramatically outperformed HIMSS (12%) and Shoptalk (28%) on conversion. For Q2, front-load events in weeks 2–8 to allow conversion time, and <strong>cap the tier-1 conference count at 2 per quarter</strong> to prevent the processing bottleneck seen in Q1. Allocate freed budget toward high-ROI field dinners and roundtables.
+      </div>
+    </div>
+
+    <div class="action-item">
+      <div class="action-num">5</div>
+      <div class="action-body">
+        <strong>Build a carryover conversion dashboard for Q2 Week 1 reporting.</strong> With 334 opps and $11.8M in unconverted Meeting Booked rolling into Q2, standard quarter-start reporting will understate the true pipeline opportunity. Create a <strong>dedicated carryover view</strong> that tracks Q1 opp conversion by event, age, and stage — visible to both marketing and sales. Set a Q2 carryover target: convert 40% of the $11.8M ($4.7M) to Pre-pipeline within the first 4 weeks of Q2.
+      </div>
+    </div>
+
+  </div><!-- /content -->
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-logo">✳ delight.ai</div>
+    <p>Events Pipeline Report &middot; FY2027 Q1 &middot; Week 13 of 13 — Quarter Close<br>
+    Data as of April 27, 2026. Attribution is W-shaped. Stage names: Meeting Booked (formerly Opps Created), Pre-pipeline (formerly Discovery), Qualified Pipeline. Pre-pipeline pacing shown against $9.84M Events Q1 OKR target. No explicit OKR target for Meeting Booked or Qualified stages.</p>
+  </div>
+
+</div><!-- /email-wrapper -->
+
+<script src="/chat-widget.js"></script>
+</body>
+</html>
